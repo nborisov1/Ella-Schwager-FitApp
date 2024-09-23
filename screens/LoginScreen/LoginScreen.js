@@ -57,7 +57,7 @@ export default function LoginScreen() {
               <Text className="text-gray-500 font-semibold">
                   Don't have an account?
               </Text>
-              <TouchableOpacity onPress={()=> navigation.navigate('SignUp')}>
+              <TouchableOpacity onPress={()=> navigation.navigate('Gender')}>
                   <Text className="font-semibold text-blue-500"> Sign Up</Text>
               </TouchableOpacity>
           </View>

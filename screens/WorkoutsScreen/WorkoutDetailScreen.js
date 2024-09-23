@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, View, Text } from 'react-native';
 import WorkoutCard from '../cards/WorkoutCard';
-import styles from './cards/styles';
+import styles from '../cards/styles';
 
 const WorkoutDetailScreen = ({ route }) => {
   const { workout } = route.params;

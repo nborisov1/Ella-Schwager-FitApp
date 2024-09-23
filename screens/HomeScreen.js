@@ -8,7 +8,7 @@ import WorkoutsScreen from './WorkoutsScreen/workoutsScreen';
 import WorkoutDetailScreen from './WorkoutsScreen/WorkoutDetailScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import PaymentScreen from './PaymentScreen/PaymentScreen';
-
+import MyPlanStack from './PersonalCoachScreen/MyPlanStack';
 const Stack = createStackNavigator();
 
 const DietScreen = () => (
@@ -70,8 +70,8 @@ const HomeScreen = () => {
               case 'Workouts':
                 iconName = 'barbell';
                 break;
-              case 'Diet':
-                iconName = 'restaurant';
+              case 'My Plan':
+                iconName = 'clipboard';
                 break;
               case 'Settings':
                 iconName = 'settings';
@@ -98,7 +98,7 @@ const HomeScreen = () => {
         }}
  />
         <Tab.Screen name="Workouts" component={WorkoutStack} />
-        <Tab.Screen name="Diet" component={DietScreen} />
+        <Tab.Screen name="My Plan" component={MyPlanStack} options={{headerShown:false}}/>
         <Tab.Screen name="Store" component={StoreScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
