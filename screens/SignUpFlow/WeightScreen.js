@@ -12,7 +12,7 @@ const WeightScreen = ({ navigation, route }) => {
 
   const handleContinue = () => {
     const selectedWeight = WeightList[selectedWeightIndex];
-    const updatedData = { ...signUpData, Weight: selectedWeight }; // Add selected Weight to sign-up data
+    const updatedData = { ...signUpData, weight: parseInt(selectedWeight) }; // Add selected Weight to sign-up data
     navigation.navigate('Height', { signUpData: updatedData });
   };
 

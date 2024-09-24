@@ -12,7 +12,7 @@ const HeightScreen = ({ navigation, route }) => {
 
   const handleContinue = () => {
     const selectedHeight = heightList[selectedHeightIndex];
-    const updatedData = { ...signUpData, height: selectedHeight }; // Add selected height to sign-up data
+    const updatedData = { ...signUpData, height: parseInt(selectedHeight) }; // Add selected height to sign-up data
     navigation.navigate('Goals', { signUpData: updatedData });
   };
 

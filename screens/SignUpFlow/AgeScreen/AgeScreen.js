@@ -15,7 +15,7 @@ const AgeScreen = ({ navigation, route }) => {
 
   const handleContinue = () => {
     const selectedAge = ageList[selectedAgeIndex];
-    const updatedData = { ...signUpData, age: selectedAge }; // Add selected age to sign-up data
+    const updatedData = { ...signUpData, age: parseInt(selectedAge) }; // Add selected age to sign-up data
     navigation.navigate('Weight', { signUpData: updatedData });
   };
 

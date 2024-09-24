@@ -2,10 +2,24 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import styles from './styles';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../../config/firebase';
+import { createUserWithEmailAndPassword, useDeviceLanguage } from 'firebase/auth';
+import { auth, db } from '../../../config/firebase';
+import { doc, setDoc } from "firebase/firestore"; 
 
-const AccountScreen = ({ navigation }) => {
+
+ const createUser = async (uid, email, signUpData) => {
+  return await setDoc(doc(db, 'users', uid), {
+    age: signUpData.age,
+    gender: signUpData.gender,
+    weight: signUpData.weight,
+    height: signUpData.height,
+    goals: signUpData.goals,
+    activityLevel: signUpData.activityLevel,
+    email: email
+  });
+ }
+
+const AccountScreen = ({ navigation, route }) => {
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState(''); 
   const [confirmedPassword, setConfirmedPassword] = useState(''); 
@@ -13,6 +27,8 @@ const AccountScreen = ({ navigation }) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);  // State to track password visibility
   const [isConfirmedPasswordVisible, setIsConfirmedPasswordVisible] = useState(false);  // State to track password visibility
+
+  const { signUpData } = route.params;
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);  // Toggle password visibility state
@@ -38,9 +54,12 @@ const AccountScreen = ({ navigation }) => {
 
       if (email && password){
           try{
-              await createUserWithEmailAndPassword(auth,email,password)
+              const userCredential = await createUserWithEmailAndPassword(auth,email,password)
+              
+              await createUser(userCredential.user.uid, email, signUpData)
           }catch(err){
               setErrorMessage(err.message)
+              console.error(err)
           }
       }
   }
