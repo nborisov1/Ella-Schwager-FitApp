@@ -9,6 +9,7 @@ import WorkoutDetailScreen from './WorkoutsScreen/WorkoutDetailScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import PaymentScreen from './PaymentScreen/PaymentScreen';
 import MyPlanStack from './PersonalCoachScreen/MyPlanStack';
+import AddWorkoutScreen from './WorkoutsScreen/addWorkoutScreen'
 const Stack = createStackNavigator();
 
 const DietScreen = () => (
@@ -32,12 +33,12 @@ const StoreScreen = () => (
 // Create the Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
 
-const WorkoutStack = () => {
+const WorkoutStack = ({isSuperUser}) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Workouts Plans"
-        component={WorkoutsScreen}
+        children={()=><WorkoutsScreen isSuperUser={isSuperUser}/>}
         options={{ headerShown: false }}  // Customize header
       />
       <Stack.Screen
@@ -50,11 +51,17 @@ const WorkoutStack = () => {
         component={PaymentScreen}
         options={{ headerShown: false }}
       />
+            <Stack.Screen
+        name="AddWorkout"  // New screen for adding workouts
+        component={AddWorkoutScreen}
+        options={{ title: 'Add Workout' }}  // Set the title for this screen
+      />
     </Stack.Navigator>
+    
   );
 };
 
-const HomeScreen = () => {
+const HomeScreen = ({isSuperUser}) => {
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -97,7 +104,7 @@ const HomeScreen = () => {
           headerShown:false
         }}
  />
-        <Tab.Screen name="Workouts" component={WorkoutStack} />
+        <Tab.Screen name="Workouts" children={()=><WorkoutStack isSuperUser={isSuperUser}/>} />
         <Tab.Screen name="My Plan" component={MyPlanStack} options={{headerShown:false}}/>
         <Tab.Screen name="Store" component={StoreScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />

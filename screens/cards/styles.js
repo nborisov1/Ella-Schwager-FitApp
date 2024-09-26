@@ -82,7 +82,31 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 12,  // Adjust the font size as needed
   },
-
+  workoutItem: {
+    backgroundColor: '#333',
+    padding: 15,
+    marginVertical: 10,
+    borderRadius: 10,
+  },
+  workoutTitle: {
+    fontSize: 18,
+    color: '#fff',
+  },
+  addButton: {
+    backgroundColor: '#7D3C98',
+    paddingVertical: 10,    // Reduced vertical padding
+    paddingHorizontal: 30,  // Adjusted horizontal padding
+    borderRadius: 10,
+    alignItems: 'center',
+    alignSelf: 'center',    // Center the button horizontally
+    marginVertical: 20,
+    width: '50%',           // Set a percentage width for the button to make it smaller
+  },
+  addButtonText: {
+    color: '#fff',
+    fontSize: 16,           // Reduced font size
+    fontWeight: 'bold',
+  },
 });
 
 export default styles;

@@ -18,9 +18,8 @@ const Stack = createNativeStackNavigator();
 
 export default function AppNavigation() {
   const { user } = useAuth();
-  
   if (user) {
-    return <HomeScreen />;
+    return <HomeScreen isSuperUser={false}/>;
   } else {
     return (
       <NavigationContainer>
