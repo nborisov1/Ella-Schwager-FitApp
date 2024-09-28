@@ -87,7 +87,7 @@ const PersonalCoachScreen = () => {
               key={session.id}
               title={session.title}
               exercises={session.exercises}
-              imageUri={session.thumbnail}
+              imageUri={session.thumbnailUrl}
               days={session.days}
               onPress={() => handlePress(session)}
             />
