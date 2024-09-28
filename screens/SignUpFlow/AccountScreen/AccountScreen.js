@@ -2,22 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import styles from './styles';
-import { createUserWithEmailAndPassword, useDeviceLanguage } from 'firebase/auth';
-import { auth, db } from '../../../config/firebase';
-import { doc, setDoc } from "firebase/firestore"; 
+import signUp from '../../../backend/users/signUp';
 
-
- const createUser = async (uid, email, signUpData) => {
-  return await setDoc(doc(db, 'users', uid), {
-    age: signUpData.age,
-    gender: signUpData.gender,
-    weight: signUpData.weight,
-    height: signUpData.height,
-    goals: signUpData.goals,
-    activityLevel: signUpData.activityLevel,
-    email: email
-  });
- }
 
 const AccountScreen = ({ navigation, route }) => {
   const [email, setEmail] = useState(''); 
@@ -54,9 +40,7 @@ const AccountScreen = ({ navigation, route }) => {
 
       if (email && password){
           try{
-              const userCredential = await createUserWithEmailAndPassword(auth,email,password)
-              
-              await createUser(userCredential.user.uid, email, signUpData)
+              await signUp(email, password, signUpData)
           }catch(err){
               setErrorMessage(err.message)
               console.error(err)
