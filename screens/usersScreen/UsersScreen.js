@@ -39,7 +39,7 @@ const UsersScreen = ({ navigation }) => {
   const handleSearch = (query) => {
     setSearchQuery(query);
     const filtered = users.filter((user) => {
-      const userName = user.name ? user.name.toLowerCase() : '';  // Handle undefined name
+      const userName = user.fullName ? user.fullName.toLowerCase() : '';  // Handle undefined name
       const userEmail = user.email ? user.email.toLowerCase() : '';  // Handle undefined email
       return userName.includes(query.toLowerCase()) || userEmail.includes(query.toLowerCase());
     });
