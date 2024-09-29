@@ -1,9 +1,9 @@
 // backend/personalPlan/deleteExerciseFromSession.js
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import { db } from '../../config/firebase';
 
 // Function to delete an exercise from a session
-const deleteExerciseFromSession = async (userId, sessionId, exerciseId) => {
+const deleteExerciseFromSession = async (userId, sessionId, exerciseId, name) => {
   try {
     const sessionRef = doc(db, `users/${userId}/personalPlan`, sessionId);
     const sessionDoc = await getDoc(sessionRef);
@@ -11,9 +11,10 @@ const deleteExerciseFromSession = async (userId, sessionId, exerciseId) => {
     if (sessionDoc.exists()) {
       const sessionData = sessionDoc.data();
       const updatedExercises = sessionData.exercises.filter(
-        exercise => exercise.exerciseId !== exerciseId
+        exercise => exercise.exerciseId !== exerciseId && exercise.name !== name
       );
-
+      console.log('exe', updatedExercises);
+      console.log('name , exe id', name, exerciseId);
       await updateDoc(sessionRef, { exercises: updatedExercises });
       console.log('Exercise deleted successfully.');
     } else {

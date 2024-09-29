@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
@@ -9,48 +9,51 @@ const styles = {
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'center',  // Center the title
-  },
-  daysContainer: {
-    marginBottom: 15,
-    alignItems: 'center',  // Center the days container
-  },
-  daysTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 5,
+    marginBottom: 20,
     textAlign: 'center',
   },
-  daysListContainer: {
-    width: '100%',  // Full width to allow horizontal scrolling
-    justifyContent: 'center',
-    alignItems: 'center',
+  daysContainer: {
+    justifyContent: 'center',  // Center the days horizontally
+    alignItems: 'center',      // Center the days horizontally
+    marginVertical: 10,
   },
-  daysList: {
+  daysListContainer: {
     flexDirection: 'row',
-    justifyContent: 'center',  // Center the list
-    alignItems: 'center',
+    justifyContent: 'center',  // Align the entire list of days horizontally
   },
   dayWrapper: {
-    marginHorizontal: 8,  // Add horizontal space between the days
-    backgroundColor: '#f0f0f0',
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-    borderRadius: 15,  // Rounded edges for a badge-like effect
+    padding: 5,
+    marginHorizontal: 5,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 5,
   },
   dayText: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#333',
   },
-  superUserOptions: {
-    marginTop: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-around',  // Spread buttons out
-  },
-  scrollContainer: {
+    scrollContainer: {
     paddingBottom: 20,
   },
-};
-  
-  export default styles;
+  exerciseItem: {
+    marginBottom: 20,
+  },
+  deleteButton: {
+    backgroundColor: '#f44336',
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  deleteButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  superUserOptions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 20,
+    justifyContent: 'center',
+  },
+});
+
+export default styles;

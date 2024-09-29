@@ -1,7 +1,7 @@
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../firebaseConfig';
+import { db } from '../../config/firebase';
 
-const updateExerciseInSession = async (userId, sessionId, exerciseId, updatedFields) => {
+const updateExerciseInSession = async (userId, sessionId, exerciseId, name, updatedFields) => {
   try {
     const sessionRef = doc(db, `users/${userId}/personalPlan`, sessionId);
     const sessionDoc = await getDoc(sessionRef);
@@ -9,7 +9,7 @@ const updateExerciseInSession = async (userId, sessionId, exerciseId, updatedFie
     if (sessionDoc.exists()) {
       const sessionData = sessionDoc.data();
       const updatedExercises = sessionData.exercises.map(exercise =>
-        exercise.exerciseId === exerciseId
+        exercise.exerciseId === exerciseId || exercise.name == name
           ? { ...exercise, ...updatedFields }  // Update the exercise details
           : exercise
       );
