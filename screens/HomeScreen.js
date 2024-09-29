@@ -9,6 +9,7 @@ import WorkoutDetailScreen from './WorkoutsScreen/WorkoutDetailScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import PaymentScreen from './PaymentScreen/PaymentScreen';
 import MyPlanStack from './PersonalCoachScreen/MyPlanStack';
+import AddTrainingSessionStack from '../addTrainingSession/AddTrainingSessionStack'
 import AddWorkoutScreen from './WorkoutsScreen/addWorkoutScreen';
 import UserStack from './usersScreen/UsersStack';
 import ProfileScreen from './ProfileScreen/ProfileScreen';
@@ -84,6 +85,9 @@ const HomeScreen = ({ isSuperUser }) => {
               case 'My Plan':
                 iconName = 'clipboard';
                 break;
+              case 'Add Training':
+                iconName = 'add-circle';
+                break;
               case 'Settings':
                 iconName = 'settings';
                 break;
@@ -129,15 +133,26 @@ const HomeScreen = ({ isSuperUser }) => {
             }}
           />
         )}
+        
         <Tab.Screen
           name="Workouts"
           children={() => <WorkoutStack isSuperUser={isSuperUser} />}
         />
-        <Tab.Screen
-          name="My Plan"
-          component={MyPlanStack}
-          options={{ headerShown: false }}
-        />
+
+        {isSuperUser ? (
+          <Tab.Screen
+            name="Add Training"
+            component={AddTrainingSessionStack}
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <Tab.Screen
+            name="My Plan"
+            component={MyPlanStack}
+            options={{ headerShown: false }}
+          />
+        )}
+        
         <Tab.Screen name="Store" component={StoreScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>

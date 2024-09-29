@@ -38,7 +38,8 @@ const PersonalCoachScreen = () => {
     navigation.navigate('ExerciseList', {
       title: session.title,
       exercises: session.exerciseList,
-      days: session.days
+      days: session.days,
+      isSuperUser: false
     });
   };
 

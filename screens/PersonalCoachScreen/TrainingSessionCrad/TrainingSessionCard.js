@@ -19,7 +19,7 @@ const TrainingSessionCard = ({ title, exercises, imageUri, days, onPress }) => {
 
             {/* Render the list of days horizontally */}
             <View style={styles.daysContainer}>
-              {days.map((day, index) => (
+              {days && days.length > 0 && days.map((day, index) => (
                 <View key={index} style={styles.dayWrapper}>
                   <Text style={styles.dayText}>{day}</Text>
                 </View>
