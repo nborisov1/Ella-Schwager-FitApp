@@ -1,7 +1,7 @@
 import React from 'react';
 import { ScrollView, Text, View } from 'react-native';
-import styles from './styles';
 import ExerciseCard from './cards/ExerciseCard';  // Import the ExerciseCard component
+import styles from './styles';
 
 const ExerciseListScreen = ({ route }) => {
   const { title, exercises } = route.params;  // Get title and exercise list passed from navigation

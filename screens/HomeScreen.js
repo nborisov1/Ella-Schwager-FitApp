@@ -3,13 +3,16 @@ import { View, Text, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { NavigationContainer } from '@react-navigation/native';
-import ProfileScreen from './ProfileScreen/ProfileScreen'
+import UsersScreen from './usersScreen/UsersScreen'; // Import the new UsersScreen
 import WorkoutsScreen from './WorkoutsScreen/workoutsScreen';
 import WorkoutDetailScreen from './WorkoutsScreen/WorkoutDetailScreen';
 import { createStackNavigator } from '@react-navigation/stack';
 import PaymentScreen from './PaymentScreen/PaymentScreen';
 import MyPlanStack from './PersonalCoachScreen/MyPlanStack';
-import AddWorkoutScreen from './WorkoutsScreen/addWorkoutScreen'
+import AddWorkoutScreen from './WorkoutsScreen/addWorkoutScreen';
+import UserStack from './usersScreen/UsersStack';
+import ProfileScreen from './ProfileScreen/ProfileScreen';
+
 const Stack = createStackNavigator();
 
 const DietScreen = () => (
@@ -33,12 +36,13 @@ const StoreScreen = () => (
 // Create the Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
 
-const WorkoutStack = ({isSuperUser}) => {
+// The Workout Stack
+const WorkoutStack = ({ isSuperUser }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Workouts Plans"
-        children={()=><WorkoutsScreen isSuperUser={isSuperUser}/>}
+        children={() => <WorkoutsScreen isSuperUser={isSuperUser} />}
         options={{ headerShown: false }}  // Customize header
       />
       <Stack.Screen
@@ -46,22 +50,22 @@ const WorkoutStack = ({isSuperUser}) => {
         component={WorkoutDetailScreen}
         options={{ headerShown: false }}  // Customize header
       />
-        <Stack.Screen
+      <Stack.Screen
         name="Payment"
         component={PaymentScreen}
         options={{ headerShown: false }}
       />
-            <Stack.Screen
+      <Stack.Screen
         name="AddWorkout"  // New screen for adding workouts
         component={AddWorkoutScreen}
         options={{ title: 'Add Workout' }}  // Set the title for this screen
       />
     </Stack.Navigator>
-    
   );
 };
 
-const HomeScreen = ({isSuperUser}) => {
+// Main Home Screen with bottom tabs
+const HomeScreen = ({ isSuperUser }) => {
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -71,8 +75,8 @@ const HomeScreen = ({isSuperUser}) => {
 
             // Choose the icon based on the route name (tab name)
             switch (route.name) {
-              case 'Profile':
-                iconName = 'person';
+              case 'UsersStack':  // Use the 'Users' tab instead of 'Profile'
+                iconName = 'people';
                 break;
               case 'Workouts':
                 iconName = 'barbell';
@@ -86,6 +90,9 @@ const HomeScreen = ({isSuperUser}) => {
               case 'Store':
                 iconName = 'cart';
                 break;
+              case 'Profile':
+                iconName = 'people';
+                break;
             }
 
             // Return the Icon component from react-native-vector-icons
@@ -95,17 +102,42 @@ const HomeScreen = ({isSuperUser}) => {
           tabBarInactiveTintColor: 'gray',  // Inactive tab color
         })}
       >
-        <Tab.Screen name="Profile" component={ProfileScreen} options={{
-          title: 'Profile',  // This customizes the header title
-          headerTitleStyle: {
-            fontWeight: 'bold',  // Customize the font style
-            fontSize: 20,  // Customize font size
-          },
-          headerShown:false
-        }}
- />
-        <Tab.Screen name="Workouts" children={()=><WorkoutStack isSuperUser={isSuperUser}/>} />
-        <Tab.Screen name="My Plan" component={MyPlanStack} options={{headerShown:false}}/>
+        {isSuperUser ? (
+          <Tab.Screen
+            name="UsersStack"
+            component={UserStack}  // Use the UsersStack for navigation within the Users tab
+            options={{
+              title: 'Users',  // This customizes the header title
+              headerTitleStyle: {
+                fontWeight: 'bold',  // Customize the font style
+                fontSize: 20,  // Customize font size
+              },
+              headerShown: false,
+            }}
+          />
+        ) : (
+          <Tab.Screen
+            name="Profile"
+            component={ProfileScreen}
+            options={{
+              title: 'Profile',  // This customizes the header title
+              headerTitleStyle: {
+                fontWeight: 'bold',  // Customize the font style
+                fontSize: 20,  // Customize font size
+              },
+              headerShown: false,
+            }}
+          />
+        )}
+        <Tab.Screen
+          name="Workouts"
+          children={() => <WorkoutStack isSuperUser={isSuperUser} />}
+        />
+        <Tab.Screen
+          name="My Plan"
+          component={MyPlanStack}
+          options={{ headerShown: false }}
+        />
         <Tab.Screen name="Store" component={StoreScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>

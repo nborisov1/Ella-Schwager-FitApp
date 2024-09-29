@@ -9,7 +9,8 @@ const createUser = async (uid, email, signUpData) => {
       height: signUpData.height,
       goals: signUpData.goals,
       activityLevel: signUpData.activityLevel,
-      email: email
+      email: email,
+      name: signUpData.name
     });
    }
   

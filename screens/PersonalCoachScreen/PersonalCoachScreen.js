@@ -11,30 +11,7 @@ const PersonalCoachScreen = () => {
   const { width, height } = Dimensions.get('window');
   const navigation = useNavigation();  
   const [trainingSessions, setTrainingSessions] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const sessionData = {
-    title: 'Leg Day',
-    days: ['Monday', 'Thursday'],
-    exercises: [
-      {
-        exerciseId: 'exercise001',
-        name: 'Squats',
-        sets: 3,
-        reps: 12,
-        weight: 100
-      },
-      {
-        exerciseId: 'exercise002',
-        name: 'Leg Press',
-        sets: 4,
-        reps: 8,
-        weight: 150
-      }
-    ],
-    thumbnail: 'https://images.pexels.com/photos/4775202/pexels-photo-4775202.jpeg?auto=compress&cs=tinysrgb&w=600' // Assuming imageFile is the file selected by the user
-  };
-  
-  
+  const [loading, setLoading] = useState(true);  
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     loadPersonalPlan().then(() => setRefreshing(false));
