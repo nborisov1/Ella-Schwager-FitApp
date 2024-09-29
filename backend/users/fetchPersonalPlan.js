@@ -30,7 +30,6 @@ const fetchPersonalPlan = async (userId) => {
     try {
       const personalPlanRef = collection(db, `users/${userId}/personalPlan`);
       const querySnapshot = await getDocs(personalPlanRef);
-  
       const trainingSessions = querySnapshot.docs.map((doc, index) => {
         const sessionData = doc.data();
         const exerciseList = sessionData.exercises.map(exercise => ({
@@ -39,7 +38,7 @@ const fetchPersonalPlan = async (userId) => {
           reps: exercise.reps
         }));
         return {
-          id: index + 1,  // Generate an ID
+          id: doc.id,  // Generate an ID
           days: sessionData.days,  // The days of the week
           title: sessionData.title,  // Session title
           exercises: exerciseList.length,  // Number of exercises

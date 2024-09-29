@@ -9,9 +9,14 @@ const UserDetailScreen = ({ route, navigation }) => {
   const [personalPlan, setPersonalPlan] = useState([]);
 
   const handlePress = (session) => {
+    console.log("NATAN test ",session.id)
     navigation.navigate('ExerciseList', {
       title: session.title,
-      exercises: session.exerciseList
+      exercises: session.exerciseList,
+      days: session.days,
+      isSuperUser: true,
+      sessionId: session.id,
+      userId: user.id
     });
   };
 

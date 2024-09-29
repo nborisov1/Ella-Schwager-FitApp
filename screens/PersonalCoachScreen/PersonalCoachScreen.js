@@ -37,7 +37,8 @@ const PersonalCoachScreen = () => {
   const handlePress = (session) => {
     navigation.navigate('ExerciseList', {
       title: session.title,
-      exercises: session.exerciseList
+      exercises: session.exerciseList,
+      days: session.days
     });
   };
 
