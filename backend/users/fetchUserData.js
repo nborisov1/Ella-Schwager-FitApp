@@ -1,5 +1,5 @@
 import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebaseConfig';  // Assuming your firebaseConfig.js exports 'db'
+import { db } from '../../config/firebase';  // Assuming your firebaseConfig.js exports 'db'
   
 // Function to fetch user data along with their personal plan
 const fetchUserData = async (userId) => {
