@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Image, Modal, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Image, Modal, StyleSheet } from 'react-native';
 import Video from 'react-native-video'; // Import the video player component
 import styles from './ExerciseVideoScreenStyle'
 
