@@ -12,7 +12,7 @@ import MyPlanStack from './PersonalCoachScreen/MyPlanStack';
 import AddTrainingSessionStack from '../addTrainingSession/AddTrainingSessionStack'
 import AddWorkoutScreen from './WorkoutsScreen/addWorkoutScreen';
 import UserStack from './usersScreen/UsersStack';
-import ProfileScreen from './ProfileScreen/ProfileScreen';
+import ProfileScreenStack from './ProfileScreen/ProfileStack';
 
 const Stack = createStackNavigator();
 
@@ -66,7 +66,8 @@ const WorkoutStack = ({ isSuperUser }) => {
 };
 
 // Main Home Screen with bottom tabs
-const HomeScreen = ({ isSuperUser }) => {
+const HomeScreen = ({ userData }) => {
+  const isSuperUser = userData ? userData.role == 'Admin' : false
   return (
     <NavigationContainer>
       <Tab.Navigator
@@ -122,15 +123,10 @@ const HomeScreen = ({ isSuperUser }) => {
         ) : (
           <Tab.Screen
             name="Profile"
-            component={ProfileScreen}
-            options={{
-              title: 'Profile',  // This customizes the header title
-              headerTitleStyle: {
-                fontWeight: 'bold',  // Customize the font style
-                fontSize: 20,  // Customize font size
-              },
-              headerShown: false,
-            }}
+            children={() => <ProfileScreenStack user={userData} />}
+            options={
+              {headerShown: false}
+            }
           />
         )}
         

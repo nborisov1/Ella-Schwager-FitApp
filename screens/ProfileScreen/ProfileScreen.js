@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Button } from 'react-native';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import WeekDays from './WeekDays';
 import StatsCard from './StatsCard';
-import WorkoutCard from '../cards/WorkoutCard';
+import TrainingSessionCard from '../PersonalCoachScreen/TrainingSessionCrad/TrainingSessionCard'; // Import the TrainingSessionCard
+import fetchPersonalPlan from '../../backend/users/fetchPersonalPlan';  // Function to fetch the user's personal plan
 import styles from './styles';
-import ProfileHeader from './ProfileHeader';
+import { useNavigation } from '@react-navigation/native';  // Import navigation hook
+import ProfileHeader from './ProfileHeader'
+
 dayjs.extend(isoWeek);
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ user }) {
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [weekDays, setWeekDays] = useState([]);
-
-  // Sample workout data for today
-  const [todayWorkouts, setTodayWorkouts] = useState([
-    { name: 'Morning Run', duration: 30, type: 'Cardio', watched: 10, total: 30, image: 'https://www.auraleisure.ie/wp-content/uploads/2023/03/john-arano-h4i9G-de7Po-unsplash-1-scaled.jpg' },
-    { name: 'Strength Training', duration: 45, type: 'Strength', watched: 20, total: 45, image: 'https://www.auraleisure.ie/wp-content/uploads/2023/03/john-arano-h4i9G-de7Po-unsplash-1-scaled.jpg' },
-
-  ]);
+  const [todayWorkouts, setTodayWorkouts] = useState([]);
+  const [loading, setLoading] = useState(true);  // Loading state
+  const [hasPersonalPlan, setHasPersonalPlan] = useState(false);  // To track if the user has a personal plan
+  const navigation = useNavigation();  // Initialize navigation
 
   useEffect(() => {
     const startOfWeek = currentDate.startOf('isoWeek');
@@ -36,6 +36,38 @@ export default function ProfileScreen() {
     setWeekDays(days);
   }, [currentDate]);
 
+  // Load personal plan for the user
+  useEffect(() => {
+    const loadPersonalPlan = async () => {
+      try {
+        const personalPlan = await fetchPersonalPlan(user.id);
+        const currentDay = currentDate.format('dddd');
+
+        const workoutsForToday = personalPlan.filter(session => session.days.includes(currentDay));
+
+        setTodayWorkouts(workoutsForToday);
+        setHasPersonalPlan(true);
+      } catch (error) {
+        console.error('Error fetching personal plan:', error);
+        setHasPersonalPlan(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadPersonalPlan();
+  }, [currentDate, user.id]);
+
+  const handlePress = (session) => {
+    navigation.navigate('ExerciseList', {
+      title: session.title,
+      exercises: session.exerciseList,  // Pass the exercise list to ExerciseListScreen
+      days: session.days,
+      sessionId: session.id,
+      userId: user.id
+    });
+  };
+
   const stats = {
     caloriesBurned: 1200,
     workoutsCompleted: 3,
@@ -44,17 +76,35 @@ export default function ProfileScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <ProfileHeader/>
+      <ProfileHeader user={user}/>
       <WeekDays weekDays={weekDays} />
       <StatsCard stats={stats} />
 
-      {/* Improved Headline for Today's Workouts */}
       <View style={styles.todayWorkoutsContainer}>
         <Text style={styles.sectionTitle}>Today's Workouts</Text>
         <View style={styles.divider} />
-        {todayWorkouts.map((workout, index) => (
-          <WorkoutCard key={index} workout={workout} />
-        ))}
+
+        {loading ? (
+          <Text>Loading workouts...</Text>
+        ) : hasPersonalPlan && todayWorkouts.length > 0 ? (
+          todayWorkouts.map((session, index) => (
+            <TrainingSessionCard
+              key={index}
+              title={session.title}
+              exercises={session.exerciseList.length}  // Count of exercises in the session
+              imageUri={session.thumbnailUrl}  // Assuming each session has a thumbnail
+              days={session.days}  // Pass the days for the session
+              onPress={() => handlePress(session)}  // Handle navigation on press
+            />
+          ))
+        ) : hasPersonalPlan ? (
+          <Text>No workouts scheduled for today!</Text>
+        ) : (
+          <View style={styles.noPlanCard}>
+            <Text style={styles.noPlanText}>You don't have a personal plan yet!</Text>
+            <Button title="Purchase a Plan" onPress={() => {/* Handle purchasing plan */}} />
+          </View>
+        )}
       </View>
     </ScrollView>
   );
