@@ -32,11 +32,11 @@ const fetchPersonalPlan = async (userId) => {
       const querySnapshot = await getDocs(personalPlanRef);
       const trainingSessions = querySnapshot.docs.map((doc, index) => {
         const sessionData = doc.data();
-        const exerciseList = sessionData.exercises.map(exercise => ({
+        const exerciseList = sessionData.exercises ? sessionData.exercises.map(exercise => ({
           name: exercise.name,
           sets: exercise.sets,
           reps: exercise.reps
-        }));
+        })) : [];
         return {
           id: doc.id,  // Generate an ID
           days: sessionData.days,  // The days of the week

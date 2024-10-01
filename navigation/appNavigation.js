@@ -30,7 +30,8 @@ export default function AppNavigation() {
 
   if (userData) {
     // Once user data is fetched, pass the role to HomeScreen
-    return <HomeScreen isSuperUser={userData.role === 'Admin'} />;
+    console.log("userData = ",userData)
+    return <HomeScreen userData={userData} />;
   } else {
     return (
       <NavigationContainer>

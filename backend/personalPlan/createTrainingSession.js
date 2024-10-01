@@ -5,6 +5,7 @@ import { uploadThumbnail } from '../upload/thumbnials';
 // Function to create a training session in the personalPlan subcollection
 const createTrainingSession = async (userId, sessionData) => {
   try {
+    console.log("NATAN1234",userId)
     const thumbnailUrl = await uploadThumbnail(sessionData.thumbnail, 'natan123');
     const personalPlanRef = collection(db, `users/${userId}/personalPlan`);
 

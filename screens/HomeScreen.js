@@ -67,6 +67,7 @@ const WorkoutStack = ({ isSuperUser }) => {
 
 // Main Home Screen with bottom tabs
 const HomeScreen = ({ userData }) => {
+  console.log("userData = ",userData)
   const isSuperUser = userData ? userData.role == 'Admin' : false
   return (
     <NavigationContainer>
