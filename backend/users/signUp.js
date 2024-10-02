@@ -1,5 +1,6 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db, setDoc } from '../../config/firebase';
+import { auth, db } from '../../config/firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 const createUser = async (uid, email, signUpData) => {
     return await setDoc(doc(db, 'users', uid), {
@@ -10,7 +11,7 @@ const createUser = async (uid, email, signUpData) => {
       goals: signUpData.goals,
       activityLevel: signUpData.activityLevel,
       email: email,
-      name: signUpData.name
+      fullName: signUpData.name
     });
    }
   
