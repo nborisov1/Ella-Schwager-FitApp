@@ -6,6 +6,7 @@ import styles from './styles';
 
 const TrainingSessionCard = ({ title, exercises, imageUri, days, onPress }) => {
   return (
+    console.log("ex natan",exercises),
     <TouchableOpacity onPress={onPress}>
       <ImageBackground
         source={{ uri: imageUri }}

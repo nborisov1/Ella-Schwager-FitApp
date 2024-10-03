@@ -11,7 +11,7 @@ const AddTrainingSessionStack = () => {
         <Stack.Screen
           name="AddTrainingSession"
           component={AddTrainingSessionScreen}
-          options={{ title: 'Add Training Session' }}
+          options={{ headerShown: false }}
         />
         <Stack.Screen
             name="AddExerciseScreen"  // Define the new route

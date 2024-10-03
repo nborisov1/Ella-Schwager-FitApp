@@ -43,10 +43,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
-    textAlign: 'center',  // Center the input text
-    width: 80,  // Define a fixed width for input fields
+    textAlign: 'center',
+    width: '100%',  // Full width
+    marginBottom: 10,  // Add space between input fields
   },
-  label: {
+      label: {
     marginTop: 5,
     fontSize: 14,
     fontWeight: 'bold',
@@ -140,6 +141,68 @@ const styles = StyleSheet.create({
   editButtonText: {
     color: '#fff',
     fontWeight: 'bold',
+  },
+  customFieldContainer: {
+    marginTop: 20,
+  },
+  customFieldRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  addFieldButton: {
+    backgroundColor: '#3498DB',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 20,
+  },
+  addFieldButtonText: {
+    color: '#fff',
+    textAlign: 'center',
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    elevation: 10,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  modalSaveButton: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 5,
+    width: '48%',
+  },
+  modalSaveButtonText: {
+    color: '#fff',
+    textAlign: 'center',
+  },
+  modalCancelButton: {
+    backgroundColor: '#FF6347',
+    padding: 10,
+    borderRadius: 5,
+    width: '48%',
+  },
+  modalCancelButtonText: {
+    color: '#fff',
+    textAlign: 'center',
   },
 });
 

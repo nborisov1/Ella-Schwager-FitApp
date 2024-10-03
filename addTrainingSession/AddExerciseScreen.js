@@ -42,7 +42,6 @@ const AddExerciseScreen = ({ route }) => {
   };
 
   const handleExercisePress = (exercise) => {
-    // Navigate to the ExerciseVideoScreen and pass the exercise data
     navigation.navigate('ExerciseVideoScreen', { exercise });
   };
 
