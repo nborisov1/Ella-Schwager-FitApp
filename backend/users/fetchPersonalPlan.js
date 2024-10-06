@@ -32,15 +32,16 @@ const fetchPersonalPlan = async (userId) => {
       const querySnapshot = await getDocs(personalPlanRef);
       const trainingSessions = querySnapshot.docs.map((doc, index) => {
         const sessionData = doc.data();
+        console.log("sessionData" , sessionData);
         const exerciseList = sessionData.exercises ? sessionData.exercises.map(exercise => ({
           ...exercise
         })) : [];
         return {
           id: doc.id,  // Generate an ID
           days: sessionData.days,  // The days of the week
-          title: sessionData.title,  // Session title
+          sessionName: sessionData.sessionName,  // Session title
           exercises: exerciseList.length,  // Number of exercises
-          thumbnailUrl: sessionData.thumbnailUrl || '',  // Fetch the thumbnail URL
+          downloadURL: sessionData.downloadURL || '',  // Fetch the thumbnail URL
           exerciseList: exerciseList  // List of exercises
         };
       });

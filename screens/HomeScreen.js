@@ -144,7 +144,7 @@ const HomeScreen = ({ userData }) => {
         ) : (
           <Tab.Screen
             name="My Plan"
-            component={MyPlanStack}
+            children={() => <MyPlanStack userData={userData} />}
             options={{ headerShown: false }}
           />
         )}

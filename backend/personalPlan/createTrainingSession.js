@@ -10,7 +10,7 @@ const createTrainingSession = async (userId, sessionData) => {
 
     // Add the new training session as a document in the personalPlan subcollection
     await addDoc(personalPlanRef, {
-      title: sessionData.title,
+      sessionName: sessionData.sessionName,
       days: sessionData.days,  // Days of the week the session is performed
       exercises: sessionData.exercises,  // Array of exercises
       thumbnailUrl: thumbnailUrl  // Store the thumbnail URL

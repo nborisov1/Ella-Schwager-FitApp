@@ -6,12 +6,12 @@ import PersonalCoachScreen from './PersonalCoachScreen';  // Your main screen
 import ExerciseListScreen from '../ExerciseListScreen/ExerciseListScreen';  // New screen for exercise list
 
 const Stack = createStackNavigator();
-const MyPlanStack = () => {
+const MyPlanStack = ({userData}) => {
     return (
       <Stack.Navigator>
         <Stack.Screen
           name="PersonalCoach"
-          component={PersonalCoachScreen}
+          children={() => <PersonalCoachScreen userData={userData} />}
           options={{ headerShown: false }}  // No header for the main screen
         />
         <Stack.Screen

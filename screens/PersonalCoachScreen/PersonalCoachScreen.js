@@ -7,7 +7,7 @@ import fetchPersonalPlan from '../../backend/users/fetchPersonalPlan';
 import createTrainingSession from '../../backend/personalPlan/createTrainingSession';
 import { RefreshControl } from 'react-native-gesture-handler';
 
-const PersonalCoachScreen = () => {
+const PersonalCoachScreen = ({userData}) => {
   const { width, height } = Dimensions.get('window');
   const navigation = useNavigation();  
   const [trainingSessions, setTrainingSessions] = useState([]);
@@ -21,8 +21,8 @@ const PersonalCoachScreen = () => {
 
   const loadPersonalPlan = async () => {
     try {
-      //await createTrainingSession('5tKW9r0Et0WiFIWRINs4rcmqj4d2', sessionData);
-      const sessions = await fetchPersonalPlan('5tKW9r0Et0WiFIWRINs4rcmqj4d2');
+      const sessions = await fetchPersonalPlan(userData.uid);
+      console.log(sessions)
       setTrainingSessions(sessions);
       setLoading(false)
     } catch (error) {
@@ -36,7 +36,7 @@ const PersonalCoachScreen = () => {
 
   const handlePress = (session) => {
     navigation.navigate('ExerciseList', {
-      title: session.title,
+      title: session.sessionName,
       exercises: session.exerciseList,
       days: session.days,
       isSuperUser: false
@@ -64,9 +64,9 @@ const PersonalCoachScreen = () => {
           {trainingSessions.map((session) => (
             <TrainingSessionCard 
               key={session.id}
-              title={session.title}
+              title={session.sessionName}
               exercises={session.exercises}
-              imageUri={session.thumbnailUrl}
+              imageUri={session.downloadURL}
               days={session.days}
               onPress={() => handlePress(session)}
             />

@@ -4,7 +4,6 @@ export async function uploadImage(uri, progressUpdateHandler, completionHandler)
   try {
     const response = await fetch(uri);
     const blob = await response.blob();
-    console.log('blob = ', blob);
 
     const storage = getStorage(); // Initialize Firebase Storage
     const fileName = uri.split('/').pop(); // Extract file name

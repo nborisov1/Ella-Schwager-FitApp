@@ -17,12 +17,7 @@ const UserDetailScreen = ({ route, navigation }) => {
 
   useEffect(() => {
     navigation.setOptions({ title: user.fullName || 'Unnamed User' });
-    
-    if (user.hasPersonalPlan) {
-      loadPersonalPlan();
-    } else {
-      setPersonalPlanLoading(false);  // If no plan, stop loading
-    }
+    loadPersonalPlan();
   }, [navigation, user]);
 
   const loadPersonalPlan = async () => {
@@ -58,9 +53,9 @@ const UserDetailScreen = ({ route, navigation }) => {
     }
   };
 
-  const filteredSessions = trainingSessions.filter(session =>
-    session.title.toLowerCase().includes(searchText.toLowerCase())
-  );
+  const filteredSessions = searchText ? trainingSessions.filter(session =>
+    session.sessionName.toLowerCase().includes(searchText.toLowerCase())
+  ) : trainingSessions;
 
   const openAddSessionModal = async () => {
     setModalVisible(true);
@@ -69,7 +64,7 @@ const UserDetailScreen = ({ route, navigation }) => {
 
   const renderTrainingSession = ({ item }) => (
     <View style={styles.sessionRow}>
-      <Text style={styles.sessionTitle}>{item.title}</Text>
+      <Text style={styles.sessionTitle}>{item.sessionName}</Text>
       <TouchableOpacity style={styles.addButtonContainer} onPress={() => handleAddSession(item.id)}>
         <Text style={styles.addButton}>Add</Text>
       </TouchableOpacity>
@@ -125,13 +120,13 @@ const UserDetailScreen = ({ route, navigation }) => {
           renderItem={({ item }) => (
             <TrainingSessionCard
               key={item.id}
-              title={item.title}
+              title={item.sessionName}
               exercises={item.exercises}
-              imageUri={item.thumbnailUrl}
+              imageUri={item.downloadURL}
               days={item.days}
               onPress={() =>
                 navigation.navigate('ExerciseList', {
-                  title: item.title,
+                  title: item.sessionName,
                   exercises: item.exerciseList,
                   days: item.days,
                   isSuperUser: true,

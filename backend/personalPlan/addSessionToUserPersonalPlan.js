@@ -8,15 +8,14 @@ const addSessionToUserPersonalPlan = async (userId, session) => {
 
     // Data structure for adding the session
     const sessionData = {
-      title: session.title,          // Session title
-      thumbnailUrl: session.thumbnailUrl,  // Session thumbnail URL
+      sessionName: session.sessionName,          // Session title
+      downloadURL: session.downloadURL,  // Session thumbnail URL
       days: session.days || [],      // Days (if available)
       exerciseList: [],              // Initialize with an empty exercise list
     };
-
     // Add session to the personal plan subcollection
     await setDoc(doc(personalPlanRef, session.id), sessionData);
-    console.log(`Added session ${session.title} to user ${userId}'s personal plan.`);
+    console.log(`Added session ${session.sessionName} to user ${userId}'s personal plan.`);
   } catch (error) {
     console.error('Error adding session to personal plan:', error);
     throw error;

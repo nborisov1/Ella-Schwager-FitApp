@@ -3,10 +3,6 @@ import { View, Text, Modal, ActivityIndicator } from 'react-native';
 import styles from './uploadProgressModalStyle';
 
 const UploadProgressModal = ({ isVisible, progress, onCancel }) => {
-  const handleCancel = () => {
-    console.log("CANCEL");
-    onCancel();
-  }
   return (
     <Modal
       visible={isVisible}

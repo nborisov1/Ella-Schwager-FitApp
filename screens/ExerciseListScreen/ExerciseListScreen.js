@@ -64,7 +64,6 @@ const ExerciseListScreen = ({ route }) => {
   };
 
   const handleSaveExercise = async (name, exerciseId, updatedData) => {
-    console.log(updatedData);
     await updateExerciseInSession(userId, sessionId, exerciseId, name, updatedData);
     const updatedExercises = editableExercises.map(exercise =>
       exercise.name === name ? { ...exercise } : exercise

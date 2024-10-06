@@ -13,7 +13,6 @@ import ProfileHeader from './ProfileHeader'
 dayjs.extend(isoWeek);
 
 export default function ProfileScreen({ user }) {
-  userId = '5tKW9r0Et0WiFIWRINs4rcmqj4d2'
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [weekDays, setWeekDays] = useState([]);
   const [todayWorkouts, setTodayWorkouts] = useState([]);
@@ -41,7 +40,7 @@ export default function ProfileScreen({ user }) {
   useEffect(() => {
     const loadPersonalPlan = async () => {
       try {
-        const personalPlan = await fetchPersonalPlan(userId);
+        const personalPlan = await fetchPersonalPlan(user.uid);
         const currentDay = currentDate.format('dddd');
 
         const workoutsForToday = personalPlan.filter(session => session.days.includes(currentDay));
@@ -57,15 +56,15 @@ export default function ProfileScreen({ user }) {
     };
 
     loadPersonalPlan();
-  }, [currentDate, userId]);
+  }, [currentDate, user.uid]);
 
   const handlePress = (session) => {
     navigation.navigate('ExerciseList', {
-      title: session.title,
+      title: session.sessionName,
       exercises: session.exerciseList,  // Pass the exercise list to ExerciseListScreen
       days: session.days,
       sessionId: session.id,
-      userId: userId
+      userId: user.uid
     });
   };
 
@@ -91,7 +90,7 @@ export default function ProfileScreen({ user }) {
           todayWorkouts.map((session, index) => (
             <TrainingSessionCard
               key={index}
-              title={session.title}
+              title={session.sessionName}
               exercises={session.exerciseList.length}  // Count of exercises in the session
               imageUri={session.thumbnailUrl}  // Assuming each session has a thumbnail
               days={session.days}  // Pass the days for the session

@@ -38,7 +38,6 @@ const AddExerciseScreen = ({ route }) => {
     try {
       setIsUploading(true); // Show the modal when uploading starts
       // Pass both the name and thumbnail to the backend
-      console.log(thumbnailUri);
       await addExerciseToGeneralSession(sessionId, { name: newExerciseName, thumbnail: thumbnailUri }, 
         (progress) => {
           setUploadProgress(progress); // Update the progress in the state to reflect in the modal
@@ -75,7 +74,6 @@ const AddExerciseScreen = ({ route }) => {
       aspect: [4, 3],        // Aspect ratio of the image
       quality: 1,            // Image quality (1 = max)
     });
-    console.log("res = ",result.assets[0].uri);
     if (!result.cancelled) {
       setThumbnailUri(result.assets[0].uri);  // Set the selected image URI
     }

@@ -76,7 +76,6 @@ const AddTrainingSessionScreen = () => {
       aspect: [4, 3],        // Aspect ratio of the image
       quality: 1,            // Image quality (1 = max)
     });
-    console.log("res = ",result.assets[0].uri);
     if (!result.cancelled) {
       setThumbnailUri(result.assets[0].uri);  // Set the selected image URI
     }
@@ -86,10 +85,10 @@ const AddTrainingSessionScreen = () => {
   const renderTrainingSession = ({ item }) => (
       <TrainingSessionCard 
         key={item.id}
-        title={item.title}
+        title={item.sessionName}
         exercises={item.exercises.length}
-        imageUri={item.thumbnailUrl}
-        onPress={() => navigation.navigate('AddExerciseScreen', { sessionId: item.id, title: item.title })}
+        imageUri={item.downloadURL}
+        onPress={() => navigation.navigate('AddExerciseScreen', { sessionId: item.id, title: item.sessionName })}
       />
   );
 

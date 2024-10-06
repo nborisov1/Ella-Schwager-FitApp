@@ -55,6 +55,7 @@ const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId, addit
     if (editableReps != '') {
       fields['reps'] = editableReps;
     }
+    console.log(fields);
     onSave(name, exerciseId, fields);
     setOriginalReps(editableReps);
     setOriginalSets(editableSets);
