@@ -111,6 +111,35 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 15,
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  cancelButton: {
+    backgroundColor: '#ff4d4d', // Light red color indicating cancel action
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 16, // Add space between the button and other elements
+    alignItems: 'center',
+  },
+  cancelButtonText: {
+    color: '#fff', // White text to stand out against the red background
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
 });
 
 export default styles;

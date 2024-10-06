@@ -4,14 +4,19 @@ import { useNavigation } from '@react-navigation/native'; // Import navigation h
 import TrainingSessionCard from '../screens/PersonalCoachScreen/TrainingSessionCrad/TrainingSessionCard';
 import { fetchTrainingSessions, createTrainingSessionInSessionCollection } from './backend';
 import styles from './styles'; // Import styles
+import * as ImagePicker from 'expo-image-picker';
+import UploadProgressModal from '../components/UploadProgressModal'
+import { collection, addDoc } from "firebase/firestore";
+import { db } from '../config/firebase';
 
 const AddTrainingSessionScreen = () => {
   const [sessionName, setSessionName] = useState(''); // State for the new session name
   const [thumbnailUri, setThumbnailUri] = useState(''); // State for the new session thumbnail URI
   const [trainingSessions, setTrainingSessions] = useState([]); // State to hold the fetched training sessions
   const [loading, setLoading] = useState(true); // Loading state for fetching sessions
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const navigation = useNavigation(); // Initialize navigation
-
   // Load the existing training sessions from Firebase when the component mounts
   useEffect(() => {
     loadTrainingSessions();
@@ -30,19 +35,50 @@ const AddTrainingSessionScreen = () => {
 
   // Function to handle creating a new training session
   const handleCreateSession = async () => {
-    if (!sessionName) {
+    if (!sessionName || !thumbnailUri) {
       alert('Please provide a name and a thumbnail for the training session.');
       return;
     }
 
     try {
-      await createTrainingSessionInSessionCollection(sessionName, thumbnailUri); // Function to create a session in Firebase
-      setSessionName(''); // Reset session name
-      setThumbnailUri(''); // Reset thumbnail URI
-      loadTrainingSessions(); // Reload sessions to reflect the newly created one
+      setIsUploading(true); // Show the modal when uploading starts
+      await createTrainingSessionInSessionCollection(thumbnailUri, 
+        (progress) => {
+          setUploadProgress(progress); // Update the progress in the state to reflect in the modal
+        }, 
+        async (error, downloadURL) => {
+          if (error) {
+            console.error("Upload failed", error);
+          } else {
+            console.log("Upload completed. File available at:", downloadURL);
+            await addDoc(collection(db, 'trainingSessions'), {
+              sessionName,
+              downloadURL,
+              exercises: [], // Initialize with empty exercises array
+            });        
+            setSessionName(''); // Reset session name
+            setThumbnailUri(''); // Reset thumbnail URI
+            setIsUploading(false); // Hide the modal when upload is complete
+            loadTrainingSessions(); // Reload sessions to reflect the newly created one
+          }
+      });
     } catch (error) {
       console.error('Error creating training session:', error);
       alert('Failed to create training session. Please try again.');
+      setIsUploading(false);
+    }
+  };
+
+  const handleChooseThumbnail = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,   // Allows user to crop image
+      aspect: [4, 3],        // Aspect ratio of the image
+      quality: 1,            // Image quality (1 = max)
+    });
+    console.log("res = ",result.assets[0].uri);
+    if (!result.cancelled) {
+      setThumbnailUri(result.assets[0].uri);  // Set the selected image URI
     }
   };
 
@@ -59,6 +95,11 @@ const AddTrainingSessionScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
+      {/* Reusable Modal for upload progress */}
+      <UploadProgressModal
+        isVisible={isUploading}
+        progress={uploadProgress}
+      />
       {/* Create New Training Session Section */}
       <Text style={styles.heading}>Create New Training Session</Text>
       <TextInput
@@ -67,7 +108,7 @@ const AddTrainingSessionScreen = () => {
         onChangeText={setSessionName}
         style={styles.input}
       />
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleChooseThumbnail}>
         <View style={styles.thumbnailContainer}>
           {thumbnailUri ? (
             <Image source={{ uri: thumbnailUri }} style={styles.thumbnail} />
@@ -90,7 +131,7 @@ const AddTrainingSessionScreen = () => {
           contentContainerStyle={styles.trainingSessionList}
         />
       )}
-    </SafeAreaView>
+    </SafeAreaView>    
   );
 };
 

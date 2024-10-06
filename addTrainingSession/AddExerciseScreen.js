@@ -4,12 +4,17 @@ import { useNavigation } from '@react-navigation/native';
 import { addExerciseToGeneralSession, fetchExercisesForSession } from './backend';
 import * as ImagePicker from 'expo-image-picker';
 import styles from './addExerciseStyle';
+import { doc, setDoc, collection } from 'firebase/firestore';
+import { db } from '../config/firebase';
+import UploadProgressModal from '../components/UploadProgressModal';  // Import your new reusable component
 
 const AddExerciseScreen = ({ route }) => {
   const { sessionId, title } = route.params;
   const [exercises, setExercises] = useState([]);
   const [newExerciseName, setNewExerciseName] = useState('');
   const [thumbnailUri, setThumbnailUri] = useState('');  // State to hold thumbnail URI
+  const [uploadProgress, setUploadProgress] = useState(0); // Track upload progress
+  const [isUploading, setIsUploading] = useState(false); // Control modal visibility
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -31,14 +36,30 @@ const AddExerciseScreen = ({ route }) => {
     }
 
     try {
+      setIsUploading(true); // Show the modal when uploading starts
       // Pass both the name and thumbnail to the backend
       console.log(thumbnailUri);
-      await addExerciseToGeneralSession(sessionId, { name: newExerciseName, thumbnail: thumbnailUri });
-      loadExercises();  // Reload the updated exercises
-      setNewExerciseName('');  // Reset input fields
-      setThumbnailUri('');  // Reset the thumbnail
+      await addExerciseToGeneralSession(sessionId, { name: newExerciseName, thumbnail: thumbnailUri }, 
+        (progress) => {
+          setUploadProgress(progress); // Update the progress in the state to reflect in the modal
+        }, 
+        async (error, downloadURL) => {
+          if (error) {
+            console.error("Upload failed", error);
+          } else {
+            console.log("Upload completed. File available at:", downloadURL);
+            const exercise = { name: newExerciseName, thumbnail: downloadURL }
+            const exerciseRef = doc(collection(db, `trainingSessions/${sessionId}/exercises`));
+            await setDoc(exerciseRef, exercise);
+            setNewExerciseName('');  // Reset input fields
+            setThumbnailUri('');  // Reset the thumbnail
+            setIsUploading(false); // Hide the modal when upload is complete
+            loadExercises();  // Reload the updated exercises
+          }
+      });
     } catch (error) {
       console.error('Error adding exercise:', error);
+      setIsUploading(false); // Hide the modal on error
     }
   };
 
@@ -105,6 +126,13 @@ const AddExerciseScreen = ({ route }) => {
           <Text style={styles.addButtonText}>Add Exercise</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Reusable Modal for upload progress */}
+      <UploadProgressModal
+        isVisible={isUploading}
+        progress={uploadProgress}
+      />
+
     </SafeAreaView>
   );
 };

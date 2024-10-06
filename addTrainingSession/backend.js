@@ -1,7 +1,6 @@
-// addTrainingSession/backend.js
 import { getFirestore, collection, doc, setDoc, getDocs, addDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { uploadThumbnail } from "../backend/upload/thumbnials";
+import { getStorage, ref, uploadBytes, getDownloadURL, UploadTask } from "firebase/storage";
+import { uploadImage } from "../backend/upload/thumbnials";
 import { db, storage } from '../config/firebase';
 
 // Add a new training session
@@ -16,15 +15,12 @@ export const addTrainingSession = async (name, thumbnail) => {
 };
 
 // Add exercise to training session
-export const addExerciseToGeneralSession = async (sessionId, exercise) => {
+export const addExerciseToGeneralSession = async (sessionId, exercise, progressUpdateHandler, completionHandler) => {
   try {
     const thumbnailUrl = exercise.thumbnail;
-    console.log("NATAN thumbnailUrl = ",thumbnailUrl);
-    const url = uploadThumbnail(thumbnailUrl)
-    exercise.thumbnailUri = url;
-    const exerciseRef = doc(collection(db, `trainingSessions/${sessionId}/exercises`));
-    await setDoc(exerciseRef, exercise);
-    return exerciseRef.id;
+    return uploadImage(thumbnailUrl, 
+                progressUpdateHandler,
+                completionHandler);
   } catch (error) {
     console.error("Error adding exercise: ", error);
     throw error;
@@ -42,13 +38,11 @@ export const fetchTrainingSessions = async () => {
   }
 };
 
-export const createTrainingSessionInSessionCollection = async (title, thumbnailUrl) => {
+export const createTrainingSessionInSessionCollection = async (thumbnailUrl, progressUpdateHandler, completionHandler) => {
   try {
-    const docRef = await addDoc(collection(db, 'trainingSessions'), {
-      title,
-      thumbnailUrl,
-      exercises: [], // Initialize with empty exercises array
-    });
+    return uploadImage(thumbnailUrl, 
+      progressUpdateHandler,
+      completionHandler);
     console.log('Training session created with ID: ', docRef.id);
   } catch (e) {
     console.error('Error adding training session: ', e);
