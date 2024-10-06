@@ -35,7 +35,6 @@ const fetchPersonalPlan = async (userId) => {
         const exerciseList = sessionData.exercises ? sessionData.exercises.map(exercise => ({
           ...exercise
         })) : [];
-        console.log("exerciseList = ",exerciseList);
         return {
           id: doc.id,  // Generate an ID
           days: sessionData.days,  // The days of the week

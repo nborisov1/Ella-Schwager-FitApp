@@ -145,11 +145,6 @@ const styles = StyleSheet.create({
   customFieldContainer: {
     marginTop: 20,
   },
-  customFieldRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 10,
-  },
   addFieldButton: {
     backgroundColor: '#3498DB',
     padding: 10,
@@ -203,6 +198,35 @@ const styles = StyleSheet.create({
   modalCancelButtonText: {
     color: '#fff',
     textAlign: 'center',
+  },
+  customFieldRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 8,
+    marginVertical: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2, // For Android shadow
+  },
+  customFieldTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  customFieldKey: {
+    fontWeight: 'bold',
+    marginRight: 8,
+  },
+  customFieldValue: {
+    color: '#333',
+  },
+  trashButton: {
+    padding: 8,  // Give the button a little padding for easier clickability
   },
 });
 

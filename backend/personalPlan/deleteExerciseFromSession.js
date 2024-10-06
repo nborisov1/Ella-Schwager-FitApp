@@ -11,10 +11,8 @@ const deleteExerciseFromSession = async (userId, sessionId, exerciseId, name) =>
     if (sessionDoc.exists()) {
       const sessionData = sessionDoc.data();
       const updatedExercises = sessionData.exercises.filter(
-        exercise => exercise.exerciseId !== exerciseId && exercise.name !== name
+        exercise => exercise.name !== name
       );
-      console.log('exe', updatedExercises);
-      console.log('name , exe id', name, exerciseId);
       await updateDoc(sessionRef, { exercises: updatedExercises });
       console.log('Exercise deleted successfully.');
     } else {

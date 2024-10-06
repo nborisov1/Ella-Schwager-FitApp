@@ -17,8 +17,8 @@ const ExerciseListScreen = ({ route }) => {
   const [customFields, setCustomFields] = useState({});
   const [editableExercises, setEditableExercises] = useState(exercises.map(exercise => ({
     ...exercise,
-    originalSets: exercise.sets,  
-    originalReps: exercise.reps,  
+    originalSets: exercise.sets || 0,  
+    originalReps: exercise.reps || 0,  
   })));
   const [editMode, setEditMode] = useState(false);  
   const [originalExercises, setOriginalExercises] = useState(editableExercises);  
@@ -28,7 +28,6 @@ const ExerciseListScreen = ({ route }) => {
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [customReps, setCustomReps] = useState('');
   const [customSets, setCustomSets] = useState('');
-
   const toggleDay = (day) => {
     if (updatedDays.includes(day)) {
       setUpdatedDays(updatedDays.filter((d) => d !== day));
@@ -44,8 +43,8 @@ const ExerciseListScreen = ({ route }) => {
       setOriginalExercises(editableExercises);
       setEditableExercises(editableExercises.map(exercise => ({
         ...exercise,
-        originalSets: exercise.sets,  
-        originalReps: exercise.reps,  
+        originalSets: exercise.sets || 0,  
+        originalReps: exercise.reps || 0,  
       })));
       setEditMode(false);
     } catch (error) {
@@ -67,7 +66,7 @@ const ExerciseListScreen = ({ route }) => {
   const handleSaveExercise = async (name, exerciseId, updatedData) => {
     await updateExerciseInSession(userId, sessionId, exerciseId, name, updatedData);
     const updatedExercises = editableExercises.map(exercise =>
-      exercise.name === name ? { ...exercise, sets: newSets, reps: newReps } : exercise
+      exercise.name === name ? { ...exercise } : exercise
     );
     setEditableExercises(updatedExercises);
     setEditMode(false);
@@ -114,18 +113,27 @@ const ExerciseListScreen = ({ route }) => {
     setSelectedExercise(exercise);
     setIsCustomizingExercise(true);
   };
-  const handleSaveCustomExercise = async () => {
-    console.log("selectedExercise", selectedExercise);
+  const handleSaveCustomExercise = async (customField) => {
+    let reps = 0;
+    let sets = 0;
     try {
+      const filteredData = Object.entries(customField).reduce((acc, [key, value]) => {
+        if (key == 'sets') {
+          sets = value;
+        } else if (key == 'reps') {
+          reps = value;
+        } else {
+          acc[key] = value;  // Add the key-value pair if key is not 'sets'
+        }
+        return acc;
+      }, {});      
       const newExercise = {
-        ...selectedExercise,
-        sets: customSets || 3,
-        reps: customReps || 10,
+        reps: reps,
+        sets: sets,
+        customField: {...filteredData},
       };
       const updatedExercises = [...editableExercises, newExercise];
-      console.log('selectedExercise.exerciseId',selectedExercise.exerciseId);
-      console.log('selectedExercise.name',selectedExercise.name);
-      await updateExerciseInSession(userId, sessionId, selectedExercise.exerciseId, selectedExercise.name, { reps: newExercise.reps, sets: newExercise.sets });
+      await updateExerciseInSession(userId, sessionId, selectedExercise.exerciseId, selectedExercise.name, newExercise);
       setEditableExercises(updatedExercises);
       setOriginalExercises(updatedExercises);
       setModalVisible(false);
@@ -190,6 +198,7 @@ const ExerciseListScreen = ({ route }) => {
               exerciseId={exercise.exerciseId}
               isSuperUser={isSuperUser}
               onSave={handleSaveExercise}
+              additionalFields={exercise.customField || {}}
             />
 
             {isSuperUser && editMode && (

@@ -12,7 +12,6 @@ const updateExerciseInSession = async (userId, sessionId, exerciseId, name, upda
       
       // Check if the exercise already exists in the session
       const exerciseExists = currentExercises.some(exercise => exercise.exerciseId === exerciseId && exercise.name === name);
-      console.log("currentExercises",currentExercises);
       let updatedExercises;
       if (exerciseExists) {
         // Update the existing exercise
@@ -21,7 +20,6 @@ const updateExerciseInSession = async (userId, sessionId, exerciseId, name, upda
             ? { ...exercise, ...updatedFields }  // Update the exercise details
             : exercise
         );
-        console.log("updatedExercises",updatedExercises);
       } else {
         // Add the new exercise if it doesn't exist
         const newExercise = {

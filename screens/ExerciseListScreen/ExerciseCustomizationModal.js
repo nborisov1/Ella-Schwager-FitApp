@@ -18,6 +18,21 @@ const ExerciseCustomizationModal = ({ visible, onClose, onSave, exerciseName }) 
     setCustomFields(updatedFields);
   };
 
+  const hadnleSave = () => {
+    let fieldDictionary = customFields.reduce((acc, currentField) => {
+      if (currentField.name) {
+        acc[currentField.name] = currentField.value;
+      }
+      return acc;
+    }, {});
+    if (customReps != '') {
+      fieldDictionary['reps'] = customReps;
+    }
+    if (customSets != '') {
+      fieldDictionary['sets'] = customSets;
+    }
+    onSave(fieldDictionary)
+  }
   return (
     <Modal visible={visible} transparent={true} animationType="fade">
       <SafeAreaView style={exerciseCustomizationModalStyles.modalBackground}>
@@ -70,7 +85,7 @@ const ExerciseCustomizationModal = ({ visible, onClose, onSave, exerciseName }) 
 
           {/* Save and Cancel Buttons */}
           <View style={exerciseCustomizationModalStyles.buttonContainer}>
-            <TouchableOpacity style={exerciseCustomizationModalStyles.saveButton} onPress={onSave}>
+            <TouchableOpacity style={exerciseCustomizationModalStyles.saveButton} onPress={hadnleSave}>
               <Text style={exerciseCustomizationModalStyles.saveButtonText}>Save</Text>
             </TouchableOpacity>
             <TouchableOpacity style={exerciseCustomizationModalStyles.cancelButton} onPress={onClose}>

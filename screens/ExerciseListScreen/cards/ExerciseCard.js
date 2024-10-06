@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, LayoutAnimation, Platform, UIManager, Modal, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, LayoutAnimation, Platform, UIManager, Modal, ScrollView, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import styles from './styles';
@@ -9,64 +9,53 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-function flattenDictionary(dict) {
-  let flattened = {};
-
-  for (let key in dict) {
-    if (dict.hasOwnProperty(key)) {
-
-      if (typeof dict[key] === 'object' && dict[key] !== null && !Array.isArray(dict[key])) {
-        // Recursively flatten the nested dictionary
-        Object.assign(flattened, flattenDictionary(dict[key]));
-      } else {
-        // Assign the value to the flattened dictionary
-        flattened[key] = dict[key];
-      }
-    }
-  }
-
-  return flattened;
-}
-
-const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId }) => {
+const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId, additionalFields }) => {
   const [editableSets, setEditableSets] = useState(sets);
   const [editableReps, setEditableReps] = useState(reps);
   const [originalSets, setOriginalSets] = useState(sets);
   const [originalReps, setOriginalReps] = useState(reps);
   const [isEditing, setIsEditing] = useState(false);
-  const [customFields, setCustomFields] = useState([]); // For handling custom key-value fields
+  const [customFields, setCustomFields] = useState(additionalFields ? additionalFields : {}); // For handling custom key-value fields
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newFieldKey, setNewFieldKey] = useState('');
   const [newFieldValue, setNewFieldValue] = useState('');
   const [difficulty, setDifficulty] = useState(3);  // Default difficulty (only for non-super user)
   const [comment, setComment] = useState('');
   const [isCommentOpen, setIsCommentOpen] = useState(false);
-
   const toggleCommentSection = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setIsCommentOpen(!isCommentOpen);
   };
-
   // Add a custom field
   const handleAddCustomField = () => {
-    setCustomFields([...customFields, { [newFieldKey]: newFieldValue }]);
+    customFields[newFieldKey] = newFieldValue;
     setNewFieldKey('');
     setNewFieldValue('');
     setIsModalVisible(false);
   };
 
   // Remove a custom field
-  const handleRemoveField = (index) => {
-    const updatedFields = customFields.filter((_, i) => i !== index);
+  const handleRemoveField = (key) => {
+    const updatedFields = { ...customFields };
+    delete updatedFields[key];
     setCustomFields(updatedFields);
+
   };
 
   // Save changes (including custom fields)
   const handleSave = () => {
     const dict = { ...(customFields || {})};
-    const flattenedDict = flattenDictionary(dict);
-    const updatedExercise = { ...flattenedDict, ...{sets: editableSets, reps: editableReps} };
-    onSave(name, exerciseId, updatedExercise);
+    let fields = {}
+    if (dict !== {}) {
+      fields['customField'] = dict;
+    }
+    if (editableSets != '') {
+      fields['sets'] = editableSets;
+    }
+    if (editableReps != '') {
+      fields['reps'] = editableReps;
+    }
+    onSave(name, exerciseId, fields);
     setOriginalReps(editableReps);
     setOriginalSets(editableSets);
     setIsEditing(false);
@@ -77,7 +66,6 @@ const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId }) => 
     setEditableReps(originalReps);
     setEditableSets(originalSets);
   };
-
   return (
     <View style={styles.card}>
       <Text style={styles.title}>{name}</Text>
@@ -109,18 +97,37 @@ const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId }) => 
               <Text style={styles.label}>Reps</Text>
             </View>
           </View>
-
           {/* Custom Fields Section */}
           <ScrollView style={styles.customFieldContainer}>
-            {customFields.map((field, index) => (
-              <View key={index} style={styles.customFieldRow}>
-                <Text>{field.key}: {field.value}</Text>
-                <TouchableOpacity onPress={() => handleRemoveField(index)}>
-                  <FontAwesome name="trash" size={20} color="red" />
-                </TouchableOpacity>
+          {customFields && Object.entries(customFields).map(([key, value], index) => (
+            <View key={index} style={styles.customFieldRow}>
+              {/* Text container for field name and value */}
+              <View style={styles.customFieldTextContainer}>
+                <Text style={styles.customFieldKey}>{key}:</Text>
+                <Text style={styles.customFieldValue}>{value}</Text>
               </View>
-            ))}
-          </ScrollView>
+              
+              {/* Trash icon with a confirmation dialog */}
+              <TouchableOpacity
+                style={styles.trashButton}
+                onPress={() => {
+                  // Prompt user to confirm deletion
+                  Alert.alert(
+                    "Confirm Deletion",
+                    `Are you sure you want to delete the field "${key}"?`,
+                    [
+                      { text: "Cancel", style: "cancel" },
+                      { text: "OK", onPress: () => handleRemoveField(key) },
+                    ],
+                    { cancelable: true }
+                  );
+                }}
+              >
+                <FontAwesome name="trash" size={18} color="red" />
+              </TouchableOpacity>
+            </View>
+          ))}
+        </ScrollView>
 
           {/* Add Custom Field Button */}
           <TouchableOpacity
@@ -141,7 +148,6 @@ const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId }) => 
           </View>
         </>
       ) : (
-        console.log("customFields",customFields),
       <View style={styles.centeredContainer}>
         <Text style={styles.details}>
           {/* Conditionally render Sets and Reps if they are not 0 or undefined */}
@@ -153,8 +159,8 @@ const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId }) => 
           {customFields && Object.keys(customFields).length > 0 && (
             <>
               {(editableSets > 0 || editableReps > 0) && ' | '}
-              {Object.entries(...customFields).map(([key, value], index, arr) => (
-                value !== undefined ? `${key}: ${value}${index < arr.length - 1 ? ' | ' : ''}` : ''
+              {Object.entries(customFields).map(([key, value], index, arr) => (
+                value !== undefined && value > 0 ? `${key}: ${value}${index < arr.length - 1 ? ' | ' : ''}` : ''
               ))}
             </>
           )}
