@@ -30,7 +30,6 @@ export default function AppNavigation() {
 
   if (userData) {
     // Once user data is fetched, pass the role to HomeScreen
-    console.log("userData = ",userData)
     return <HomeScreen userData={userData} />;
   } else {
     return (

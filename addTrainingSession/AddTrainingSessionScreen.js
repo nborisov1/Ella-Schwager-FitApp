@@ -48,13 +48,12 @@ const AddTrainingSessionScreen = () => {
 
   // Render each training session as a card
   const renderTrainingSession = ({ item }) => (
-    console.log('item', item.title),
       <TrainingSessionCard 
         key={item.id}
         title={item.title}
         exercises={item.exercises.length}
         imageUri={item.thumbnailUrl}
-        onPress={() => {navigation.navigate('AddExerciseScreen', { sessionId: item.id, title: item.title }); console.log("NATAN1111",item.title);}}
+        onPress={() => navigation.navigate('AddExerciseScreen', { sessionId: item.id, title: item.title })}
       />
   );
 

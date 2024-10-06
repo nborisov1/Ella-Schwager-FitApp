@@ -123,7 +123,6 @@ const UserDetailScreen = ({ route, navigation }) => {
           data={personalPlan}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            console.log("natn item = ",item),
             <TrainingSessionCard
               key={item.id}
               title={item.title}

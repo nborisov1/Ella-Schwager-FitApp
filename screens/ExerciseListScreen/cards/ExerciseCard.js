@@ -160,7 +160,7 @@ const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId, addit
             <>
               {(editableSets > 0 || editableReps > 0) && ' | '}
               {Object.entries(customFields).map(([key, value], index, arr) => (
-                value !== undefined && value > 0 ? `${key}: ${value}${index < arr.length - 1 ? ' | ' : ''}` : ''
+                value !== undefined && (value > 0 || value !== '') ? `${key}: ${value}${index < arr.length - 1 ? ' | ' : ''}` : ''
               ))}
             </>
           )}

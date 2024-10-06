@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, FlatList, TextInput, TouchableOpacity, Alert, SafeAreaView, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { addExerciseToGeneralSession, fetchExercisesForSession } from './backend'; // Assuming these are in your backend
+import { addExerciseToGeneralSession, fetchExercisesForSession } from './backend';
+import * as ImagePicker from 'expo-image-picker';
 import styles from './addExerciseStyle';
 
 const AddExerciseScreen = ({ route }) => {
-  const { sessionId } = route.params; // Get sessionId from navigation params
+  const { sessionId, title } = route.params;
   const [exercises, setExercises] = useState([]);
   const [newExerciseName, setNewExerciseName] = useState('');
-  const [sets, setSets] = useState('');
-  const [reps, setReps] = useState('');
-  const navigation = useNavigation(); // Use navigation for routing to ExerciseVideoScreen
+  const [thumbnailUri, setThumbnailUri] = useState('');  // State to hold thumbnail URI
+  const navigation = useNavigation();
 
   useEffect(() => {
     loadExercises();
@@ -26,16 +26,17 @@ const AddExerciseScreen = ({ route }) => {
   };
 
   const handleAddExercise = async () => {
-    if (!newExerciseName || !sets || !reps) {
-      return Alert.alert('Invalid Input', 'Please enter all fields for exercise name, sets, and reps.');
+    if (!newExerciseName || !thumbnailUri) {
+      return Alert.alert('Invalid Input', 'Please enter an exercise name and select a thumbnail.');
     }
 
     try {
-      await addExerciseToGeneralSession(sessionId, { name: newExerciseName, sets: parseInt(sets), reps: parseInt(reps) });
-      loadExercises(); // Reload the updated exercises
-      setNewExerciseName(''); // Reset input fields
-      setSets('');
-      setReps('');
+      // Pass both the name and thumbnail to the backend
+      console.log(thumbnailUri);
+      await addExerciseToGeneralSession(sessionId, { name: newExerciseName, thumbnail: thumbnailUri });
+      loadExercises();  // Reload the updated exercises
+      setNewExerciseName('');  // Reset input fields
+      setThumbnailUri('');  // Reset the thumbnail
     } catch (error) {
       console.error('Error adding exercise:', error);
     }
@@ -45,9 +46,23 @@ const AddExerciseScreen = ({ route }) => {
     navigation.navigate('ExerciseVideoScreen', { exercise });
   };
 
+  // Open the image picker to select a thumbnail
+  const handleChooseThumbnail = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,   // Allows user to crop image
+      aspect: [4, 3],        // Aspect ratio of the image
+      quality: 1,            // Image quality (1 = max)
+    });
+    console.log("res = ",result.assets[0].uri);
+    if (!result.cancelled) {
+      setThumbnailUri(result.assets[0].uri);  // Set the selected image URI
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Exercises in this session</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.heading}>{title} Exercises</Text>
 
       {/* Exercise List */}
       <FlatList
@@ -56,7 +71,7 @@ const AddExerciseScreen = ({ route }) => {
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => handleExercisePress(item)} style={styles.exerciseCard}>
             <Text style={styles.exerciseName}>{item.name}</Text>
-            <Text style={styles.exerciseInfo}>Sets: {item.sets} | Reps: {item.reps}</Text>
+            {item.thumbnail && <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />}
           </TouchableOpacity>
         )}
         ListEmptyComponent={() => <Text style={styles.noExercisesText}>No exercises added yet.</Text>}
@@ -71,21 +86,18 @@ const AddExerciseScreen = ({ route }) => {
           onChangeText={setNewExerciseName}
         />
 
-        <View style={styles.row}>
-          <TextInput
-            style={styles.smallInput}
-            placeholder="Sets"
-            keyboardType="numeric"
-            value={sets}
-            onChangeText={setSets}
-          />
-          <TextInput
-            style={styles.smallInput}
-            placeholder="Reps"
-            keyboardType="numeric"
-            value={reps}
-            onChangeText={setReps}
-          />
+        {/* Button to pick a thumbnail */}
+        <TouchableOpacity style={styles.thumbnailButton} onPress={handleChooseThumbnail}>
+          <Text style={styles.thumbnailButtonText}>Choose Thumbnail</Text>
+        </TouchableOpacity>
+
+        {/* Show the selected thumbnail */}
+        <View style={styles.selectedThumbnail}>
+          {thumbnailUri ? (
+            <Image source={{ uri: thumbnailUri }} style={styles.selectedThumbnail} />
+          ) : (
+            <Text style={styles.noThumbnailText}>No thumbnail selected</Text>
+          )}
         </View>
 
         {/* Add Exercise Button */}
@@ -93,7 +105,7 @@ const AddExerciseScreen = ({ route }) => {
           <Text style={styles.addButtonText}>Add Exercise</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

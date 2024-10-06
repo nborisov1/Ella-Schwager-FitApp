@@ -66,13 +66,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
-  backButton: {
-    backgroundColor: '#333',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 30,
-  },
-
+  
 });
 
 export default styles;

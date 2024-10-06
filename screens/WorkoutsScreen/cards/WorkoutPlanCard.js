@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, ImageBackground, TouchableOpacity, Alert, Image } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import styles from './styles';
+import styles from '../../cards/styles';
 
 const WorkoutPlanCard = ({ workout }) => {
   const navigation = useNavigation();

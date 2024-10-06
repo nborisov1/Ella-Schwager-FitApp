@@ -16,7 +16,7 @@ const AddTrainingSessionStack = () => {
         <Stack.Screen
             name="AddExerciseScreen"  // Define the new route
             component={AddExerciseScreen}  // Point to the new component
-            options={{ title: 'Add Exercises' }}  // Set the screen title
+            options={{ headerShown: false }}
         />
         <Stack.Screen
           name="ExerciseVideoScreen"

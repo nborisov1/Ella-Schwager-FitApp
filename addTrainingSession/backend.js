@@ -1,6 +1,7 @@
 // addTrainingSession/backend.js
 import { getFirestore, collection, doc, setDoc, getDocs, addDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { uploadThumbnail } from "../backend/upload/thumbnials";
 import { db, storage } from '../config/firebase';
 
 // Add a new training session
@@ -17,6 +18,10 @@ export const addTrainingSession = async (name, thumbnail) => {
 // Add exercise to training session
 export const addExerciseToGeneralSession = async (sessionId, exercise) => {
   try {
+    const thumbnailUrl = exercise.thumbnail;
+    console.log("NATAN thumbnailUrl = ",thumbnailUrl);
+    const url = uploadThumbnail(thumbnailUrl)
+    exercise.thumbnailUri = url;
     const exerciseRef = doc(collection(db, `trainingSessions/${sessionId}/exercises`));
     await setDoc(exerciseRef, exercise);
     return exerciseRef.id;
