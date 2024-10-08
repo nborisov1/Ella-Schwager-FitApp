@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Modal, ScrollView, SafeAreaView } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import exerciseCustomizationModalStyles from './exerciseCustomizationModalStyles'; // Import new styles
-
-const ExerciseCustomizationModal = ({ visible, onClose, onSave, exerciseName }) => {
+              
+const ExerciseCustomizationModal = ({   isVisible,  exerciseName,  onSave,  onClose }) => {
   const [customSets, setCustomSets] = useState('');
   const [customReps, setCustomReps] = useState('');
   const [customFields, setCustomFields] = useState([{ name: '', value: '' }]);
@@ -34,10 +34,10 @@ const ExerciseCustomizationModal = ({ visible, onClose, onSave, exerciseName }) 
     onSave(fieldDictionary)
   }
   return (
-    <Modal visible={visible} transparent={true} animationType="fade">
+    <Modal visible={isVisible} transparent={true} animationType="fade">
       <SafeAreaView style={exerciseCustomizationModalStyles.modalBackground}>
         <View style={exerciseCustomizationModalStyles.modalContainer}>
-          <Text style={exerciseCustomizationModalStyles.modalTitle}>Customize {exerciseName}</Text>
+          <Text style={exerciseCustomizationModalStyles.modalTitle}>{exerciseName}</Text>
           
           {/* Input Fields for Sets and Reps */}
           <ScrollView style={exerciseCustomizationModalStyles.modalContent}>
@@ -46,6 +46,7 @@ const ExerciseCustomizationModal = ({ visible, onClose, onSave, exerciseName }) 
                 style={exerciseCustomizationModalStyles.inputField}
                 placeholder="Sets"
                 keyboardType="numeric"
+                placeholderTextColor="#888"
                 value={customSets}
                 onChangeText={setCustomSets}
               />
@@ -53,6 +54,7 @@ const ExerciseCustomizationModal = ({ visible, onClose, onSave, exerciseName }) 
                 style={exerciseCustomizationModalStyles.inputField}
                 placeholder="Reps"
                 keyboardType="numeric"
+                placeholderTextColor="#888"
                 value={customReps}
                 onChangeText={setCustomReps}
               />
@@ -64,14 +66,16 @@ const ExerciseCustomizationModal = ({ visible, onClose, onSave, exerciseName }) 
               <View key={index} style={exerciseCustomizationModalStyles.customFieldContainer}>
                 <TextInput
                   style={exerciseCustomizationModalStyles.customFieldInput}
-                  placeholder="Field Name"
+                  placeholder="Name"
                   value={field.name}
+                  placeholderTextColor="#888"
                   onChangeText={(value) => handleCustomFieldChange(index, 'name', value)}
                 />
                 <TextInput
                   style={exerciseCustomizationModalStyles.customFieldInput}
-                  placeholder="Field Value"
+                  placeholder="Value"
                   value={field.value}
+                  placeholderTextColor="#888"
                   onChangeText={(value) => handleCustomFieldChange(index, 'value', value)}
                 />
               </View>

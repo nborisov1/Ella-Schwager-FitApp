@@ -31,28 +31,7 @@ const ExerciseListScreen = ({ route }) => {
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [customReps, setCustomReps] = useState('');
   const [customSets, setCustomSets] = useState('');
-  const [refreshing, setRefreshing] = useState(false);
-
-  // const onRefresh = useCallback(() => {
-  //   setRefreshing(true);
-  //   loadPersonalPlan().then(() => setRefreshing(false));
-  // }, []);
-
-
-  const loadExercisesThumbnails = async () => {
-    try {
-      editableExercises.map(exercises => ({
-        fetchAvailableExercises
-      }))
-    } catch (error) {
-      console.error('Error fetching personal plan:', error);
-    }
-  };
-
-  // useEffect(() => {
-  //   loadPersonalPlan();
-  // }, []);
-
+  //TODO: refresh, and reload exercises after saving
   const toggleDay = (day) => {
     if (updatedDays.includes(day)) {
       setUpdatedDays(updatedDays.filter((d) => d !== day));
@@ -89,7 +68,6 @@ const ExerciseListScreen = ({ route }) => {
   };
 
   const handleSaveExercise = async (name, exerciseId, thumbnail, updatedData) => {
-    console.log("handleSaveExercise", thumbnail);
     await updateExerciseInSession(userId, sessionId, exerciseId, name, thumbnail, updatedData);
     const updatedExercises = editableExercises.map(exercise =>
       exercise.name === name ? { ...exercise } : exercise
@@ -263,16 +241,8 @@ const ExerciseListScreen = ({ route }) => {
         <SafeAreaView style={styles.modalContainer}>
         {isCustomizingExercise ? <ExerciseCustomizationModal
               isVisible={isModalVisible}
-              exercise={selectedExercise}
-              customSets={customSets}
-              setCustomSets={setCustomSets}
-              customReps={customReps}
-              setCustomReps={setCustomReps}
-              customFields={customFields}
+              exerciseName={selectedExercise.name}
               handleCustomFieldChange={(field, value) => setCustomFields({ ...customFields, [field]: value })}
-              addCustomField={() =>
-                setCustomFields({ ...customFields, [`customField${Object.keys(customFields).length + 1}`]: '' })
-              }
               onSave={handleSaveCustomExercise}
               onClose={() => {setIsCustomizingExercise(false); setModalVisible(false);}}
           />: (
