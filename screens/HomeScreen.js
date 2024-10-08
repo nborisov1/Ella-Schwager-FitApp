@@ -138,7 +138,7 @@ const HomeScreen = ({ userData }) => {
         {isSuperUser ? (
           <Tab.Screen
             name="Add Training"
-            component={AddTrainingSessionStack}
+            children={() => <AddTrainingSessionStack userData={userData} />}
             options={{ headerShown: false }}
           />
         ) : (

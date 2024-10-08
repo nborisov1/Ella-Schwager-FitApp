@@ -7,10 +7,13 @@ import deleteExerciseFromSession from '../../backend/personalPlan/deleteExercise
 import updateExerciseInSession from '../../backend/personalPlan/updateExerciseInSession';
 import fetchAvailableExercises from '../../backend/users/fetchAvailableExercises';
 import ExerciseCustomizationModal from './ExerciseCustomizationModal'
+import { useNavigation } from '@react-navigation/native';
+
 
 const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const ExerciseListScreen = ({ route }) => {
+  const navigation = useNavigation();
   const { title, exercises, days, isSuperUser, sessionId, userId } = route.params;
   const [updatedDays, setUpdatedDays] = useState([...days]);  
   const [previousDays, setPreviousDays] = useState([...days]);
@@ -108,6 +111,18 @@ const ExerciseListScreen = ({ route }) => {
       console.error('Error fetching available exercises:', error);
     }
   };
+  
+  const handleNavigateToExerciseVideoScreen = (exercise) => {
+    console.log("exercise = ",exercise);
+    navigation.navigate('ExerciseVideoScreen', {
+      title: exercise.name,
+      videoUri: exercise.videoUri,
+      thumbnail: exercise.thumbnail,
+      exerciseId: exercise.id,
+      sessionId: sessionId,
+      isSuperUser: isSuperUser
+    });
+  };
 
   const handleAddExercise = (exercise) => {
     setSelectedExercise(exercise);
@@ -191,6 +206,9 @@ const ExerciseListScreen = ({ route }) => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {editableExercises.map((exercise, index) => (
           <View key={index} style={styles.exerciseItem}>
+            <TouchableOpacity
+              onPress={() => handleNavigateToExerciseVideoScreen(exercise)}  // Make the card clickable
+            >
             <ExerciseCard
               name={exercise.name}
               sets={exercise.sets}
@@ -200,7 +218,7 @@ const ExerciseListScreen = ({ route }) => {
               onSave={handleSaveExercise}
               additionalFields={exercise.customField || {}}
             />
-
+            </TouchableOpacity>
             {isSuperUser && editMode && (
               <View style={styles.deleteButtonContainer}>
                 <TouchableOpacity

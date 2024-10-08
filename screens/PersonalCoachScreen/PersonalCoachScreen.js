@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';  // Import navigation 
 import styles from './styles';
 import TrainingSessionCard from './TrainingSessionCrad/TrainingSessionCard';
 import fetchPersonalPlan from '../../backend/users/fetchPersonalPlan';
-import createTrainingSession from '../../backend/personalPlan/createTrainingSession';
 import { RefreshControl } from 'react-native-gesture-handler';
 
 const PersonalCoachScreen = ({userData}) => {

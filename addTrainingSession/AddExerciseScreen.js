@@ -9,7 +9,8 @@ import { db } from '../config/firebase';
 import UploadProgressModal from '../components/UploadProgressModal';  // Import your new reusable component
 
 const AddExerciseScreen = ({ route }) => {
-  const { sessionId, title } = route.params;
+  console.log('route',route);
+  const { sessionId, title, userData } = route.params;
   const [exercises, setExercises] = useState([]);
   const [newExerciseName, setNewExerciseName] = useState('');
   const [thumbnailUri, setThumbnailUri] = useState('');  // State to hold thumbnail URI
@@ -63,7 +64,15 @@ const AddExerciseScreen = ({ route }) => {
   };
 
   const handleExercisePress = (exercise) => {
-    navigation.navigate('ExerciseVideoScreen', { exercise });
+    console.log(exercise);
+    navigation.navigate('ExerciseVideoScreen', {
+      title: exercise.name,
+      videoUri: exercise.videoUri,
+      thumbnail: exercise.thumbnail,
+      exerciseId: exercise.id,
+      sessionId: sessionId,
+      isSuperUser: userData.role == 'Admin'
+    });
   };
 
   // Open the image picker to select a thumbnail
@@ -74,6 +83,7 @@ const AddExerciseScreen = ({ route }) => {
       aspect: [4, 3],        // Aspect ratio of the image
       quality: 1,            // Image quality (1 = max)
     });
+    console.log("natan ", result);
     if (!result.cancelled) {
       setThumbnailUri(result.assets[0].uri);  // Set the selected image URI
     }

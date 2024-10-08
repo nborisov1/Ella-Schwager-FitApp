@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Modal, ActivityIndicator } from 'react-native';
 import styles from './uploadProgressModalStyle';
 
-const UploadProgressModal = ({ isVisible, progress, onCancel }) => {
+const UploadProgressModal = ({ isVisible, progress }) => {
   return (
     <Modal
       visible={isVisible}

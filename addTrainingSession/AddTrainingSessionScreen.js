@@ -9,7 +9,7 @@ import UploadProgressModal from '../components/UploadProgressModal'
 import { collection, addDoc } from "firebase/firestore";
 import { db } from '../config/firebase';
 
-const AddTrainingSessionScreen = () => {
+const AddTrainingSessionScreen = ({userData}) => {
   const [sessionName, setSessionName] = useState(''); // State for the new session name
   const [thumbnailUri, setThumbnailUri] = useState(''); // State for the new session thumbnail URI
   const [trainingSessions, setTrainingSessions] = useState([]); // State to hold the fetched training sessions
@@ -17,6 +17,7 @@ const AddTrainingSessionScreen = () => {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const navigation = useNavigation(); // Initialize navigation
+  console.log('userData1,',userData);
   // Load the existing training sessions from Firebase when the component mounts
   useEffect(() => {
     loadTrainingSessions();
@@ -51,7 +52,8 @@ const AddTrainingSessionScreen = () => {
             console.error("Upload failed", error);
           } else {
             console.log("Upload completed. File available at:", downloadURL);
-            await addDoc(collection(db, 'trainingSessions'), {
+            doc(collection(db, `trainingSessions/${sessionId}/exercises/${exerciseId}`));
+            await addDoc(collection(db, 'trainingSessions/${sessionId}'), {
               sessionName,
               downloadURL,
               exercises: [], // Initialize with empty exercises array
@@ -83,12 +85,13 @@ const AddTrainingSessionScreen = () => {
 
   // Render each training session as a card
   const renderTrainingSession = ({ item }) => (
+    console.log("NATAN",userData),
       <TrainingSessionCard 
         key={item.id}
         title={item.sessionName}
         exercises={item.exercises.length}
         imageUri={item.downloadURL}
-        onPress={() => navigation.navigate('AddExerciseScreen', { sessionId: item.id, title: item.sessionName })}
+        onPress={() => navigation.navigate('AddExerciseScreen', { sessionId: item.id, title: item.sessionName, userData: userData })}
       />
   );
 

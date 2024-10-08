@@ -3,14 +3,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AddTrainingSessionScreen from './AddTrainingSessionScreen';
 import AddExerciseScreen from './AddExerciseScreen';  // Import the screen
-import ExerciseVideoScreen from '../addTrainingSession/ExerciseVideoScreen'
+import ExerciseVideoScreen from '../components/ExerciseVideoScreen/ExerciseVideoScreen'
 const Stack = createStackNavigator();
-const AddTrainingSessionStack = () => {
+const AddTrainingSessionStack = ({userData}) => {
+    console.log('userData ',userData);
     return (
       <Stack.Navigator>
         <Stack.Screen
           name="AddTrainingSession"
-          component={AddTrainingSessionScreen}
+          children={() => <AddTrainingSessionScreen userData={userData} />}
           options={{ headerShown: false }}
         />
         <Stack.Screen
@@ -18,10 +19,14 @@ const AddTrainingSessionStack = () => {
             component={AddExerciseScreen}  // Point to the new component
             options={{ headerShown: false }}
         />
-        <Stack.Screen
+          <Stack.Screen
           name="ExerciseVideoScreen"
           component={ExerciseVideoScreen}
-          options={{ title: 'Exercise Videos' }}
+          options={{
+            headerShown: false,
+            title: 'Exercises',
+            headerBackTitleVisible: false,
+          }}
         />
       </Stack.Navigator>
     );
