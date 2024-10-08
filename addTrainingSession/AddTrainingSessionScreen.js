@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, SafeAreaView, TextInput, Button, Text, Image, TouchableOpacity, FlatList } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, SafeAreaView, RefreshControl, TextInput, Button, Text, Image, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; // Import navigation hook
 import TrainingSessionCard from '../screens/PersonalCoachScreen/TrainingSessionCrad/TrainingSessionCard';
 import { fetchTrainingSessions, createTrainingSessionInSessionCollection } from './backend';
@@ -17,8 +17,12 @@ const AddTrainingSessionScreen = ({userData}) => {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const navigation = useNavigation(); // Initialize navigation
-  console.log('userData1,',userData);
-  // Load the existing training sessions from Firebase when the component mounts
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    loadTrainingSessions().then(() => setRefreshing(false));
+  }, []);
+
   useEffect(() => {
     loadTrainingSessions();
   }, []);
@@ -52,8 +56,7 @@ const AddTrainingSessionScreen = ({userData}) => {
             console.error("Upload failed", error);
           } else {
             console.log("Upload completed. File available at:", downloadURL);
-            doc(collection(db, `trainingSessions/${sessionId}/exercises/${exerciseId}`));
-            await addDoc(collection(db, 'trainingSessions/${sessionId}'), {
+            await addDoc(collection(db, `trainingSessions/`), {
               sessionName,
               downloadURL,
               exercises: [], // Initialize with empty exercises array
@@ -85,7 +88,6 @@ const AddTrainingSessionScreen = ({userData}) => {
 
   // Render each training session as a card
   const renderTrainingSession = ({ item }) => (
-    console.log("NATAN",userData),
       <TrainingSessionCard 
         key={item.id}
         title={item.sessionName}
@@ -131,6 +133,7 @@ const AddTrainingSessionScreen = ({userData}) => {
           keyExtractor={(item) => item.id}
           renderItem={renderTrainingSession}
           contentContainerStyle={styles.trainingSessionList}
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         />
       )}
     </SafeAreaView>    

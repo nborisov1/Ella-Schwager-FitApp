@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, TextInput, Modal, Button, SafeAreaView } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, FlatList, TouchableOpacity, TextInput, Modal, RefreshControl, SafeAreaView } from 'react-native';
 import TrainingSessionCard from '../../PersonalCoachScreen/TrainingSessionCrad/TrainingSessionCard'; 
 import fetchTrainingSessions from '../../../backend/users/fetchTrainingSessions';
 import addSessionToUserPersonalPlan from '../../../backend/personalPlan/addSessionToUserPersonalPlan';  
@@ -14,6 +14,12 @@ const UserDetailScreen = ({ route, navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [loading, setLoading] = useState(true);  // Loading state for fetching data
   const [personalPlanLoading, setPersonalPlanLoading] = useState(true);  // Loading state for personal plan
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    loadTrainingSessions().then(() => setRefreshing(false));
+  }, []);
 
   useEffect(() => {
     navigation.setOptions({ title: user.fullName || 'Unnamed User' });
@@ -115,6 +121,7 @@ const UserDetailScreen = ({ route, navigation }) => {
         <Text style={styles.loadingText}>Loading personal plan...</Text>
       ) : personalPlan.length > 0 ? (
         <FlatList
+          refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
           data={personalPlan}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
