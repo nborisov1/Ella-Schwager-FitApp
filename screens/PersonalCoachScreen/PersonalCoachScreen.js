@@ -21,7 +21,7 @@ const PersonalCoachScreen = ({userData}) => {
   const loadPersonalPlan = async () => {
     try {
       const sessions = await fetchPersonalPlan(userData.uid);
-      console.log(sessions)
+      console.log(sessions);
       setTrainingSessions(sessions);
       setLoading(false)
     } catch (error) {
@@ -34,11 +34,15 @@ const PersonalCoachScreen = ({userData}) => {
   }, []);
 
   const handlePress = (session) => {
+    console.log("session", session);
+    console.log("userData.uid",userData.uid);
     navigation.navigate('ExerciseList', {
       title: session.sessionName,
       exercises: session.exerciseList,
       days: session.days,
-      isSuperUser: false
+      isSuperUser: false,
+      sessionId: session.id,
+      userId: userData.uid
     });
   };
 

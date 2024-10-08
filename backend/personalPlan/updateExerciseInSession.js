@@ -1,22 +1,22 @@
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
-const updateExerciseInSession = async (userId, sessionId, exerciseId, name, updatedFields) => {
+const updateExerciseInSession = async (userId, sessionId, exerciseId, name, thumbnail, updatedFields) => {
   try {
     const sessionRef = doc(db, `users/${userId}/personalPlan`, sessionId);
     const sessionDoc = await getDoc(sessionRef);
-
+    console.log("thumbnail ====",thumbnail);
     if (sessionDoc.exists()) {
       const sessionData = sessionDoc.data();
       const currentExercises = sessionData.exercises || [];  // Default to an empty array if no exercises exist
       
       // Check if the exercise already exists in the session
-      const exerciseExists = currentExercises.some(exercise => exercise.exerciseId === exerciseId && exercise.name === name);
+      const exerciseExists = currentExercises.some(exercise => exercise.id === exerciseId && exercise.name === name);
       let updatedExercises;
       if (exerciseExists) {
         // Update the existing exercise
         updatedExercises = currentExercises.map(exercise =>
-          exercise.exerciseId === exerciseId && exercise.name === name
+          exercise.id === exerciseId && exercise.name === name
             ? { ...exercise, ...updatedFields }  // Update the exercise details
             : exercise
         );
@@ -24,6 +24,8 @@ const updateExerciseInSession = async (userId, sessionId, exerciseId, name, upda
         // Add the new exercise if it doesn't exist
         const newExercise = {
           name,
+          id: exerciseId,
+          thumbnail:thumbnail,
           ...updatedFields
         };
         updatedExercises = [...currentExercises, newExercise];  // Add the new exercise to the array

@@ -9,7 +9,6 @@ import { db } from '../config/firebase';
 import UploadProgressModal from '../components/UploadProgressModal';  // Import your new reusable component
 
 const AddExerciseScreen = ({ route }) => {
-  console.log('route',route);
   const { sessionId, title, userData } = route.params;
   const [exercises, setExercises] = useState([]);
   const [newExerciseName, setNewExerciseName] = useState('');
@@ -47,7 +46,6 @@ const AddExerciseScreen = ({ route }) => {
           if (error) {
             console.error("Upload failed", error);
           } else {
-            console.log("Upload completed. File available at:", downloadURL);
             const exercise = { name: newExerciseName, thumbnail: downloadURL }
             const exerciseRef = doc(collection(db, `trainingSessions/${sessionId}/exercises`));
             await setDoc(exerciseRef, exercise);
@@ -64,10 +62,9 @@ const AddExerciseScreen = ({ route }) => {
   };
 
   const handleExercisePress = (exercise) => {
-    console.log(exercise);
+    console.log("exercise",exercise);
     navigation.navigate('ExerciseVideoScreen', {
       title: exercise.name,
-      videoUri: exercise.videoUri,
       thumbnail: exercise.thumbnail,
       exerciseId: exercise.id,
       sessionId: sessionId,
@@ -83,7 +80,6 @@ const AddExerciseScreen = ({ route }) => {
       aspect: [4, 3],        // Aspect ratio of the image
       quality: 1,            // Image quality (1 = max)
     });
-    console.log("natan ", result);
     if (!result.cancelled) {
       setThumbnailUri(result.assets[0].uri);  // Set the selected image URI
     }

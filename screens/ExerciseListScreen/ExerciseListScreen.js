@@ -31,6 +31,28 @@ const ExerciseListScreen = ({ route }) => {
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [customReps, setCustomReps] = useState('');
   const [customSets, setCustomSets] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
+
+  // const onRefresh = useCallback(() => {
+  //   setRefreshing(true);
+  //   loadPersonalPlan().then(() => setRefreshing(false));
+  // }, []);
+
+
+  const loadExercisesThumbnails = async () => {
+    try {
+      editableExercises.map(exercises => ({
+        fetchAvailableExercises
+      }))
+    } catch (error) {
+      console.error('Error fetching personal plan:', error);
+    }
+  };
+
+  // useEffect(() => {
+  //   loadPersonalPlan();
+  // }, []);
+
   const toggleDay = (day) => {
     if (updatedDays.includes(day)) {
       setUpdatedDays(updatedDays.filter((d) => d !== day));
@@ -66,8 +88,9 @@ const ExerciseListScreen = ({ route }) => {
     setEditMode(false);
   };
 
-  const handleSaveExercise = async (name, exerciseId, updatedData) => {
-    await updateExerciseInSession(userId, sessionId, exerciseId, name, updatedData);
+  const handleSaveExercise = async (name, exerciseId, thumbnail, updatedData) => {
+    console.log("handleSaveExercise", thumbnail);
+    await updateExerciseInSession(userId, sessionId, exerciseId, name, thumbnail, updatedData);
     const updatedExercises = editableExercises.map(exercise =>
       exercise.name === name ? { ...exercise } : exercise
     );
@@ -113,7 +136,7 @@ const ExerciseListScreen = ({ route }) => {
   };
   
   const handleNavigateToExerciseVideoScreen = (exercise) => {
-    console.log("exercise = ",exercise);
+    console.log('NATAN ex',exercise);
     navigation.navigate('ExerciseVideoScreen', {
       title: exercise.name,
       videoUri: exercise.videoUri,
@@ -125,6 +148,7 @@ const ExerciseListScreen = ({ route }) => {
   };
 
   const handleAddExercise = (exercise) => {
+    console.log("add",exercise);
     setSelectedExercise(exercise);
     setIsCustomizingExercise(true);
   };
@@ -148,7 +172,7 @@ const ExerciseListScreen = ({ route }) => {
         customField: {...filteredData},
       };
       const updatedExercises = [...editableExercises, newExercise];
-      await updateExerciseInSession(userId, sessionId, selectedExercise.exerciseId, selectedExercise.name, newExercise);
+      await updateExerciseInSession(userId, sessionId, selectedExercise.id, selectedExercise.name, selectedExercise.thumbnail, newExercise);
       setEditableExercises(updatedExercises);
       setOriginalExercises(updatedExercises);
       setModalVisible(false);
@@ -217,13 +241,14 @@ const ExerciseListScreen = ({ route }) => {
               isSuperUser={isSuperUser}
               onSave={handleSaveExercise}
               additionalFields={exercise.customField || {}}
+              thumbnail={exercise.thumbnail}
             />
             </TouchableOpacity>
             {isSuperUser && editMode && (
               <View style={styles.deleteButtonContainer}>
                 <TouchableOpacity
                   style={styles.deleteButton}
-                  onPress={() => handleDeleteExercise(exercise.name, exercise.exerciseId)}
+                  onPress={() => handleDeleteExercise(exercise.name, exercise.id)}
                 >
                   <Text style={styles.deleteButtonText}>Delete</Text>
                 </TouchableOpacity>
@@ -254,6 +279,7 @@ const ExerciseListScreen = ({ route }) => {
             <ScrollView>
               <Text style={styles.sectionTitle}>Select an Exercise</Text>
               {availableExercises.map((exercise) => (
+                console.log("NATAN exercise.id",exercise.id),
                 <TouchableOpacity
                   key={exercise.id}
                   style={styles.exerciseItem}

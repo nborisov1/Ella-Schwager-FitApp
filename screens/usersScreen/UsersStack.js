@@ -2,6 +2,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import UsersScreen from './UsersScreen';
 import UserDetailScreen from './UserDetailScreen/userDetailScreen';
 import ExerciseListScreen from '../ExerciseListScreen/ExerciseListScreen';
+import ExerciseVideoScreen from '../../components/ExerciseVideoScreen/ExerciseVideoScreen';
 const Stack = createStackNavigator();
 
 const UserStack = () => {
@@ -21,6 +22,15 @@ const UserStack = () => {
         name="ExerciseList"
         component={ExerciseListScreen}
         options={{ title: 'Exercises' }}
+      />
+      <Stack.Screen
+        name="ExerciseVideoScreen"
+        component={ExerciseVideoScreen}
+        options={{
+          headerShown: false,
+          title: 'Exercises',
+          headerBackTitleVisible: false,
+        }}
       />
     </Stack.Navigator>
   );

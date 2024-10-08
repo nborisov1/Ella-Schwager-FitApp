@@ -9,7 +9,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId, additionalFields }) => {
+const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId, thumbnail, additionalFields }) => {
   const [editableSets, setEditableSets] = useState(sets);
   const [editableReps, setEditableReps] = useState(reps);
   const [originalSets, setOriginalSets] = useState(sets);
@@ -55,8 +55,7 @@ const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId, addit
     if (editableReps != '') {
       fields['reps'] = editableReps;
     }
-    console.log(fields);
-    onSave(name, exerciseId, fields);
+    onSave(name, exerciseId, thumbnail, fields);
     setOriginalReps(editableReps);
     setOriginalSets(editableSets);
     setIsEditing(false);

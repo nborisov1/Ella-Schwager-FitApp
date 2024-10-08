@@ -6,7 +6,6 @@ import AddExerciseScreen from './AddExerciseScreen';  // Import the screen
 import ExerciseVideoScreen from '../components/ExerciseVideoScreen/ExerciseVideoScreen'
 const Stack = createStackNavigator();
 const AddTrainingSessionStack = ({userData}) => {
-    console.log('userData ',userData);
     return (
       <Stack.Navigator>
         <Stack.Screen

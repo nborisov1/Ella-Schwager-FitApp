@@ -25,6 +25,7 @@ function formatDuration(milliseconds) {
 
 const ExerciseVideoScreen = ({ route }) => {
   const { thumbnail, title, isSuperUser, sessionId, exerciseId } = route.params;
+  console.log("thumbnail",thumbnail);
   const [uploading, setUploading] = useState(false);
   const [videoName, setVideoName] = useState('');  // State for video name
   const [modalVisible, setModalVisible] = useState(false); // Modal visibility for video name
@@ -39,7 +40,6 @@ const ExerciseVideoScreen = ({ route }) => {
   const loadExercises = async () => {
     try {
       const exercisesVideos = await fetchExerciseVideos(sessionId, exerciseId); // Fetch the sessions from Firebase
-      console.log(exercisesVideos);
       setExercises(exercisesVideos);
     } catch (error) {
       console.error('Error fetching training sessions:', error);
@@ -56,7 +56,6 @@ const ExerciseVideoScreen = ({ route }) => {
         allowsEditing: true,
         quality: 1,
       });
-      console.log("result",result);
       if (!result.cancelled) {
         setSelectedVideoResult(result);
         setModalVisible(true); // Open modal to enter video name
@@ -85,10 +84,7 @@ const ExerciseVideoScreen = ({ route }) => {
           console.error("Upload failed", error);
           resetUploadingState();
         } else {
-          console.log('File available at: ', downloadURL);
-          console.log('thumbnail available at: ', thumbnailUrl);
           const exerciseDocRef = doc(db, `trainingSessions/${sessionId}/exercises`, exerciseId);
-  
           // Update only the videoURL field without overriding other data
           await updateDoc(exerciseDocRef, {
             videos: arrayUnion({
