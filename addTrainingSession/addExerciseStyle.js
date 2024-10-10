@@ -1,37 +1,36 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#000',  // Match the dark theme
     padding: 20,
-    backgroundColor: '#f8f8f8',
   },
   heading: {
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
-    color: '#333',
+    color: '#fff',  // Match text color to white
   },
   exerciseCard: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1c1c1e',  // Dark background for consistency
     padding: 15,
     marginVertical: 10,
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 2,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   exerciseName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#fff',  // White text for readability
   },
-  exerciseInfo: {
-    fontSize: 14,
-    color: '#666',
-    marginTop: 5,
+  thumbnail: {
+    width: 50,
+    height: 50,
+    borderRadius: 10,
   },
   noExercisesText: {
     textAlign: 'center',
@@ -40,48 +39,19 @@ const styles = StyleSheet.create({
   },
   addExerciseContainer: {
     marginTop: 30,
+    backgroundColor: '#1c1c1e',
     padding: 20,
-    backgroundColor: '#fff',
     borderRadius: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 2,
   },
   input: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#333',  // Dark input background
+    color: '#fff',  // White text
     padding: 10,
     borderRadius: 8,
     marginBottom: 15,
   },
-  smallInput: {
-    flex: 1,
-    backgroundColor: '#f0f0f0',
-    padding: 10,
-    borderRadius: 8,
-    marginHorizontal: 5,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 15,
-  },
-  addButton: {
-    backgroundColor: '#1EB1FC',
-    paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  addButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-
-  // Thumbnail Styles
   thumbnailButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#ff0',  // Yellow button
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
@@ -89,7 +59,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   thumbnailButtonText: {
-    color: '#fff',
+    color: '#000',  // Black text
     fontSize: 16,
     fontWeight: 'bold',
   },
@@ -98,48 +68,26 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 10,
     marginTop: 10,
-    marginBottom: 15,
-    backgroundColor: '#f0f0f0',  // Placeholder background
-    justifyContent: 'center',     // Center content vertically
-    alignItems: 'center',         // Center content horizontally
+    backgroundColor: '#333',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   noThumbnailText: {
     fontSize: 14,
     fontStyle: 'italic',
-    color: '#aaa',
-    textAlign: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 15,
+    color: '#888',
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  modalText: {
-    fontSize: 18,
-    marginBottom: 10,
-  },
-  cancelButton: {
-    backgroundColor: '#ff4d4d', // Light red color indicating cancel action
-    padding: 12,
+  addButton: {
+    backgroundColor: '#ff0',  // Yellow button like in ExerciseVideoScreen
+    paddingVertical: 12,
     borderRadius: 8,
-    marginTop: 16, // Add space between the button and other elements
     alignItems: 'center',
   },
-  cancelButtonText: {
-    color: '#fff', // White text to stand out against the red background
+  addButtonText: {
+    color: '#000',  // Black text
     fontSize: 16,
     fontWeight: 'bold',
   },
-
 });
 
 export default styles;

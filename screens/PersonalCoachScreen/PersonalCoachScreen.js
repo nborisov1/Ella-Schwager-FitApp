@@ -21,20 +21,13 @@ const PersonalCoachScreen = ({userData}) => {
   const loadPersonalPlan = async () => {
     try {
       const sessions = await fetchPersonalPlan(userData.uid);
+      console.log(sessions);
       setTrainingSessions(sessions);
-      setImageCount(sessions.length);  
+      setLoading(false)
     } catch (error) {
       console.error('Error fetching personal plan:', error);
     }
   };
-
-  const thumbnailsLoading = () => {
-    console.log('image count =',imageCount);
-    if (imageCount == 1) {
-      setLoading(false);
-    }
-    setImageCount(imageCount - 1);
-  }
 
   useEffect(() => {
     loadPersonalPlan();
