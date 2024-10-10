@@ -6,6 +6,12 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: '#f5f5f5',
   },
+  profileImage: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,  // Circular image
+    marginRight: 20,
+  },
   userName: {
     fontSize: 22,  // Larger font for the user's name
     fontWeight: 'bold',
@@ -13,9 +19,9 @@ const styles = StyleSheet.create({
   },
   userGreeting: {
     fontSize: 18,
-    color: 'blue',
+    color: 'black',
     textAlign: 'left',
-    marginBottom: 20,
+    fontWeight: '300',  // Light weight for a sleek look
   },
   weekContainer: {
     flexDirection: 'row',
