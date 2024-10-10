@@ -19,7 +19,7 @@ const MyPlanStack = ({userData}) => {
           name="ExerciseList"
           component={ExerciseListScreen}
           options={{
-            headerShown: true,
+            headerShown: false,
             title: 'Exercises',
             headerBackTitleVisible: false,
           }}

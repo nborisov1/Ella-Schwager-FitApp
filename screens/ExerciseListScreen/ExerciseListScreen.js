@@ -17,7 +17,6 @@ const ExerciseListScreen = ({ route }) => {
   const { title, exercises, days, isSuperUser, sessionId, userId } = route.params;
   const [updatedDays, setUpdatedDays] = useState([...days]);  
   const [previousDays, setPreviousDays] = useState([...days]);
-  const [customFields, setCustomFields] = useState({});
   const [editableExercises, setEditableExercises] = useState(exercises.map(exercise => ({
     ...exercise,
     originalSets: exercise.sets || 0,  
@@ -161,7 +160,7 @@ const ExerciseListScreen = ({ route }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>{title}</Text>
 
       <View style={styles.daysContainer}>
@@ -173,7 +172,7 @@ const ExerciseListScreen = ({ route }) => {
                 onPress={() => toggleDay(day)}
                 style={[
                   styles.dayWrapper,
-                  { backgroundColor: updatedDays.includes(day) ? '#4CAF50' : '#f0f0f0' },
+                  { backgroundColor: updatedDays.includes(day) ? 'red' : 'red' },
                 ]}
               >
                 <Text style={styles.dayText}>{day}</Text>
@@ -242,7 +241,6 @@ const ExerciseListScreen = ({ route }) => {
         {isCustomizingExercise ? <ExerciseCustomizationModal
               isVisible={isModalVisible}
               exerciseName={selectedExercise.name}
-              handleCustomFieldChange={(field, value) => setCustomFields({ ...customFields, [field]: value })}
               onSave={handleSaveCustomExercise}
               onClose={() => {setIsCustomizingExercise(false); setModalVisible(false);}}
           />: (
@@ -263,7 +261,7 @@ const ExerciseListScreen = ({ route }) => {
           )}
         </SafeAreaView>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 };
 

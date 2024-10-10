@@ -104,6 +104,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(128, 128, 128, 0.3)',  // Light grey with low opacity
   },
   dayText: {
     fontSize: 14,

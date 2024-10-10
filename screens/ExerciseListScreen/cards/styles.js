@@ -83,8 +83,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   difficultyContainer: {
-    marginVertical: 15,
+    marginVertical: 20,
     alignSelf: 'stretch',  // Ensure it stretches to full width
+    color: 'red'
   },
   leftLabel: {
     fontSize: 14,

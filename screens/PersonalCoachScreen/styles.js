@@ -3,34 +3,30 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: '#F5F5F5',  // Match background color with the screen
+    backgroundColor: '#000',  // Dark background similar to AddExerciseScreen
   },
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',  // Light background for the whole screen
+    backgroundColor: '#000',  // Dark background for the entire screen
     padding: 20,
   },
   headlineContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: '#1c1c1e',  // Dark background for headline section
     borderRadius: 10,
     alignItems: 'center',
     paddingVertical: 15,
-    marginBottom: 10,  // Reduced margin to keep headline close to ScrollView
+    marginBottom: 10,
     elevation: 5,
   },
-  logo: {
-    borderRadius: 10,
-    marginBottom: 10,
-  },
   headlineText: {
-    fontSize: 20,  // Adjusted font size
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#fff',  // White text
     textAlign: 'center',
   },
   sessionList: {
-    paddingBottom: 20,  // Padding at the bottom for scrollable content
-    flexGrow: 1,  // Make sure ScrollView takes the rest of the available space    
+    paddingBottom: 20,
+    flexGrow: 1,
   },
   card: {
     width: '100%',
@@ -38,10 +34,12 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     overflow: 'hidden',
     marginVertical: 10,
+    backgroundColor: '#1c1c1e',  // Dark background for cards
+    elevation: 5,
   },
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',  // Dark overlay for readability
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -53,19 +51,23 @@ const styles = StyleSheet.create({
   sessionTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: '#fff',
+    color: '#fff',  // White text
     textAlign: 'right',
   },
   sessionSubtitle: {
     fontSize: 16,
-    color: '#fff',
+    color: '#fff',  // White text for consistency
     textAlign: 'right',
     marginTop: 5,
   },
   icon: {
     marginLeft: 10,
   },
-
+  loadingText: {
+    color: '#fff',  // White text for loading message
+    fontSize: 18,
+    textAlign: 'center',
+  },
 });
 
 export default styles;

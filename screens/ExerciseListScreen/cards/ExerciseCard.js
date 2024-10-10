@@ -168,28 +168,29 @@ const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId, thumb
       </View>
       )}
 
-      {/* Difficulty Scale for Non-Super Users */}
-        <View style={styles.difficultyContainer}>
-          <Text style={styles.leftLabel}>Difficulty: {difficulty}</Text>
-          {!isSuperUser && (
-          <Slider
-            style={styles.slider}
-            minimumValue={1}
-            maximumValue={5}
-            step={1}
-            value={difficulty}
-            onValueChange={(value) => setDifficulty(value)}
-            minimumTrackTintColor="#4CAF50"
-            maximumTrackTintColor="#C8C8C8"
-            thumbTintColor="#4CAF50"
-          />
-          ) && (
-          <View style={styles.difficultyLabels}>
-            <Text style={styles.difficultyText}>Easy</Text>
-            <Text style={styles.difficultyText}>Hard</Text>
-          </View>
-          )}
-        </View>
+      <View style={styles.difficultyContainer}>
+        <Text style={styles.leftLabel}>Difficulty: {difficulty}</Text>
+        
+        {!isSuperUser && (
+          <>
+            <Slider
+              style={styles.slider}
+              minimumValue={1}
+              maximumValue={5}
+              step={1}
+              value={difficulty}
+              onValueChange={(value) => setDifficulty(value)}
+              minimumTrackTintColor="#4CAF50"
+              maximumTrackTintColor="#C8C8C8"
+              thumbTintColor="#4CAF50"
+            />
+            <View style={styles.difficultyLabels}>
+              <Text style={styles.difficultyText}>Easy</Text>
+              <Text style={styles.difficultyText}>Hard</Text>
+            </View>
+          </>
+        )}
+      </View>
 
       {/* Comment Section */}
       <TouchableOpacity style={styles.commentToggle} onPress={toggleCommentSection}>
