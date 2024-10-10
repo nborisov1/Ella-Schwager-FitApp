@@ -1,54 +1,50 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal, TextInput } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Modal, TextInput, Alert, RefreshControl} from 'react-native';
 import Header from './Header';
 import StartButton from './StartButton';
 import ExerciseItem from './ExerciseItem';
 import * as ImagePicker from 'expo-image-picker';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { getFirestore, doc, updateDoc, arrayUnion } from 'firebase/firestore'; 
-import { collection, addDoc } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'; 
 import { db } from '../../config/firebase';
 import { uploadVideo } from '../../backend/upload/thumbnials';
 import { fetchExerciseVideos } from '../../backend/trainingSession/fetchExerciseVideos';
-import { useEffect } from 'react';
+import { deleteVideo } from '../../backend/upload/thumbnials';
 
 function formatDuration(milliseconds) {
-  const totalSeconds = Math.floor(milliseconds / 1000); // Convert milliseconds to seconds
-  const minutes = Math.floor(totalSeconds / 60); // Get total minutes
-  const seconds = totalSeconds % 60; // Get remaining seconds
-  
-  // Format minutes and seconds into '1:35 min' format
-  const formattedDuration = `${minutes}:${seconds < 10 ? '0' : ''}${seconds} min`;
-  
-  return formattedDuration;
+  const totalSeconds = Math.floor(milliseconds / 1000); 
+  const minutes = Math.floor(totalSeconds / 60); 
+  const seconds = totalSeconds % 60;
+  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds} min`;
 }
 
 const ExerciseVideoScreen = ({ route }) => {
   const { thumbnail, title, isSuperUser, sessionId, exerciseId } = route.params;
-  console.log("thumbnail",thumbnail);
   const [uploading, setUploading] = useState(false);
   const [videoName, setVideoName] = useState('');  // State for video name
   const [modalVisible, setModalVisible] = useState(false); // Modal visibility for video name
   const [selectedVideoResult, setSelectedVideoResult] = useState(null);  // State for selected video URI
   const [uploadProgress, setUploadProgress] = useState(0);
   const [exercises, setExercises] = useState([]);
-  // Example data
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    loadExercises().then(() => setRefreshing(false));
+  }, []);
+
   useEffect(() => {
     loadExercises();
   }, []);
 
   const loadExercises = async () => {
     try {
-      const exercisesVideos = await fetchExerciseVideos(sessionId, exerciseId); // Fetch the sessions from Firebase
+      const exercisesVideos = await fetchExerciseVideos(sessionId, exerciseId);
       setExercises(exercisesVideos);
     } catch (error) {
       console.error('Error fetching training sessions:', error);
-    } finally {
-      //setLoading(false); // End loading state
     }
   };
 
-  // Pick a video from the library
   const pickVideo = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -58,7 +54,7 @@ const ExerciseVideoScreen = ({ route }) => {
       });
       if (!result.cancelled) {
         setSelectedVideoResult(result);
-        setModalVisible(true); // Open modal to enter video name
+        setModalVisible(true); 
       }
     } catch (error) {
       console.log('Error picking a video: ', error);
@@ -66,12 +62,12 @@ const ExerciseVideoScreen = ({ route }) => {
   };
 
   const resetUploadingState = () => {
-    setUploading(false); // Hide the modal when upload is complete
-    setModalVisible(false); // Close modal after upload
+    setUploading(false);
+    setModalVisible(false);
     setVideoName('');
     setSelectedVideoResult(null);
     setUploadProgress(0);
-  }
+  };
 
   const handleUpload = async () => {
     setUploading(true);
@@ -85,7 +81,6 @@ const ExerciseVideoScreen = ({ route }) => {
           resetUploadingState();
         } else {
           const exerciseDocRef = doc(db, `trainingSessions/${sessionId}/exercises`, exerciseId);
-          // Update only the videoURL field without overriding other data
           await updateDoc(exerciseDocRef, {
             videos: arrayUnion({
               name: videoName,
@@ -98,41 +93,61 @@ const ExerciseVideoScreen = ({ route }) => {
           loadExercises();
         }
     });
+  };
+
+  const handleDeleteVide = async (video) => {
+    try {
+      await deleteVideo(video);
+      loadExercises();
+    } catch (error) {
+      console.error('Error deleting video:', error);
+      Alert.alert('Error', 'Failed to delete the video. Please try again.');
+    }
   }
-  // Save video URL to Firestore
+
+  const handleDeleteVideo = (video) => {
+    Alert.alert(
+      'Delete Video',
+      `Are you sure you want to delete ${video.name}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: () => handleDeleteVide(video),
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   return (
     <View style={styles.container}>
-      {/* Header with image, title, and details */}
-      <Header 
-        imageSource={thumbnail}
-        title={title}
-      />
+      <Header imageSource={thumbnail} title={title} />
       
-      {/* Start Workout Button */}
       <StartButton title="Start Workout" onPress={() => console.log('Workout Started')} />
 
       <FlatList
         data={exercises}
         renderItem={({ item }) => (
-          <ExerciseItem 
-            title={item.name} 
-            duration={item.duration} 
-            image={item.thumbnailURL}
-            videoUri={item.videoURL}
-          />
+          <View style={styles.cardContainer}>
+            <ExerciseItem 
+              item={item}
+              handleDelete={handleDeleteVideo}
+              isSuperUser={isSuperUser}
+            />
+          </View>
         )}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={styles.addButton.backgroundColor}/>}
         keyExtractor={item => item.id}
       />
 
-      {/* Super User Add Video Button */}
       {isSuperUser && (
         <TouchableOpacity style={styles.addButton} onPress={pickVideo}>
           <Text style={styles.addButtonText}>{uploading ? 'Uploading...' : 'Add Video to Exercise'}</Text>
         </TouchableOpacity>
       )}
 
-      {/* Modal for Entering Video Name */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -146,19 +161,20 @@ const ExerciseVideoScreen = ({ route }) => {
               style={styles.input}
               placeholder="Enter video name"
               value={videoName}
-              onChangeText={setVideoName}  // Update the video name
+              onChangeText={setVideoName}  
             />
             <TouchableOpacity
               style={styles.uploadButton}
               onPress={handleUpload}
               disabled={uploading}
             >
-          <Text style={styles.uploadButtonText}>
-            {uploading ? `Uploading: ${uploadProgress.toFixed(0)}%` : 'Upload Video'}
-          </Text>
+              <Text style={styles.uploadButtonText}>
+                {uploading ? `Uploading: ${uploadProgress.toFixed(0)}%` : 'Upload Video'}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.cancelButton} onPress={() =>  {setModalVisible(false), setVideoName(''),setSelectedVideoResult(''),setUploading(false),setUploadProgress(0);}}>
+              style={styles.cancelButton} 
+              onPress={() =>  {setModalVisible(false), setVideoName(''),setSelectedVideoResult(null), setUploading(false), setUploadProgress(0);}}>
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
           </View>
@@ -173,11 +189,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000',
   },
-  roundText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-    margin: 20,
+  cardContainer: {
+    position: 'relative',
+    marginBottom: 15,
   },
   addButton: {
     backgroundColor: '#ff0',
@@ -237,4 +251,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
 export default ExerciseVideoScreen;

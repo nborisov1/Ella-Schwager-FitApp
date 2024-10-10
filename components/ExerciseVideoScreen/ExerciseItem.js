@@ -1,12 +1,14 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { Video } from 'expo-av';
+import { Ionicons } from 'react-native-vector-icons';  // For the trash icon
 
-const ExerciseItem = ({ title, duration, image, videoUri }) => {
+const ExerciseItem = ({ item, handleDelete, isSuperUser }) => {
   const [isVideoVisible, setIsVideoVisible] = useState(false);
   const [videoPosition, setVideoPosition] = useState(0); // State to store video playback position
   const videoRef = useRef(null); // Ref for the Video component
   // Open modal and resume video from the saved position
+  console.log(item);
   const handleOpenVideo = () => {
     setIsVideoVisible(true);
   };
@@ -28,17 +30,22 @@ const ExerciseItem = ({ title, duration, image, videoUri }) => {
       <TouchableOpacity style={styles.container} onPress={handleOpenVideo}>
         {/* Conditionally render the image only if it's provided */}
         <View style={styles.imageContainer}>
-          {image ? (
-            <Image source={{uri: image}} style={styles.image} />
+          {item.thumbnailURL ? (
+            <Image source={{uri: item.thumbnailURL}} style={styles.image} />
           ) : (
             <View style={styles.placeholderImage} />
           )}
         </View>
         <View style={styles.detailsContainer}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.duration}>{duration}</Text>
+          <Text style={styles.title}>{item.name}</Text>
+          <Text style={styles.duration}>{item.duration}</Text>
         </View>
       </TouchableOpacity>
+      {isSuperUser && (
+        <TouchableOpacity style={styles.deleteIcon} onPress={() => handleDelete(item)}>
+          <Ionicons name="trash-outline" size={24} color="#f00" />
+        </TouchableOpacity>
+        )}
 
       {/* Modal for playing the video */}
       <Modal
@@ -50,7 +57,7 @@ const ExerciseItem = ({ title, duration, image, videoUri }) => {
         <View style={styles.videoContainer}>
           <Video
             ref={videoRef}
-            source={{ uri: videoUri }}
+            source={{ uri: item.videoURL }}
             rate={1.0}
             volume={1.0}
             isMuted={false}
@@ -132,6 +139,12 @@ const styles = StyleSheet.create({
   closeText: {
     color: '#000',
     fontWeight: 'bold',
+  },
+  deleteIcon: {
+    position: 'absolute',  // Absolute position on top of the card
+    top: 10,
+    right: 30,  // Positioned at the top-right corner of the card
+    padding: 25,
   },
 });
 
