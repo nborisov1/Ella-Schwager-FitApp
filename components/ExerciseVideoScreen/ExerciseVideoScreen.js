@@ -9,6 +9,7 @@ import { db } from '../../config/firebase';
 import { uploadVideo } from '../../backend/upload/thumbnials';
 import { fetchExerciseVideos } from '../../backend/trainingSession/fetchExerciseVideos';
 import { deleteVideo } from '../../backend/upload/thumbnials';
+import { pickVideo } from '../../media/mediaPicker';
 
 function formatDuration(milliseconds) {
   const totalSeconds = Math.floor(milliseconds / 1000); 
@@ -45,19 +46,12 @@ const ExerciseVideoScreen = ({ route }) => {
     }
   };
 
-  const pickVideo = async () => {
-    try {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-        allowsEditing: true,
-        quality: 1,
-      });
-      if (!result.cancelled) {
-        setSelectedVideoResult(result);
-        setModalVisible(true); 
-      }
-    } catch (error) {
-      console.log('Error picking a video: ', error);
+  const handlePickVideo = async () => {
+    const result = await pickVideo();
+    if (result.success) {
+      setSelectedVideoResult(result.result);  // Set the selected video URI
+    } else {
+      console.log('No video was selected or an error occurred');
     }
   };
 
@@ -143,7 +137,7 @@ const ExerciseVideoScreen = ({ route }) => {
       />
 
       {isSuperUser && (
-        <TouchableOpacity style={styles.addButton} onPress={pickVideo}>
+        <TouchableOpacity style={styles.addButton} onPress={handlePickVideo}>
           <Text style={styles.addButtonText}>{uploading ? 'Uploading...' : 'Add Video to Exercise'}</Text>
         </TouchableOpacity>
       )}

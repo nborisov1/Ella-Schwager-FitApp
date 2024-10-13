@@ -15,7 +15,6 @@ export async function uploadImage(uri, progressUpdateHandler, completionHandler)
     uploadTask.on(
       'state_changed',
       (snapshot) => {
-        console.log("snapshot",snapshot);
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         if (progressUpdateHandler) {
           progressUpdateHandler(progress);
@@ -50,7 +49,6 @@ export async function uploadVideo(uri, progressUpdateHandler, completionHandler)
 
     // 1. Generate thumbnail for the video
     const thumbnailUri  = await VideoThumbnails.getThumbnailAsync(uri);
-    console.log(thumbnailUri)
     // 2. Upload the thumbnail using the uploadImage method
     await uploadImage(
       thumbnailUri.uri,
@@ -101,3 +99,17 @@ export async function uploadVideo(uri, progressUpdateHandler, completionHandler)
     }
   }
 };
+
+export async function deleteVideo(video) {
+  const exerciseDocRef = doc(db, `trainingSessions/${sessionId}/exercises`, exerciseId);
+  await updateDoc(exerciseDocRef, {
+    videos: arrayRemove(video),
+  });
+
+  const storage = getStorage();
+  const videoRef = ref(storage, video.videoURL);
+  const thumbnailRef = ref(storage, video.thumbnailURL);
+
+  await deleteObject(videoRef);
+  await deleteObject(thumbnailRef);
+}

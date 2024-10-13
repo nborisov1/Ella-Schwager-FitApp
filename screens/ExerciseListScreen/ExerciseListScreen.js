@@ -66,8 +66,8 @@ const ExerciseListScreen = ({ route }) => {
     setEditMode(false);
   };
 
-  const handleSaveExercise = async (name, exerciseId, thumbnail, updatedData) => {
-    await updateExerciseInSession(userId, sessionId, exerciseId, name, thumbnail, updatedData);
+  const handleSaveExercise = async (name, exerciseId, thumbnail, updatedData, difficulty, comments) => {
+    await updateExerciseInSession(userId, sessionId, exerciseId, name, thumbnail, updatedData, difficulty, comments);
     const updatedExercises = editableExercises.map(exercise =>
       exercise.name === name ? { ...exercise } : exercise
     );
@@ -113,7 +113,6 @@ const ExerciseListScreen = ({ route }) => {
   };
   
   const handleNavigateToExerciseVideoScreen = (exercise) => {
-    console.log('NATAN ex',exercise);
     navigation.navigate('ExerciseVideoScreen', {
       title: exercise.name,
       videoUri: exercise.videoUri,
@@ -125,7 +124,6 @@ const ExerciseListScreen = ({ route }) => {
   };
 
   const handleAddExercise = (exercise) => {
-    console.log("add",exercise);
     setSelectedExercise(exercise);
     setIsCustomizingExercise(true);
   };
@@ -149,7 +147,7 @@ const ExerciseListScreen = ({ route }) => {
         customField: {...filteredData},
       };
       const updatedExercises = [...editableExercises, newExercise];
-      await updateExerciseInSession(userId, sessionId, selectedExercise.id, selectedExercise.name, selectedExercise.thumbnail, newExercise);
+      await updateExerciseInSession(userId, sessionId, selectedExercise.id, selectedExercise.name, selectedExercise.thumbnail, newExercise, null, null);
       setEditableExercises(updatedExercises);
       setOriginalExercises(updatedExercises);
       setModalVisible(false);
@@ -172,7 +170,7 @@ const ExerciseListScreen = ({ route }) => {
                 onPress={() => toggleDay(day)}
                 style={[
                   styles.dayWrapper,
-                  { backgroundColor: updatedDays.includes(day) ? 'red' : 'red' },
+                  { backgroundColor: updatedDays.includes(day) ? '#blakc' : '#f0f0f0' },
                 ]}
               >
                 <Text style={styles.dayText}>{day}</Text>
@@ -206,6 +204,7 @@ const ExerciseListScreen = ({ route }) => {
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {editableExercises.map((exercise, index) => (
+          console.log("exercise", exercise),
           <View key={index} style={styles.exerciseItem}>
             <TouchableOpacity
               onPress={() => handleNavigateToExerciseVideoScreen(exercise)}  // Make the card clickable
@@ -214,7 +213,7 @@ const ExerciseListScreen = ({ route }) => {
               name={exercise.name}
               sets={exercise.sets}
               reps={exercise.reps}
-              exerciseId={exercise.exerciseId}
+              exerciseId={exercise.id}
               isSuperUser={isSuperUser}
               onSave={handleSaveExercise}
               additionalFields={exercise.customField || {}}
@@ -247,7 +246,6 @@ const ExerciseListScreen = ({ route }) => {
             <ScrollView>
               <Text style={styles.sectionTitle}>Select an Exercise</Text>
               {availableExercises.map((exercise) => (
-                console.log("NATAN exercise.id",exercise.id),
                 <TouchableOpacity
                   key={exercise.id}
                   style={styles.exerciseItem}

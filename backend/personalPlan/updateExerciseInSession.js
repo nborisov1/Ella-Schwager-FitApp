@@ -1,11 +1,10 @@
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../config/firebase';
 
-const updateExerciseInSession = async (userId, sessionId, exerciseId, name, thumbnail, updatedFields) => {
+const updateExerciseInSession = async (userId, sessionId, exerciseId, name, thumbnail, updatedFields, difficulty, comment) => {
   try {
     const sessionRef = doc(db, `users/${userId}/personalPlan`, sessionId);
     const sessionDoc = await getDoc(sessionRef);
-    console.log("thumbnail ====",thumbnail);
     if (sessionDoc.exists()) {
       const sessionData = sessionDoc.data();
       const currentExercises = sessionData.exercises || [];  // Default to an empty array if no exercises exist
@@ -17,7 +16,7 @@ const updateExerciseInSession = async (userId, sessionId, exerciseId, name, thum
         // Update the existing exercise
         updatedExercises = currentExercises.map(exercise =>
           exercise.id === exerciseId && exercise.name === name
-            ? { ...exercise, ...updatedFields }  // Update the exercise details
+            ? { ...exercise, ...updatedFields, difficulty, comment }  // Update the exercise details
             : exercise
         );
       } else {

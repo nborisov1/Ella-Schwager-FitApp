@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, LayoutAnimation, Platform, UIManager, Modal, ScrollView, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, LayoutAnimation, Platform, UIManager, Modal, ScrollView, Alert, FlatList } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import styles from './styles';
@@ -9,24 +9,24 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId, thumbnail, additionalFields }) => {
+const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId, thumbnail, additionalFields, userComment, userDifficulty }) => {
   const [editableSets, setEditableSets] = useState(sets);
   const [editableReps, setEditableReps] = useState(reps);
-  const [originalSets, setOriginalSets] = useState(sets);
-  const [originalReps, setOriginalReps] = useState(reps);
   const [isEditing, setIsEditing] = useState(false);
-  const [customFields, setCustomFields] = useState(additionalFields ? additionalFields : {}); // For handling custom key-value fields
+  const [customFields, setCustomFields] = useState(additionalFields ? additionalFields : {}); 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [newFieldKey, setNewFieldKey] = useState('');
   const [newFieldValue, setNewFieldValue] = useState('');
-  const [difficulty, setDifficulty] = useState(3);  // Default difficulty (only for non-super user)
-  const [comment, setComment] = useState('');
+  const [difficulty, setDifficulty] = useState(userDifficulty ? userDifficulty : 3); 
+  const [comment, setComment] = useState(userComment ? userComment : '');
   const [isCommentOpen, setIsCommentOpen] = useState(false);
+  const [comments, setComments] = useState([]); // Super user comments
+
   const toggleCommentSection = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     setIsCommentOpen(!isCommentOpen);
   };
-  // Add a custom field
+
   const handleAddCustomField = () => {
     customFields[newFieldKey] = newFieldValue;
     setNewFieldKey('');
@@ -34,38 +34,15 @@ const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId, thumb
     setIsModalVisible(false);
   };
 
-  // Remove a custom field
-  const handleRemoveField = (key) => {
-    const updatedFields = { ...customFields };
-    delete updatedFields[key];
-    setCustomFields(updatedFields);
-
+  // Logic for sending a comment (empty for now)
+  const handleSendComment = () => {
+    if (comment == '' || comment == null) {
+      return;
+    }
+    onSave(name, exerciseId, thumbnail, {}, difficulty, comment);
+    setComment('');
   };
 
-  // Save changes (including custom fields)
-  const handleSave = () => {
-    const dict = { ...(customFields || {})};
-    let fields = {}
-    if (dict !== {}) {
-      fields['customField'] = dict;
-    }
-    if (editableSets != '') {
-      fields['sets'] = editableSets;
-    }
-    if (editableReps != '') {
-      fields['reps'] = editableReps;
-    }
-    onSave(name, exerciseId, thumbnail, fields);
-    setOriginalReps(editableReps);
-    setOriginalSets(editableSets);
-    setIsEditing(false);
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
-    setEditableReps(originalReps);
-    setEditableSets(originalSets);
-  };
   return (
     <View style={styles.card}>
       <Text style={styles.title}>{name}</Text>
@@ -99,35 +76,31 @@ const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId, thumb
           </View>
           {/* Custom Fields Section */}
           <ScrollView style={styles.customFieldContainer}>
-          {customFields && Object.entries(customFields).map(([key, value], index) => (
-            <View key={index} style={styles.customFieldRow}>
-              {/* Text container for field name and value */}
-              <View style={styles.customFieldTextContainer}>
-                <Text style={styles.customFieldKey}>{key}:</Text>
-                <Text style={styles.customFieldValue}>{value}</Text>
+            {customFields && Object.entries(customFields).map(([key, value], index) => (
+              <View key={index} style={styles.customFieldRow}>
+                <View style={styles.customFieldTextContainer}>
+                  <Text style={styles.customFieldKey}>{key}:</Text>
+                  <Text style={styles.customFieldValue}>{value}</Text>
+                </View>
+                <TouchableOpacity
+                  style={styles.trashButton}
+                  onPress={() => {
+                    Alert.alert(
+                      "Confirm Deletion",
+                      `Are you sure you want to delete the field "${key}"?`,
+                      [
+                        { text: "Cancel", style: "cancel" },
+                        { text: "OK", onPress: () => handleRemoveField(key) },
+                      ],
+                      { cancelable: true }
+                    );
+                  }}
+                >
+                  <FontAwesome name="trash" size={18} color="red" />
+                </TouchableOpacity>
               </View>
-              
-              {/* Trash icon with a confirmation dialog */}
-              <TouchableOpacity
-                style={styles.trashButton}
-                onPress={() => {
-                  // Prompt user to confirm deletion
-                  Alert.alert(
-                    "Confirm Deletion",
-                    `Are you sure you want to delete the field "${key}"?`,
-                    [
-                      { text: "Cancel", style: "cancel" },
-                      { text: "OK", onPress: () => handleRemoveField(key) },
-                    ],
-                    { cancelable: true }
-                  );
-                }}
-              >
-                <FontAwesome name="trash" size={18} color="red" />
-              </TouchableOpacity>
-            </View>
-          ))}
-        </ScrollView>
+            ))}
+          </ScrollView>
 
           {/* Add Custom Field Button */}
           <TouchableOpacity
@@ -148,24 +121,21 @@ const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId, thumb
           </View>
         </>
       ) : (
-      <View style={styles.centeredContainer}>
-        <Text style={styles.details}>
-          {/* Conditionally render Sets and Reps if they are not 0 or undefined */}
-          {editableSets > 0 ? `Sets: ${editableSets}` : ''} 
-          {editableSets > 0 && editableReps > 0 ? ' | ' : ''} 
-          {editableReps > 0 ? `Reps: ${editableReps}` : ''}
-
-          {/* Display custom fields with a '|' separator if they exist */}
-          {customFields && Object.keys(customFields).length > 0 && (
-            <>
-              {(editableSets > 0 || editableReps > 0) && ' | '}
-              {Object.entries(customFields).map(([key, value], index, arr) => (
-                value !== undefined && (value > 0 || value !== '') ? `${key}: ${value}${index < arr.length - 1 ? ' | ' : ''}` : ''
-              ))}
-            </>
-          )}
-        </Text>
-      </View>
+        <View style={styles.centeredContainer}>
+          <Text style={styles.details}>
+            {editableSets > 0 ? `Sets: ${editableSets}` : ''} 
+            {editableSets > 0 && editableReps > 0 ? ' | ' : ''} 
+            {editableReps > 0 ? `Reps: ${editableReps}` : ''}
+            {customFields && Object.keys(customFields).length > 0 && (
+              <>
+                {(editableSets > 0 || editableReps > 0) && ' | '}
+                {Object.entries(customFields).map(([key, value], index, arr) => (
+                  value !== undefined && (value > 0 || value !== '') ? `${key}: ${value}${index < arr.length - 1 ? ' | ' : ''}` : ''
+                ))}
+              </>
+            )}
+          </Text>
+        </View>
       )}
 
       <View style={styles.difficultyContainer}>
@@ -204,17 +174,34 @@ const ExerciseCard = ({ name, sets, reps, isSuperUser, onSave, exerciseId, thumb
 
       {isCommentOpen && (
         <View style={styles.commentContainer}>
-          <TextInput
-            style={styles.commentBox}
-            placeholder="Add your feedback"
-            multiline={true}
-            value={comment}
-            onChangeText={(text) => setComment(text)}
-          />
+          {!isSuperUser ? (
+            <>
+              <TextInput
+                style={styles.commentBox}
+                placeholder="Add your feedback"
+                multiline={true}
+                value={comment}
+                onChangeText={(text) => setComment(text)}
+              />
+              <TouchableOpacity style={styles.sendButton} onPress={handleSendComment}>
+                <Text style={styles.sendButtonText}>Send</Text>
+              </TouchableOpacity>
+            </>
+          ) : (
+            <FlatList
+              data={comments}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <View style={styles.commentItem}>
+                  <Text style={styles.commentText}>{item.text}</Text>
+                </View>
+              )}
+              ListEmptyComponent={<Text style={styles.noCommentsText}>No comments yet.</Text>}
+            />
+          )}
         </View>
       )}
 
-      {/* Edit Button for Super Users */}
       {isSuperUser && !isEditing && (
         <TouchableOpacity style={styles.editButton} onPress={() => setIsEditing(true)}>
           <Text style={styles.editButtonText}>Edit</Text>

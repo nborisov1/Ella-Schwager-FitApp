@@ -75,14 +75,11 @@ const AddTrainingSessionScreen = ({userData}) => {
   };
 
   const handleChooseThumbnail = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,   // Allows user to crop image
-      aspect: [4, 3],        // Aspect ratio of the image
-      quality: 1,            // Image quality (1 = max)
-    });
-    if (!result.cancelled) {
-      setThumbnailUri(result.assets[0].uri);  // Set the selected image URI
+    const result = await pickThumbnail();  // Call the utility function
+    if (result.success) {
+      setThumbnailUri(result.uri);  // Set the selected thumbnail URI
+    } else {
+      console.log('No thumbnail was selected or an error occurred');
     }
   };
 

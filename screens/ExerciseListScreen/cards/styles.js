@@ -229,6 +229,31 @@ const styles = StyleSheet.create({
   trashButton: {
     padding: 8,  // Give the button a little padding for easier clickability
   },
+  sendButton: {
+    backgroundColor: '#4CAF50',
+    padding: 10,
+    borderRadius: 8,
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  sendButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  commentItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  commentText: {
+    fontSize: 14,
+    color: '#333',
+  },
+  noCommentsText: {
+    textAlign: 'center',
+    color: '#999',
+    marginTop: 10,
+  }  
 });
 
 export default styles;

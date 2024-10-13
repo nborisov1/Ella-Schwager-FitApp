@@ -1,35 +1,88 @@
-import React from 'react';
-import { Text, ScrollView, View, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Text, ScrollView, View, TouchableOpacity, ActivityIndicator, RefreshControl } from 'react-native';
 import WorkoutPlanCard from './cards/WorkoutPlanCard';
 import styles from '../cards/styles';
 import { useNavigation } from '@react-navigation/native';
+import { fetchGeneralWorkouts, fetchUserUnlockedWorkouts } from '../../backend/generalWorkouts/generalWorkoutController';
 
-const WorkoutsScreen = ({ isSuperUser }) => {
-  const workoutPlans = [
-    {
-      title: 'Intense ABS Workout',
-      videos: 8,
-      totalTime: 120,
-      isUnlocked: true,
-      image: 'https://media.self.com/photos/61bcd0e05aed92fc4251b026/4:3/w_2560%2Cc_limit/GettyImages-1213234926.jpeg',
-    },
-    {
-      title: 'Full Body Burn',
-      videos: 10,
-      totalTime: 180,
-      isUnlocked: false,
-      image: 'https://indianutrition.com/wp-content/uploads/2020/03/core-strength-fitness.jpg',
-    },
-    // Add more workouts as needed
-  ];
-
+const WorkoutsScreen = ({ isSuperUser, user }) => {
+  const [workouts, setWorkouts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);  // Track refresh state
+  const [unlockedWorkoutIds, setUnlockedWorkoutIds] = useState([]);
+  const [unlockAll, setUnlockAll] = useState(false);  // Track if all workouts are unlocked
   const navigation = useNavigation();
 
+  // Fetch user unlocked workouts from Firestore
+  const loadUserUnlockedWorkouts = async () => {
+    console.log("fsafs",user);
+    if (user) {
+      try {
+        const { unlockedWorkoutIds, unlockAll } = await fetchUserUnlockedWorkouts(user.uid);
+        setUnlockedWorkoutIds(unlockedWorkoutIds);
+        setUnlockAll(unlockAll);
+      } catch (error) {
+        console.error('Error fetching user unlocked workouts:', error);
+      }
+    }
+  };
+
+  // Fetch general workouts from Firestore
+  const loadWorkouts = async () => {
+    try {
+      const fetchedWorkouts = await fetchGeneralWorkouts();
+      setWorkouts(fetchedWorkouts);
+    } catch (error) {
+      console.error('Error fetching workouts:', error);
+    } finally {
+      setLoading(false);  // Stop loading after fetch completes
+    }
+  };
+
+  useEffect(() => {
+    loadUserUnlockedWorkouts();
+    loadWorkouts();
+  }, []);
+
+  // Refresh Control Handler
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);  // Start refreshing
+    loadUserUnlockedWorkouts();  // Refresh user data
+    loadWorkouts().then(() => setRefreshing(false));  // Refetch and stop refreshing
+  }, []);
+
+  if (loading && !refreshing) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+        <Text>Loading Workouts...</Text>
+      </View>
+    );
+  }
+
   return (
-    <ScrollView style={styles.container}>
-      {workoutPlans.map((workout, index) => (
-        <WorkoutPlanCard key={index} workout={workout} />
-      ))}
+    <ScrollView
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
+      {workouts.map((workout, index) => {
+        const isUnlocked = unlockAll || unlockedWorkoutIds.includes(workout.id);  // Determine if workout is unlocked
+
+        return (
+          <WorkoutPlanCard
+            key={index}
+            workout={{
+              title: workout.workoutName,
+              videos: workout.videos ? workout.videos.length : 0,  // Number of videos if available
+              totalTime: workout.totalTime || 0,  // Assuming totalTime is stored
+              isUnlocked: isUnlocked,  // Set based on user's unlocked workouts
+              image: workout.thumbnailURL,  // Use the fetched thumbnail URL
+            }}
+          />
+        );
+      })}
 
       {/* Conditionally render "Add Workout" button for super users */}
       {isSuperUser && (

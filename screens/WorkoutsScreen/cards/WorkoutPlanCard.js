@@ -28,7 +28,7 @@ const WorkoutPlanCard = ({ workout }) => {
 
   return (
     <TouchableOpacity style={styles.workoutPlanCard} onPress={handlePress}>
-      <ImageBackground source={{ uri: workout.image }} style={styles.workoutImage}>
+      <ImageBackground source={{ uri: workout.image }} style={styles.workoutImage} onLoadStart={console.log("TESTSADDSF")}>
         <View style={styles.overlay}>
           <View style={styles.workoutTopInfo}>
             <View style={styles.infoBlock}>

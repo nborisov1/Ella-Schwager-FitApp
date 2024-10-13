@@ -38,12 +38,13 @@ const StoreScreen = () => (
 const Tab = createBottomTabNavigator();
 
 // The Workout Stack
-const WorkoutStack = ({ isSuperUser }) => {
+const WorkoutStack = ({ isSuperUser, user }) => {
+  console.log(user);
   return (
     <Stack.Navigator>
       <Stack.Screen
         name="Workouts Plans"
-        children={() => <WorkoutsScreen isSuperUser={isSuperUser} />}
+        children={() => <WorkoutsScreen isSuperUser={isSuperUser} user={user} />}
         options={{ headerShown: false }}  // Customize header
       />
       <Stack.Screen
@@ -59,7 +60,7 @@ const WorkoutStack = ({ isSuperUser }) => {
       <Stack.Screen
         name="AddWorkout"  // New screen for adding workouts
         component={AddWorkoutScreen}
-        options={{ title: 'Add Workout' }}  // Set the title for this screen
+        options={{ headerShown: false}}  // Set the title for this screen
       />
     </Stack.Navigator>
   );
@@ -67,6 +68,7 @@ const WorkoutStack = ({ isSuperUser }) => {
 
 // Main Home Screen with bottom tabs
 const HomeScreen = ({ userData }) => {
+  console.log(userData);
   const isSuperUser = userData ? userData.role == 'Admin' : false
   return (
     <NavigationContainer>
@@ -129,10 +131,10 @@ const HomeScreen = ({ userData }) => {
             }
           />
         )}
-        
+
         <Tab.Screen
           name="Workouts"
-          children={() => <WorkoutStack isSuperUser={isSuperUser} />}
+          children={() => <WorkoutStack isSuperUser={isSuperUser} user={userData}/>}
         />
 
         {isSuperUser ? (

@@ -21,6 +21,7 @@ const PersonalCoachScreen = ({ userData }) => {
   const loadPersonalPlan = async () => {
     try {
       const sessions = await fetchPersonalPlan(userData.uid);
+      console.log("sesstion = ",sessions);
       setTrainingSessions(sessions);
       setLoading(false);
     } catch (error) {
@@ -33,6 +34,7 @@ const PersonalCoachScreen = ({ userData }) => {
   }, []);
 
   const handlePress = (session) => {
+    console.log("single session = ",session);
     navigation.navigate('ExerciseList', {
       title: session.sessionName,
       exercises: session.exerciseList,

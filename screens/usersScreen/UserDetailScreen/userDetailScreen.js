@@ -18,7 +18,7 @@ const UserDetailScreen = ({ route, navigation }) => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    loadTrainingSessions().then(() => setRefreshing(false));
+    loadPersonalPlan().then(() => setRefreshing(false));
   }, []);
 
   useEffect(() => {
@@ -138,7 +138,9 @@ const UserDetailScreen = ({ route, navigation }) => {
                   days: item.days,
                   isSuperUser: true,
                   sessionId: item.id,
-                  userId: user.id
+                  userId: user.id,
+                  commnet: item.commnet,
+                  difficulty: item.difficulty            
                 })
               }
             />
