@@ -4,6 +4,7 @@ import WorkoutPlanCard from './cards/WorkoutPlanCard';
 import styles from '../cards/styles';
 import { useNavigation } from '@react-navigation/native';
 import { fetchGeneralWorkouts, fetchUserUnlockedWorkouts } from '../../backend/generalWorkouts/generalWorkoutController';
+import { formatDuration } from '../../utils/utils';
 
 const WorkoutsScreen = ({ isSuperUser, user }) => {
   const [workouts, setWorkouts] = useState([]);
@@ -15,7 +16,6 @@ const WorkoutsScreen = ({ isSuperUser, user }) => {
 
   // Fetch user unlocked workouts from Firestore
   const loadUserUnlockedWorkouts = async () => {
-    console.log("fsafs",user);
     if (user) {
       try {
         const { unlockedWorkoutIds, unlockAll } = await fetchUserUnlockedWorkouts(user.uid);
@@ -68,17 +68,19 @@ const WorkoutsScreen = ({ isSuperUser, user }) => {
       }
     >
       {workouts.map((workout, index) => {
-        const isUnlocked = unlockAll || unlockedWorkoutIds.includes(workout.id);  // Determine if workout is unlocked
-
+        const isUnlocked = isSuperUser || unlockAll || unlockedWorkoutIds.includes(workout.id);  // Determine if workout is unlocked
+        console.log(workout.id);
         return (
           <WorkoutPlanCard
             key={index}
             workout={{
               title: workout.workoutName,
               videos: workout.videos ? workout.videos.length : 0,  // Number of videos if available
-              totalTime: workout.totalTime || 0,  // Assuming totalTime is stored
+              totalTime: formatDuration(workout.totalDuration || 0),  // Assuming totalTime is stored
               isUnlocked: isUnlocked,  // Set based on user's unlocked workouts
               image: workout.thumbnailURL,  // Use the fetched thumbnail URL
+              id: workout.id,
+              isSuperUser: isSuperUser
             }}
           />
         );

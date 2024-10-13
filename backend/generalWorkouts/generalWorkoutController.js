@@ -38,68 +38,65 @@ export const createGeneralWorkout = async (workoutName, thumbnailURI) => {
 
 
 export const addVideoToGeneralWorkout = async (workoutId, videoData) => {
-  if (!videoData.videoURI || !videoData.thumbnailURI) {
+  console.log("hello", workoutId, videoData);
+  if (!videoData.videoURI) {
     console.error('No thumbnail or video URL for general workout was supplied');
     return;
   }
 
   try {
-    let videoDownloadURL = null;
-    let thumbnailDownloadURL = null;
-
     // First, upload the video
     await uploadVideo(
       videoData.videoURI,  // Local URI of the video
       (progress) => console.log(`Video Upload Progress: ${progress}%`),
-      (error, downloadURL, thumbnailURL) => {
+      async (error, downloadURL, thumbnailURL) => {
         if (error) {
           console.error('Video upload failed:', error);
         } else {
-          videoDownloadURL = downloadURL;
-          thumbnailDownloadURL = thumbnailURL;
           console.log('Video uploaded successfully:', downloadURL);
+          console.log('Thumbnail uploaded successfully:', thumbnailURL);
+
+          // Get a reference to the general workout document
+          const generalWorkoutRef = doc(db, `generalWorkouts/${workoutId}`);
+
+          // Define the new video data
+          const videos = {
+            name: videoData.name,
+            videoURL: downloadURL,
+            thumbnailURL: thumbnailURL,
+            duration: videoData.duration,
+            createdAt: new Date(),
+          };
+
+          // Add the new video to the `videos` array in the general workout document
+          await updateDoc(generalWorkoutRef, {
+            videos: arrayUnion(videos),
+          });
+
+          console.log('Video added to general workout successfully');
+
+          // Fetch the updated workout document to recalculate total duration and video count
+          const generalWorkoutDoc = await getDoc(generalWorkoutRef);
+
+          if (generalWorkoutDoc.exists()) {
+            const workoutData = generalWorkoutDoc.data();
+            const currentVideos = workoutData.videos || [];  // Fetch existing videos (if any)
+            
+            // Calculate new total duration and video count
+            const totalDuration = currentVideos.reduce((total, video) => total + video.duration, 0);
+            const videoCount = currentVideos.length;
+
+            // Update the general workout document with new total duration and video count
+            await updateDoc(generalWorkoutRef, {
+              totalDuration,
+              videoCount,
+            });
+
+            console.log('General workout updated with new total duration and video count');
+          }
         }
       }
     );
-
-    // Now, save the video details to Firestore
-    const workoutDocRef = doc(db, `generalWorkouts/${workoutId}/workouts`);
-    const workoutVideo = {
-      name: videoData.name,
-      videoURL: videoDownloadURL,
-      thumbnailURL: thumbnailDownloadURL,
-      duration: videoData.duration,
-      createdAt: new Date(),
-    };
-
-    // Add the new video to the workouts subcollection
-    await updateDoc(workoutDocRef, {
-      videos: arrayUnion(workoutVideo),
-    });
-
-    console.log('Video added to general workout successfully');
-
-    // Fetch the current workout document to update the total duration and video count
-    const generalWorkoutRef = doc(db, `generalWorkouts/${workoutId}`);
-    const generalWorkoutDoc = await getDoc(generalWorkoutRef);
-
-    if (generalWorkoutDoc.exists()) {
-      const workoutData = generalWorkoutDoc.data();
-      const currentVideos = workoutData.videos || [];  // Fetch existing videos (if any)
-      
-      // Calculate new total duration and video count
-      const totalDuration = currentVideos.reduce((total, video) => total + video.duration, 0) + videoData.duration;
-      const videoCount = currentVideos.length + 1;
-
-      // Update the general workout document with new total duration and video count
-      await updateDoc(generalWorkoutRef, {
-        totalDuration,
-        videoCount,
-      });
-
-      console.log('General workout updated with new total duration and video count');
-    }
-
   } catch (error) {
     console.error('Error adding video to general workout: ', error);
   }
@@ -122,15 +119,24 @@ export const fetchGeneralWorkouts = async () => {
 // 4. Fetch All Videos of a Specific General Workout
 export const fetchWorkoutVideos = async (workoutId) => {
   try {
-    const videosRef = collection(db, `generalWorkouts/${workoutId}/workouts`);
-    const querySnapshot = await getDocs(videosRef);
-    const videos = [];
-    querySnapshot.forEach((doc) => {
-      videos.push({ id: doc.id, ...doc.data() });
-    });
-    return videos;
+    // Get a reference to the general workout document
+    const workoutDocRef = doc(db, `generalWorkouts/${workoutId}`);
+    const workoutDoc = await getDoc(workoutDocRef);
+
+    if (workoutDoc.exists()) {
+      const workoutData = workoutDoc.data();
+      
+      // Extract videos array from the workout data
+      const videos = workoutData.videos || [];  // Default to an empty array if no videos are present
+
+      return videos;
+    } else {
+      console.error(`No workout found for ID: ${workoutId}`);
+      return [];
+    }
   } catch (error) {
     console.error('Error fetching workout videos: ', error);
+    return [];
   }
 };
 

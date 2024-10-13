@@ -8,7 +8,6 @@ export const pickVideo = async () => {
       allowsEditing: true,
       quality: 1,
     });
-    console.log("TEST",result);
     if (!result.canceled) {
       return { success: true, result: result };  // Return the video URI
     }

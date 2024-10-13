@@ -6,7 +6,7 @@ import styles from './styles';
 
 const WorkoutPlanCard = ({ workout }) => {
   const navigation = useNavigation();
-
+  console.log(workout)
   const handlePress = () => {
     if (workout.isUnlocked) {
       navigation.navigate('WorkoutDetail', { workout });
@@ -28,7 +28,7 @@ const WorkoutPlanCard = ({ workout }) => {
 
   return (
     <TouchableOpacity style={styles.workoutPlanCard} onPress={handlePress}>
-      <ImageBackground source={{ uri: workout.image }} style={styles.workoutImage} onLoadStart={console.log("TESTSADDSF")}>
+      <ImageBackground source={{ uri: workout.image }} style={styles.workoutImage}>
         <View style={styles.overlay}>
           <View style={styles.workoutTopInfo}>
             <View style={styles.infoBlock}>
@@ -37,7 +37,7 @@ const WorkoutPlanCard = ({ workout }) => {
             </View>
             <View style={styles.infoBlock}>
               <FontAwesome name="clock-o" size={16} color="white" />
-              <Text style={styles.infoText}>{`${workout.totalTime} min`}</Text>
+              <Text style={styles.infoText}>{`${workout.totalTime}`}</Text>
             </View>
           </View>
 

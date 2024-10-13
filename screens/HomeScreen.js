@@ -39,7 +39,6 @@ const Tab = createBottomTabNavigator();
 
 // The Workout Stack
 const WorkoutStack = ({ isSuperUser, user }) => {
-  console.log(user);
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -68,7 +67,6 @@ const WorkoutStack = ({ isSuperUser, user }) => {
 
 // Main Home Screen with bottom tabs
 const HomeScreen = ({ userData }) => {
-  console.log(userData);
   const isSuperUser = userData ? userData.role == 'Admin' : false
   return (
     <NavigationContainer>
