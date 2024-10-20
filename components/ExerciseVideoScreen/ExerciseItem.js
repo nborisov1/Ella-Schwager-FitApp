@@ -8,7 +8,6 @@ const ExerciseItem = ({ item, handleDelete, isSuperUser }) => {
   const [videoPosition, setVideoPosition] = useState(0); // State to store video playback position
   const videoRef = useRef(null); // Ref for the Video component
   // Open modal and resume video from the saved position
-  console.log(item);
   const handleOpenVideo = () => {
     setIsVideoVisible(true);
   };

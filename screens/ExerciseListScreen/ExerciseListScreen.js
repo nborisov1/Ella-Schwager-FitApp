@@ -14,7 +14,7 @@ const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Fri
 
 const ExerciseListScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { title, exercises, days, isSuperUser, sessionId, userId } = route.params;
+  const { title, exercises, days, isSuperUser, sessionId, userId, userComment, userDifficulty } = route.params;
   const [updatedDays, setUpdatedDays] = useState([...days]);  
   const [previousDays, setPreviousDays] = useState([...days]);
   const [editableExercises, setEditableExercises] = useState(exercises.map(exercise => ({
@@ -204,7 +204,6 @@ const ExerciseListScreen = ({ route }) => {
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {editableExercises.map((exercise, index) => (
-          console.log("exercise", exercise),
           <View key={index} style={styles.exerciseItem}>
             <TouchableOpacity
               onPress={() => handleNavigateToExerciseVideoScreen(exercise)}  // Make the card clickable
@@ -218,6 +217,8 @@ const ExerciseListScreen = ({ route }) => {
               onSave={handleSaveExercise}
               additionalFields={exercise.customField || {}}
               thumbnail={exercise.thumbnail}
+              userComment={userComment}
+              userDifficulty={userDifficulty}
             />
             </TouchableOpacity>
             {isSuperUser && editMode && (

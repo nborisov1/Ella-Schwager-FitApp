@@ -8,6 +8,7 @@ import * as ImagePicker from 'expo-image-picker';
 import UploadProgressModal from '../components/UploadProgressModal'
 import { collection, addDoc } from "firebase/firestore";
 import { db } from '../config/firebase';
+import { pickThumbnail } from '../media/mediaPicker';
 
 const AddTrainingSessionScreen = ({userData}) => {
   const [sessionName, setSessionName] = useState(''); // State for the new session name

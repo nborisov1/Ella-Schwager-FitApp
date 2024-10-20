@@ -71,14 +71,11 @@ const AddExerciseScreen = ({ route }) => {
   };
 
   const handleChooseThumbnail = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,  
-      aspect: [4, 3],        
-      quality: 1,            
-    });
-    if (!result.cancelled) {
-      setThumbnailUri(result.assets[0].uri);  
+    const result = await pickThumbnail();  // Call the utility function
+    if (result.success) {
+      setThumbnailUri(result.uri);  // Set the selected thumbnail URI
+    } else {
+      console.log('No thumbnail was selected or an error occurred');
     }
   };
 

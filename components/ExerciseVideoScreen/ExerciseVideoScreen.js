@@ -10,13 +10,7 @@ import { uploadVideo } from '../../backend/upload/thumbnials';
 import { fetchExerciseVideos } from '../../backend/trainingSession/fetchExerciseVideos';
 import { deleteVideo } from '../../backend/upload/thumbnials';
 import { pickVideo } from '../../media/mediaPicker';
-
-function formatDuration(milliseconds) {
-  const totalSeconds = Math.floor(milliseconds / 1000); 
-  const minutes = Math.floor(totalSeconds / 60); 
-  const seconds = totalSeconds % 60;
-  return `${minutes}:${seconds < 10 ? '0' : ''}${seconds} min`;
-}
+import { formatDuration } from '../../utils/utils';
 
 const ExerciseVideoScreen = ({ route }) => {
   const { thumbnail, title, isSuperUser, sessionId, exerciseId } = route.params;

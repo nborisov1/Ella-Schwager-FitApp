@@ -32,7 +32,6 @@ const fetchPersonalPlan = async (userId) => {
       const querySnapshot = await getDocs(personalPlanRef);
       const trainingSessions = querySnapshot.docs.map((doc, index) => {
         const sessionData = doc.data();
-        console.log("sessionData" , sessionData);
         const exerciseList = sessionData.exercises ? sessionData.exercises.map(exercise => ({
           ...exercise
         })) : [];

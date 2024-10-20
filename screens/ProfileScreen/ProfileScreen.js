@@ -73,7 +73,9 @@ export default function ProfileScreen({ user }) {
       exercises: session.exerciseList,  // Pass the exercise list to ExerciseListScreen
       days: session.days,
       sessionId: session.id,
-      userId: user.uid
+      userId: user.uid,
+      commnet: session.commnet,
+      difficulty: session.difficulty
     });
   };
 
