@@ -72,41 +72,49 @@ const HomeScreen = ({ userData }) => {
     <NavigationContainer>
       <Tab.Navigator
         screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size }) => {
+          tabBarIcon: ({ color, size, focused }) => {
             let iconName;
+            let iconColor = focused ? '#C73D8C' : '#000';  // Black for inactive, purple for active
+            let iconSize = focused ? 30 : 24;  // Make the active icon larger
 
-            // Choose the icon based on the route name (tab name)
+            // Choose the outline icon based on the route name
             switch (route.name) {
-              case 'UsersStack':  // Use the 'Users' tab instead of 'Profile'
-                iconName = 'people';
+              case 'UsersStack':
+                iconName = 'people-outline'; 
                 break;
               case 'Workouts':
-                iconName = 'barbell';
+                iconName = 'barbell-outline';
                 break;
               case 'My Plan':
-                iconName = 'clipboard';
+                iconName = 'clipboard-outline';
                 break;
               case 'Add Training':
-                iconName = 'add-circle';
+                iconName = 'add-circle-outline';
                 break;
               case 'Settings':
-                iconName = 'settings';
+                iconName = 'settings-outline';
                 break;
               case 'Store':
-                iconName = 'cart';
+                iconName = 'cart-outline';
                 break;
               case 'Profile':
-                iconName = 'people';
+                iconName = 'people-outline';
                 break;
             }
 
-            // Return the Icon component from react-native-vector-icons
-            return <Icon name={iconName} size={size} color={color} />;
+            return (
+              <View style={{ alignItems: 'center' }}>
+                {/* Move the icon up for the focused tab */}
+                <Icon name={iconName} size={iconSize} color={iconColor} style={{ marginTop: focused ? -6 : 0 }} />
+              </View>
+            );
           },
-          tabBarActiveTintColor: 'tomato',  // Active tab color
-          tabBarInactiveTintColor: 'gray',  // Inactive tab color
-        })}
-      >
+          tabBarLabelStyle: styles.tabBarLabelStyle,
+          tabBarStyle: styles.tabBarStyle,
+          tabBarActiveTintColor: styles.tabBarActiveTintColor.color,  
+          tabBarInactiveTintColor: styles.tabBarInactiveTintColor.color,  
+        })}>
+
         {isSuperUser ? (
           <Tab.Screen
             name="UsersStack"
@@ -161,6 +169,27 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  tabBarStyle: {
+    height: 85,  
+    paddingVertical: 5,  
+    borderTopLeftRadius: 20, 
+    borderTopRightRadius: 20,  
+    backgroundColor: '#FFFFFF',  
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  tabBarLabelStyle: {
+    fontSize: 12,  
+    fontWeight: 'bold',  
+  },
+  tabBarActiveTintColor: {
+    color: '#C73D8C',
+  },
+  tabBarInactiveTintColor: {
+    color: '#000',
   },
 });
 

@@ -6,9 +6,9 @@ import ExerciseItem from './ExerciseItem';
 import * as ImagePicker from 'expo-image-picker';
 import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore'; 
 import { db } from '../../config/firebase';
-import { uploadVideo } from '../../backend/upload/thumbnials';
+import { uploadVideo } from '../../backend/upload/uploadService';
 import { fetchExerciseVideos } from '../../backend/trainingSession/fetchExerciseVideos';
-import { deleteVideo } from '../../backend/upload/thumbnials';
+import { deleteVideo } from '../../backend/upload/uploadService';
 import { pickVideo } from '../../media/mediaPicker';
 import { formatDuration } from '../../utils/utils';
 

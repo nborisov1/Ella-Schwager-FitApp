@@ -1,7 +1,7 @@
 import { collection, addDoc, doc, getDoc, updateDoc, arrayUnion, getDocs, deleteDoc } from 'firebase/firestore';
 import { ref, deleteObject } from 'firebase/storage';
 import { db, storage } from '../../config/firebase';
-import { uploadVideo, uploadImage } from '../upload/thumbnials';
+import { uploadVideo, uploadImage } from '../upload/uploadService';
 
 // 1. Create a New General Workout
 export const createGeneralWorkout = async (workoutName, thumbnailURI) => {

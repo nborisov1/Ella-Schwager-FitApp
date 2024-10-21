@@ -1,6 +1,6 @@
-import { getFirestore, collection, doc, setDoc, getDocs, addDoc } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL, UploadTask } from "firebase/storage";
-import { uploadImage } from "../backend/upload/thumbnials";
+import { collection, getDocs, addDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { uploadImage } from "../backend/upload/uploadService";
 import { db, storage } from '../config/firebase';
 
 // Add a new training session
