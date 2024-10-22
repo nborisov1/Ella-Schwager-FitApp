@@ -108,7 +108,7 @@ export default function ProfileScreen({ user }) {
               key={index}
               title={session.sessionName}
               exercises={session.exerciseList.length}  // Count of exercises in the session
-              imageUri={session.thumbnailUrl}  // Assuming each session has a thumbnail
+              imageUri={session.downloadURL}  // Assuming each session has a thumbnail
               days={session.days}  // Pass the days for the session
               onPress={() => handlePress(session)}  // Handle navigation on press
             />
