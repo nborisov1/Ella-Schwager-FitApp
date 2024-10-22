@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     fontSize: 16,
     color: '#000',
-    textAlign: 'left',
+    textAlign: 'right',
   },
 
 });
