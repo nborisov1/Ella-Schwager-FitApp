@@ -18,3 +18,15 @@ export const translateDayToHebrew = (day) => {
   }  
   return daysMap[day] || day;
 }
+export const sortDays = (daysArray) => {
+  const daysOrder = {
+    Sunday: 0,
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
+  };
+  return daysArray.sort((a, b) => daysOrder[b] - daysOrder[a]);
+}

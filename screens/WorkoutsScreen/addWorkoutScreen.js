@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker'; // Using react-native-image-picker for simplicity
 import styles from './styles';
-import { pickVideo, pickThumbnail } from '../../media/mediaPicker';
+import { pickThumbnail } from '../../media/mediaPicker';
 import { createGeneralWorkout } from '../../backend/generalWorkouts/generalWorkoutController';
 
 const AddWorkoutScreen = ({ navigation }) => {

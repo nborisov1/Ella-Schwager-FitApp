@@ -3,7 +3,7 @@ import { View, Text, ImageBackground, TouchableOpacity, Dimensions, ActivityIndi
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
 import styles from './styles';
-import { translateDayToHebrew } from '../../../utils/utils';
+import { sortDays, translateDayToHebrew } from '../../../utils/utils';
 
 I18nManager.forceRTL(false);
 
@@ -35,7 +35,7 @@ const TrainingSessionCard = ({ title, exercises, imageUri, days, onPress, subtit
       
       {/* Position Days outside of the Image and Gradient */}
       <View style={styles.daysContainer}>
-      {days && days.length > 0 && days.slice().reverse().map((day, index) => (
+      {days && days.length > 0 && sortDays(days).map((day, index) => (
           <View key={index} style={styles.dayWrapper}>
             <Text style={styles.dayText}>{translateDayToHebrew(day)}</Text>
           </View>
@@ -68,15 +68,7 @@ const TrainingSessionCard = ({ title, exercises, imageUri, days, onPress, subtit
               )}
             </View>
 
-            {/* Timer and Exercises placed at bottom corners */}
             <View style={styles.bottomLeft}>
-              <View style={styles.detailItem}>
-                <Text style={styles.detailText}>2.5 שעות</Text>
-                <MaterialIcons name="timer" size={18} color="#fff" style={{ paddingRight: 5 }}/>
-              </View>
-            </View>
-
-            <View style={styles.bottomRight}>
               <View style={styles.detailItem}>
                 <Text style={styles.detailText}>{exercises === 1 ? 'תרגיל בודד' : `${exercises} תרגילים`}</Text>
                 <MaterialIcons name="fitness-center" size={18} color="#fff" style={{ paddingRight: 5 }} />

@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native'; // Import navigation h
 import TrainingSessionCard from '../screens/PersonalCoachScreen/TrainingSessionCrad/TrainingSessionCard';
 import { fetchTrainingSessions, createTrainingSessionInSessionCollection } from './backend';
 import styles from './styles'; // Import styles
-import * as ImagePicker from 'expo-image-picker';
 import UploadProgressModal from '../components/UploadProgressModal'
 import { collection, addDoc } from "firebase/firestore";
 import { db } from '../config/firebase';

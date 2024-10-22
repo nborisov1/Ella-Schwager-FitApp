@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, TouchableOpacity, Alert, SafeAreaView, Image, Modal } from 'react-native';
+import { View, Text, FlatList, TextInput, TouchableOpacity, Alert, SafeAreaView, Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { addExerciseToGeneralSession, fetchExercisesForSession } from './backend';
-import * as ImagePicker from 'expo-image-picker';
 import { doc, setDoc, collection } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import UploadProgressModal from '../components/UploadProgressModal';  
 import styles from './addExerciseStyle';
+import { pickThumbnail } from '../media/mediaPicker';
 
 const AddExerciseScreen = ({ route }) => {
   const { sessionId, title, userData } = route.params;

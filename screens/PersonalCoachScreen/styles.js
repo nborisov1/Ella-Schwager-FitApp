@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     fontSize: 24,  // Large font for the headline
     fontWeight: 'bold',
     color: '#000',  // Black text for visibility
-    textAlign: 'left',
+    textAlign: 'right',
   },
   sessionList: {
     paddingBottom: 20,

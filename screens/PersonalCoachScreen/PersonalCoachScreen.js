@@ -91,7 +91,8 @@ const PersonalCoachScreen = ({ userData }) => {
         <ScrollView 
           contentContainerStyle={styles.sessionList}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-        >
+          style={{ direction: 'rtl' }}  // Ensure content direction is RTL
+          >
           {/* Display filtered sessions */}
           {filteredSessions.map((session) => (
             <TrainingSessionCard 
