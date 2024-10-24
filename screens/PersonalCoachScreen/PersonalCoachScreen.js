@@ -58,7 +58,8 @@ const PersonalCoachScreen = ({ userData }) => {
       sessionId: session.id,
       userId: userData.uid,
       commnet: session.commnet,
-      difficulty: session.difficulty
+      thumbnail: session.downloadURL,
+      description: session.description
     });
   };
 
@@ -102,7 +103,7 @@ const PersonalCoachScreen = ({ userData }) => {
               imageUri={session.downloadURL}
               days={session.days}
               onPress={() => handlePress(session)}
-              subtitle="שפר את היציבות והסיבולת עם אימוני רגליים דינמיים."
+              subtitle={session.subtitle}
             />
           ))}
         </ScrollView>

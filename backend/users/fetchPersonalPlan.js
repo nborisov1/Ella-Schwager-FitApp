@@ -41,7 +41,9 @@ const fetchPersonalPlan = async (userId) => {
           sessionName: sessionData.sessionName,  // Session title
           exercises: exerciseList.length,  // Number of exercises
           downloadURL: sessionData.downloadURL || '',  // Fetch the thumbnail URL
-          exerciseList: exerciseList  // List of exercises
+          exerciseList: exerciseList, // List of exercises
+          description: sessionData.description || '',
+          subtitle: sessionData.subtitle || '',
         };
       });
   

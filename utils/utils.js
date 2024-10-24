@@ -28,5 +28,5 @@ export const sortDays = (daysArray) => {
     Friday: 5,
     Saturday: 6,
   };
-  return daysArray.sort((a, b) => daysOrder[b] - daysOrder[a]);
+  return daysArray.sort((a, b) => daysOrder[a] - daysOrder[b]);
 }

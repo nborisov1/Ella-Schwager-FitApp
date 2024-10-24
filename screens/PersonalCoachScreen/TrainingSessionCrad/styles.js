@@ -47,23 +47,22 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',  // Ensure that text wraps to the next line
   },
   daysContainer: {
-    position: 'absolute',  // Position it on top of the image
+    position: 'absolute',  // Positioned at the top of the image
     top: 10,
-    flexDirection: 'row-reverse',  // Make it flow right-to-left
+    flexDirection: 'row-reverse',  // Align text RTL for Hebrew
     zIndex: 10,  // Ensure it's above the gradient
-  },
-  dayWrapper: {
-    marginLeft: 8,  // Reverse margin for RTL
+    left: 15,
     backgroundColor: 'rgba(255,255,255,0.2)',  // Semi-transparent background for day tags
     paddingVertical: 4,
     paddingHorizontal: 10,
     borderRadius: 20,
   },
   dayText: {
-    color: '#fff',  // White text to ensure visibility
+    color: '#fff',  // White text for visibility on dark background
     fontSize: 12,
     fontWeight: 'bold',
-    textAlign: 'center',
+    textAlign: 'right',  // Right-align text for RTL languages
+    writingDirection: 'rtl',  // Ensure right-to-left text direction
   },
 
   bottomContainer: {

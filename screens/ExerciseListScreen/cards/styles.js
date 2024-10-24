@@ -1,259 +1,93 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  card: {
+  cardContainer: {
     backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 15,
-    marginVertical: 10,
-    shadowColor: '#000',
+    borderRadius: 15,
+    padding: 10,
     shadowOpacity: 0.1,
-    shadowRadius: 5,
-    elevation: 3,
-    alignItems: 'center',  // Center the content
-    justifyContent: 'center',  // Center the content
+    flexDirection: 'column',  // Layout card vertically to place comment at the bottom
+  },
+  topSection: {
+    flexDirection: 'row',  // Horizontal layout for image and details
+    alignItems: 'center',  // Align image and details vertically
+    width: '100%',
+  },
+  imageContainer: {
+    width: '30%',  // Image occupies 30% of the card width
+    alignItems: 'center',
+  },
+  thumbnail: {
+    width: '100%',
+    height: 100,
+    borderRadius: 10,
+  },
+  detailsContainer: {
+    flex: 1,  // Take up the remaining width of the card
+    paddingLeft: 15,  // Add spacing between the image and details
+    justifyContent: 'space-between',
+  },
+  header: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
-    textAlign: 'center',  // Center the text
-    marginBottom: 10,
-  },
-  centeredContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  details: {
-    fontSize: 16,
     color: '#333',
-    marginBottom: 10,
-    textAlign: 'center',  // Center the text
+    textAlign: 'right',
   },
-  horizontalContainer: {
-    flexDirection: 'row',  // Arrange items horizontally
-    justifyContent: 'space-around',  // Space between sets and reps
-    width: '100%',
-    marginBottom: 10,
+  durationText: {
+    fontSize: 14,
+    color: '#999',
+    textAlign: 'right',
   },
-  editableFieldContainer: {
-    alignItems: 'center',  // Center the content
-  },
-  input: {
-    backgroundColor: '#f0f0f0',
-    borderRadius: 8,
-    padding: 10,
-    fontSize: 16,
-    textAlign: 'center',
-    width: '100%',  // Full width
-    marginBottom: 10,  // Add space between input fields
-  },
-      label: {
+  subtitle: {
+    fontSize: 14,
+    color: '#777',
     marginTop: 5,
+    textAlign: 'right',
+  },
+  infoContainer: {
+    flexDirection: 'row-reverse',
+    marginTop: 30,
+  },
+  infoText: {
     fontSize: 14,
-    fontWeight: 'bold',
     color: '#333',
-    textAlign: 'center',  // Center the label
+    textAlign: 'right',
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
-    marginTop: 10,
-  },
-  saveButton: {
-    backgroundColor: '#4CAF50',
-    padding: 10,
-    borderRadius: 8,
+  bottomSection: {
+    flexDirection: 'row-reverse',
     alignItems: 'center',
-    width: '48%',
+    marginTop: 15,
   },
-  saveButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  cancelButton: {
-    backgroundColor: '#f44336',
-    padding: 10,
-    borderRadius: 8,
-    alignItems: 'center',
-    width: '48%',
-  },
-  cancelButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  difficultyContainer: {
-    marginVertical: 20,
-    alignSelf: 'stretch',  // Ensure it stretches to full width
-    color: 'red'
-  },
-  leftLabel: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'left',  // Align label to the left
-  },
-  slider: {
-    width: '100%',
-  },
-  difficultyLabels: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  difficultyText: {
-    fontSize: 12,
-    color: '#333',
-  },
-  commentToggle: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginVertical: 10,
-    alignSelf: 'stretch',  // Ensure it stretches to full width
-  },
-  commentContainer: {
+  commentSection: {
+    flexDirection: 'row',  // Row layout for input and send button
     backgroundColor: '#f9f9f9',
     borderRadius: 10,
+    alignItems: 'center',
     padding: 10,
-    alignSelf: 'stretch',  // Ensure it stretches to full width
+    marginTop: 15,  // Space between details and comment section
+    width: '100%',  // Full width of the card
+    justifyContent: 'space-between',  // Ensure space between the comment box and button
   },
   commentBox: {
-    height: 80,
+    flex: 1,  // Take up the remaining space in the row
     borderRadius: 8,
     padding: 10,
     fontSize: 14,
     backgroundColor: '#f0f0f0',
-    textAlignVertical: 'top',  // Align text at the top for multiline input
-  },
-  hintText: {
-    fontSize: 12,
-    color: '#1E90FF',
-    marginTop: 5,
-    textAlign: 'center',  // Center the hint text
-  },
-  editButton: {
-    backgroundColor: '#1E90FF',
-    padding: 10,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 10,
-    width: '100%',  // Make the edit button take full width
-  },
-  editButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  customFieldContainer: {
-    marginTop: 20,
-  },
-  addFieldButton: {
-    backgroundColor: '#3498DB',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
-  },
-  addFieldButtonText: {
-    color: '#fff',
-    textAlign: 'center',
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  modalContent: {
-    width: '80%',
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-    elevation: 10,
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  modalButtonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-  },
-  modalSaveButton: {
-    backgroundColor: '#4CAF50',
-    padding: 10,
-    borderRadius: 5,
-    width: '48%',
-  },
-  modalSaveButtonText: {
-    color: '#fff',
-    textAlign: 'center',
-  },
-  modalCancelButton: {
-    backgroundColor: '#FF6347',
-    padding: 10,
-    borderRadius: 5,
-    width: '48%',
-  },
-  modalCancelButtonText: {
-    color: '#fff',
-    textAlign: 'center',
-  },
-  customFieldRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 8,
-    marginVertical: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2, // For Android shadow
-  },
-  customFieldTextContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  customFieldKey: {
-    fontWeight: 'bold',
-    marginRight: 8,
-  },
-  customFieldValue: {
-    color: '#333',
-  },
-  trashButton: {
-    padding: 8,  // Give the button a little padding for easier clickability
+    textAlign: 'right',  // Align text for RTL
   },
   sendButton: {
-    backgroundColor: '#4CAF50',
+    marginRight: 10,  // Add some space between the button and the comment box
+    backgroundColor: '#FFD700',
     padding: 10,
-    borderRadius: 8,
-    marginTop: 10,
-    alignItems: 'center',
+    borderRadius: 10,
   },
-  sendButtonText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  commentItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
-  commentText: {
-    fontSize: 14,
-    color: '#333',
-  },
-  noCommentsText: {
-    textAlign: 'center',
-    color: '#999',
-    marginTop: 10,
-  }  
-});
+  });
 
 export default styles;

@@ -35,12 +35,12 @@ const TrainingSessionCard = ({ title, exercises, imageUri, days, onPress, subtit
       
       {/* Position Days outside of the Image and Gradient */}
       <View style={styles.daysContainer}>
-      {days && days.length > 0 && sortDays(days).map((day, index) => (
-          <View key={index} style={styles.dayWrapper}>
-            <Text style={styles.dayText}>{translateDayToHebrew(day)}</Text>
-          </View>
-        ))}
-      </View>
+      <Text style={styles.dayText}>
+        {days && days.length > 0 ? sortDays(days).map((day, index) => (
+          `${translateDayToHebrew(day)}${index < days.length - 1 ? ' • ' : ''}`
+        )).join('') : ''}
+      </Text>
+    </View>
       
       {/* Image covering entire card with gradient */}
       <View>
