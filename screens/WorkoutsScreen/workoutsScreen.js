@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { fetchGeneralWorkouts, fetchUserUnlockedWorkouts } from '../../backend/generalWorkouts/generalWorkoutController';
 import { formatDuration } from '../../utils/utils';
 
-const WorkoutsScreen = ({ isSuperUser, user }) => {
+const WorkoutsScreen = ({ user }) => {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);  // Track refresh state
@@ -68,8 +68,7 @@ const WorkoutsScreen = ({ isSuperUser, user }) => {
       }
     >
       {workouts.map((workout, index) => {
-        const isUnlocked = isSuperUser || unlockAll || unlockedWorkoutIds.includes(workout.id);  // Determine if workout is unlocked
-        console.log(workout.id);
+        const isUnlocked = unlockAll || unlockedWorkoutIds.includes(workout.id);  // Determine if workout is unlocked
         return (
           <WorkoutPlanCard
             key={index}
@@ -80,21 +79,11 @@ const WorkoutsScreen = ({ isSuperUser, user }) => {
               isUnlocked: isUnlocked,  // Set based on user's unlocked workouts
               image: workout.thumbnailURL,  // Use the fetched thumbnail URL
               id: workout.id,
-              isSuperUser: isSuperUser
             }}
           />
         );
       })}
 
-      {/* Conditionally render "Add Workout" button for super users */}
-      {isSuperUser && (
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => navigation.navigate('AddWorkout')}
-        >
-          <Text style={styles.addButtonText}>Add Workout</Text>
-        </TouchableOpacity>
-      )}
     </ScrollView>
   );
 };

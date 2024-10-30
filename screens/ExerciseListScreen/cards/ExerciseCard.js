@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import styles from './styles';
 
 const ExerciseCard = ({ name, subtitle, customField, thumbnail, userComment, exerciseId, onCommentSend }) => {
   const [comment, setComment] = useState(userComment || '');
+  const [loading, setLoading] = useState(true);  // Manage loading state
 
   const handleSendComment = () => {
     if (comment.trim()) {
@@ -18,7 +19,16 @@ const ExerciseCard = ({ name, subtitle, customField, thumbnail, userComment, exe
       <View style={styles.topSection}>
         {/* Thumbnail on the left */}
         <View style={styles.imageContainer}>
-          <Image source={{ uri: thumbnail }} style={styles.thumbnail} />
+          {loading && (
+            <ActivityIndicator size="large" color="#0000ff" style={styles.activityIndicator} />
+          )}
+
+          <Image
+            source={{ uri: thumbnail }}
+            style={styles.thumbnail}
+            onLoadStart={() => setLoading(true)}  // Show ActivityIndicator when loading starts
+            onLoadEnd={() => setLoading(false)}   // Hide ActivityIndicator when loading finishes
+          />
         </View>
 
         {/* Details Section */}

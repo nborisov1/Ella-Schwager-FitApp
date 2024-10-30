@@ -36,11 +36,6 @@ const styles = StyleSheet.create({
       color: '#333',
       flexShrink: 1,
     },
-    modalContainer: {
-      flex: 1,
-      justifyContent: 'center',
-      backgroundColor: '#000',
-    },
     videoPlayer: {
       width: Dimensions.get('window').width,
       height: Dimensions.get('window').height * 0.4,

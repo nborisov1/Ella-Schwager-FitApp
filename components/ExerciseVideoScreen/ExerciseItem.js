@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { Video } from 'expo-av';
-import { Ionicons } from 'react-native-vector-icons';  // For the trash icon
 
-const ExerciseItem = ({ item, handleDelete, isSuperUser }) => {
+const ExerciseItem = ({ item }) => {
   const [isVideoVisible, setIsVideoVisible] = useState(false);
   const [videoPosition, setVideoPosition] = useState(0); // State to store video playback position
   const videoRef = useRef(null); // Ref for the Video component
@@ -40,11 +39,6 @@ const ExerciseItem = ({ item, handleDelete, isSuperUser }) => {
           <Text style={styles.duration}>{item.duration}</Text>
         </View>
       </TouchableOpacity>
-      {isSuperUser && (
-        <TouchableOpacity style={styles.deleteIcon} onPress={() => handleDelete(item)}>
-          <Ionicons name="trash-outline" size={24} color="#f00" />
-        </TouchableOpacity>
-        )}
 
       {/* Modal for playing the video */}
       <Modal

@@ -58,6 +58,13 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 2,
   },
+  activityIndicator: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -12 }, { translateY: -12 }],
+    zIndex: 1,  // Ensure the ActivityIndicator is on top of the image
+  },  
 });
 
 export default styles;

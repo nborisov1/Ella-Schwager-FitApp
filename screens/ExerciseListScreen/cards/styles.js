@@ -79,15 +79,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     fontSize: 14,
-    backgroundColor: '#f0f0f0',
     textAlign: 'right',  // Align text for RTL
   },
   sendButton: {
     marginRight: 10,  // Add some space between the button and the comment box
-    backgroundColor: '#FFD700',
+    backgroundColor: 'pink',
     padding: 10,
     borderRadius: 10,
   },
+  activityIndicator: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: [{ translateX: -12 }, { translateY: -12 }],
+  },  
   });
 
 export default styles;

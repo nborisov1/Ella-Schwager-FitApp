@@ -4,7 +4,6 @@ import { FontAwesome } from '@expo/vector-icons';  // For the play button icon
 import styles from './styles';
 
 const WorkoutCard = ({ workout }) => {
-  console.log(workout.name);
   return (
     <TouchableOpacity style={styles.workoutCard}>
       {/* Workout Image */}

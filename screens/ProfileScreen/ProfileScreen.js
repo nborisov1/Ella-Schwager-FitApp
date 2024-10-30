@@ -75,7 +75,6 @@ export default function ProfileScreen({ user }) {
       sessionId: session.id,
       userId: user.uid,
       commnet: session.commnet,
-      difficulty: session.difficulty
     });
   };
 

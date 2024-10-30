@@ -11,7 +11,6 @@ const TrainingSessionCard = ({ title, exercises, imageUri, days, onPress, subtit
   const [maxLines, setMaxLines] = useState(1);
   const [loading, setLoading] = useState(true);  // Loading state for image
   const { width } = Dimensions.get('window');  // Get the width of the device
-
   useEffect(() => {
     if (subtitle) {
       calculateNumberOfLines(subtitle, width);
@@ -35,12 +34,12 @@ const TrainingSessionCard = ({ title, exercises, imageUri, days, onPress, subtit
       
       {/* Position Days outside of the Image and Gradient */}
       <View style={styles.daysContainer}>
-      <Text style={styles.dayText}>
-        {days && days.length > 0 ? sortDays(days).map((day, index) => (
-          `${translateDayToHebrew(day)}${index < days.length - 1 ? ' • ' : ''}`
-        )).join('') : ''}
-      </Text>
-    </View>
+        <Text style={styles.dayText}>
+          {days && days.length > 0 ? sortDays(days).map((day, index) => (
+            `${translateDayToHebrew(day)}${index < days.length - 1 ? ' • ' : ''}`
+          )).join('') : ''}
+        </Text>
+      </View>
       
       {/* Image covering entire card with gradient */}
       <View>

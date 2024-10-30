@@ -5,7 +5,7 @@ import styles from './styles';  // Update this to match the new styles
 import TrainingSessionCard from './TrainingSessionCrad/TrainingSessionCard';
 import fetchPersonalPlan from '../../backend/users/fetchPersonalPlan';
 import { RefreshControl } from 'react-native-gesture-handler';
-
+import { translateDayToHebrew } from '../../utils/utils';
 const PersonalCoachScreen = ({ userData }) => {
   const { width, height } = Dimensions.get('window');
   const navigation = useNavigation();  
@@ -54,7 +54,6 @@ const PersonalCoachScreen = ({ userData }) => {
       title: session.sessionName,
       exercises: session.exerciseList,
       days: session.days,
-      isSuperUser: false,
       sessionId: session.id,
       userId: userData.uid,
       commnet: session.commnet,

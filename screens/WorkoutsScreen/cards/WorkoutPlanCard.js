@@ -6,7 +6,6 @@ import styles from './styles';
 
 const WorkoutPlanCard = ({ workout }) => {
   const navigation = useNavigation();
-  console.log(workout)
   const handlePress = () => {
     if (workout.isUnlocked) {
       navigation.navigate('WorkoutDetail', { workout });
