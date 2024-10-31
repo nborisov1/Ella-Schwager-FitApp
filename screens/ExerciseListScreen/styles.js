@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     padding: 20,
-    paddingBottom: 40,
+    paddingBottom: 80,
   },
   exerciseItem: {
     flexDirection: 'column',
