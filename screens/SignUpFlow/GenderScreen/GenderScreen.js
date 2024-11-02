@@ -32,7 +32,7 @@ const GenderScreen = ({ navigation }) => {
           ]}
           onPress={() => handleGenderSelect('Female')}
         >
-          <FontAwesome5 name="female" size={40} color={selectedGender === 'Female' ? '#fff' : '#000'} />
+          <FontAwesome5 name="venus" size={40} color={selectedGender === 'Female' ? '#fff' : '#000'} />
           <Text style={selectedGender === 'Female' ? styles.genderTextSelected : styles.genderText}>Female</Text>
         </TouchableOpacity>
 
@@ -43,7 +43,7 @@ const GenderScreen = ({ navigation }) => {
           ]}
           onPress={() => handleGenderSelect('Male')}
         >
-          <FontAwesome5 name="male" size={40} color={selectedGender === 'Male' ? '#fff' : '#000'} />
+          <FontAwesome5 name="mars" size={40} color={selectedGender === 'Male' ? '#fff' : '#000'} />
           <Text style={selectedGender === 'Male' ? styles.genderTextSelected : styles.genderText}>Male</Text>
         </TouchableOpacity>
       </View>

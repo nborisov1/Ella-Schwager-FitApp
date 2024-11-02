@@ -1,111 +1,58 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  workoutCard: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',  // White card
-    borderRadius: 15,
-    padding: 15,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    elevation: 5,
-    alignItems: 'center',
-  },
-  workoutImage: {
-    width: 70,  // Workout image on the left
-    height: 70,
-    borderRadius: 10,
-    marginRight: 15,
-  },
-  workoutInfo: {
+  container: {
     flex: 1,
+    backgroundColor: '#F5F5F5', // Light background color
+    paddingHorizontal: 20,
   },
-  workoutTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
-  },
-  workoutType: {
-    fontSize: 14,
-    color: '#888',
-    marginBottom: 8,
-  },
-  progressBar: {
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#e0e0e0',  // Progress bar track background
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: 20,
     marginBottom: 10,
   },
-  workoutFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  playButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FF8C00',  // Orange button
-    borderRadius: 20,
-    paddingVertical: 5,
-    paddingHorizontal: 15,
-  },
-  playButtonText: {
-    color: 'white',
-    marginLeft: 5,
-    fontWeight: '600',
-  },
-  playIcon: {
-    color: 'white',
-  },
-  percentageText: {
-    fontSize: 18,
+  headerTitle: {
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
   },
-  totalTimeContainer: {
-    position: 'absolute',
-    top: 10,  // Position it at the top
-    right: 10,  // Position it at the right
-    flexDirection: 'row',  // Align the icon and text horizontally
-    backgroundColor: '#FF8C00',  // Suitable background color (Orange)
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    borderRadius: 20,  // This makes the container rounded
-    alignItems: 'center',  // Align icon and text vertically
-  },
-  totalTimeText: {
-    color: '#fff',  // White text color for good contrast
-    marginLeft: 5,  // Space between the icon and the text
-    fontWeight: 'bold',
-    fontSize: 12,  // Adjust the font size as needed
-  },
-  workoutItem: {
-    backgroundColor: '#333',
-    padding: 15,
-    marginVertical: 10,
-    borderRadius: 10,
-  },
-  workoutTitle: {
-    fontSize: 18,
-    color: '#fff',
-  },
-  addButton: {
-    backgroundColor: '#7D3C98',
-    paddingVertical: 10,    // Reduced vertical padding
-    paddingHorizontal: 30,  // Adjusted horizontal padding
-    borderRadius: 10,
+  searchBar: {
+    flexDirection: 'row',
     alignItems: 'center',
-    alignSelf: 'center',    // Center the button horizontally
-    marginVertical: 20,
-    width: '50%',           // Set a percentage width for the button to make it smaller
+    backgroundColor: '#EFEFEF',
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    marginBottom: 20,
   },
-  addButtonText: {
-    color: '#fff',
-    fontSize: 16,           // Reduced font size
+  filterIcon: {
+    marginRight: 10,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#333',
+    textAlign: 'right',
+  },
+  searchIcon: {
+    marginLeft: 10,
+  },
+  workoutList: {
+    flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  sectionTitle: {
+    fontSize: 18,
     fontWeight: 'bold',
+    color: '#333',
+    marginVertical: 10,
+    textAlign: 'right',
   },
 });
 

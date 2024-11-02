@@ -23,16 +23,6 @@ const ExerciseListScreen = ({ route }) => {
     }
   };
 
-  const handleNavigateToExerciseVideoScreen = (exercise) => {
-    navigation.navigate('ExerciseVideoScreen', {
-      title: exercise.name,
-      videoUri: exercise.videoUri,
-      thumbnail: exercise.thumbnail,
-      exerciseId: exercise.id,
-      sessionId: sessionId,
-    });
-  };
-
   return (
     <View style={styles.container}>
       {/* Header Section */}
@@ -67,9 +57,6 @@ const ExerciseListScreen = ({ route }) => {
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {editableExercises.map((exercise, index) => (
           <View key={index} style={styles.exerciseItem}>
-            <TouchableOpacity
-              onPress={() => handleNavigateToExerciseVideoScreen(exercise)}  // Make the card clickable
-            >
               <ExerciseCard
                 name={exercise.name}
                 subtitle={exercise.subtitle}
@@ -78,8 +65,8 @@ const ExerciseListScreen = ({ route }) => {
                 onCommentSend={handleSendComment}
                 thumbnail={exercise.thumbnail}
                 userComment={userComment}
+                sessionId={sessionId}
               />
-            </TouchableOpacity>
           </View>
         ))}
       </ScrollView>

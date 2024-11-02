@@ -1,16 +1,34 @@
 import React, { useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, ActivityIndicator, Modal } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
+import { Video } from 'expo-av';
 import styles from './styles';
+import { fetchExerciseVideos } from '../../../backend/trainingSession/fetchExerciseVideos';
 
-const ExerciseCard = ({ name, customField, thumbnail, userComment, exerciseId, onCommentSend }) => {
+const ExerciseCard = ({ name, customField, thumbnail, userComment, exerciseId, onCommentSend, sessionId }) => {
   const [comment, setComment] = useState(userComment || '');
   const [loading, setLoading] = useState(true);
+  const [videoUrl, setVideoUrl] = useState(null);
+  const [isVideoModalVisible, setVideoModalVisible] = useState(false);
+  const [videoLoading, setVideoLoading] = useState(false);
 
   const handleSendComment = () => {
     if (comment.trim()) {
       onCommentSend(comment, name, exerciseId);
       setComment(''); // Clear the comment box after sending
+    }
+  };
+
+  const handlePlayPress = async () => {
+    try {
+      const videos = await fetchExerciseVideos(sessionId, exerciseId);
+      if (videos.length > 0 && videos[0].videoURL) {
+        setVideoUrl(videos[0].videoURL);
+        setVideoModalVisible(true);
+        setVideoLoading(true); // Start loading indicator
+      }
+    } catch (error) {
+      console.error("Failed to load video:", error);
     }
   };
 
@@ -27,6 +45,10 @@ const ExerciseCard = ({ name, customField, thumbnail, userComment, exerciseId, o
           onLoadStart={() => setLoading(true)}
           onLoadEnd={() => setLoading(false)}
         />
+        {/* Play Button Overlay */}
+        <TouchableOpacity style={styles.playButtonContainer} onPress={handlePlayPress}>
+          <FontAwesome name="play" size={16} color="white" style={styles.playIcon} />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.detailsContainer}>
@@ -36,14 +58,14 @@ const ExerciseCard = ({ name, customField, thumbnail, userComment, exerciseId, o
           <Text style={styles.infoText}>
             {customField &&
               Object.keys(customField)
-              .map((key, index, arr) => `${customField[key]} ${key}${index < arr.length - 1 ? ' -' : ''}`)
-              .join(' ')}
+                .map((key, index, arr) => `${customField[key]} ${key}${index < arr.length - 1 ? ' -' : ''}`)
+                .join(' ')}
           </Text>
         </View>
 
         {/* Comment Section (Directly below the title and custom fields) */}
         <View style={styles.commentSection}>
-        <TouchableOpacity style={styles.sendButton} onPress={handleSendComment}>
+          <TouchableOpacity style={styles.sendButton} onPress={handleSendComment}>
             <FontAwesome name="send" size={16} color="black" />
           </TouchableOpacity>
           <TextInput
@@ -54,6 +76,32 @@ const ExerciseCard = ({ name, customField, thumbnail, userComment, exerciseId, o
           />
         </View>
       </View>
+
+      {/* Video Modal */}
+      <Modal visible={isVideoModalVisible} animationType="fade" transparent={true} onRequestClose={() => setVideoModalVisible(false)}>
+        <View style={styles.modalOverlay}>
+          <TouchableOpacity style={styles.closeButton} onPress={() => setVideoModalVisible(false)}>
+            <FontAwesome name="times" size={24} color="white" />
+          </TouchableOpacity>
+          <View style={styles.modalContent}>
+            {videoLoading && <ActivityIndicator size="large" color="#ffffff" style={styles.videoLoadingIndicator} />}
+            {videoUrl && (
+              <Video
+                source={{ uri: videoUrl }}
+                rate={1.0}
+                volume={1.0}
+                isMuted={false}
+                resizeMode="contain"
+                shouldPlay
+                style={styles.videoPlayer}
+                useNativeControls
+                onLoadStart={() => setVideoLoading(true)}
+                onLoad={() => setVideoLoading(false)}
+              />
+            )}
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

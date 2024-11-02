@@ -64,17 +64,11 @@ const HomeScreen = ({ userData }) => {
 
             // Choose the outline icon based on the route name
             switch (route.name) {
-              case 'UsersStack':
-                iconName = 'people-outline'; 
-                break;
               case 'אימונים':
                 iconName = 'barbell-outline';
                 break;
               case 'התוכנית שלי':
                 iconName = 'clipboard-outline';
-                break;
-              case 'Add Training':
-                iconName = 'add-circle-outline';
                 break;
               case 'הגדרות':
                 iconName = 'settings-outline';
@@ -99,25 +93,24 @@ const HomeScreen = ({ userData }) => {
           tabBarActiveTintColor: styles.tabBarActiveTintColor.color,  
           tabBarInactiveTintColor: styles.tabBarInactiveTintColor.color,  
         })}>
-        
-        <Tab.Screen name="הגדרות" component={SettingsScreen} />
-        <Tab.Screen name="חנות" component={StoreScreen} />
+          <Tab.Screen
+          name="פרופיל"
+          children={() => <ProfileScreenStack user={userData} />}
+          options={
+            {headerShown: false}
+          }
+        />
+        <Tab.Screen
+          name="אימונים"
+          children={() => <WorkoutStack user={userData}/>}
+          options={{ headerShown: false }}
+        />
         <Tab.Screen
             name="התוכנית שלי"
             children={() => <MyPlanStack userData={userData} />}
             options={{ headerShown: false }}
           />
-        <Tab.Screen
-          name="אימונים"
-          children={() => <WorkoutStack user={userData}/>}
-        />
-          <Tab.Screen
-            name="פרופיל"
-            children={() => <ProfileScreenStack user={userData} />}
-            options={
-              {headerShown: false}
-            }
-          />
+                  <Tab.Screen name="הגדרות" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
