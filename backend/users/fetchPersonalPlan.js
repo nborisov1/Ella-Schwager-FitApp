@@ -44,6 +44,7 @@ const fetchPersonalPlan = async (userId) => {
           exerciseList: exerciseList, // List of exercises
           description: sessionData.description || '',
           subtitle: sessionData.subtitle || '',
+          totalDuration: sessionData.totalDuration,
         };
       });
   

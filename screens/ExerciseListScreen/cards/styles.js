@@ -35,6 +35,13 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     marginLeft: 5,  // Minimal spacing between title and custom fields
   },
+  subtitle: {
+    fontSize: 12,
+    color: '#333',
+    textAlign: 'right',
+    marginBottom: 10,
+    marginTop: 0,
+  },
   infoText: {
     fontSize: 11,
     color: '#333',

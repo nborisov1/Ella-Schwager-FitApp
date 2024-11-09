@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5', // Light background color
+    backgroundColor: '#F5F5F5',
     paddingHorizontal: 20,
   },
   header: {
@@ -40,19 +40,35 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   workoutList: {
-    flex: 1,
-  },
+    flexGrow: 1,
+    padding: 0,
+    margin: 0,
+    },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
+  sectionHeader: {
+    flexDirection: 'row-reverse',  // Align title to the right and button to the left
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginVertical: 10,
+  },
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
-    marginVertical: 10,
     textAlign: 'right',
+  },
+  viewAllButton: {
+    fontSize: 14,
+    color: '#CD7F32',  // Bronze color
+    paddingHorizontal: 10,
+    textDecorationLine: 'underline',  // Underline the button text
+  },
+  horizontalList: {
+    marginTop: 10,
   },
 });
 

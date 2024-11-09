@@ -2,15 +2,17 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { View, Text, ScrollView, SafeAreaView, Dimensions, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import styles from './styles';  // Update this to match the new styles
-import TrainingSessionCard from './TrainingSessionCrad/TrainingSessionCard';
 import fetchPersonalPlan from '../../backend/users/fetchPersonalPlan';
 import { RefreshControl } from 'react-native-gesture-handler';
 import { translateDayToHebrew } from '../../utils/utils';
+import SubscriptionScreen from '../PaymentScreen/SubscriptionScreen';
+import WorkoutPlanCard from '../WorkoutsScreen/cards/WorkoutPlanCard';
+
 const PersonalCoachScreen = ({ userData }) => {
   const { width, height } = Dimensions.get('window');
   const navigation = useNavigation();  
   const [trainingSessions, setTrainingSessions] = useState([]);
-  const [filteredSessions, setFilteredSessions] = useState([]);  // State for filtered sessions
+  const [filteredSessions, setFilteredSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchText, setSearchText] = useState('');  // State to manage the search input
@@ -58,7 +60,8 @@ const PersonalCoachScreen = ({ userData }) => {
       userId: userData.uid,
       commnet: session.commnet,
       thumbnail: session.downloadURL,
-      description: session.description
+      description: session.description,
+      totalDuration: session.totalDuration,
     });
   };
 
@@ -74,10 +77,9 @@ const PersonalCoachScreen = ({ userData }) => {
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         <View style={[styles.headlineContainer, { paddingVertical: height * 0.02, paddingHorizontal: width * 0.01 }]}>
-          <Text style={[styles.headlineText, { fontSize: width * 0.06 }]}>התוכנית שלי</Text>
+          <Text style={[styles.headlineText, { fontSize: width * 0.06 }]}>התוכנית שלי 🔥</Text>
         </View>
 
-        {/* Search Box */}
         <View style={styles.searchContainer}>
           <TextInput
             style={styles.searchInput}
@@ -91,19 +93,22 @@ const PersonalCoachScreen = ({ userData }) => {
         <ScrollView 
           contentContainerStyle={styles.sessionList}
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-          style={{ direction: 'rtl' }}  // Ensure content direction is RTL
           >
-          {/* Display filtered sessions */}
-          {filteredSessions.map((session) => (
-            <TrainingSessionCard 
-              key={session.id}
-              title={session.sessionName}
-              exercises={session.exercises}
-              imageUri={session.downloadURL}
-              days={session.days}
-              onPress={() => handlePress(session)}
-              subtitle={session.subtitle}
-            />
+          {filteredSessions.map((session, index) => (
+              <WorkoutPlanCard
+                key={index}
+                workout={{
+                  title: session.sessionName,
+                  subtitle: session.subtitle,
+                  totalTime: session.totalDuration ? session.totalDuration : '',
+                  image: session.downloadURL,
+                  id: session.id,
+                  isUnlocked: true,
+                  videos: session.exercises ? session.exercises : 0,
+                  days: session.days,
+                }}
+                onPress={() => handlePress(session)}
+              />  
           ))}
         </ScrollView>
       </View>

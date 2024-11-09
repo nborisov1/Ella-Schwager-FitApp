@@ -4,7 +4,6 @@ import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import WeekDays from './WeekDays';
 import StatsCard from './StatsCard';
-import TrainingSessionCard from '../PersonalCoachScreen/TrainingSessionCrad/TrainingSessionCard'; // Import the TrainingSessionCard
 import fetchPersonalPlan from '../../backend/users/fetchPersonalPlan';  // Function to fetch the user's personal plan
 import styles from './styles';
 import { useNavigation } from '@react-navigation/native';  // Import navigation hook
@@ -98,28 +97,6 @@ export default function ProfileScreen({ user }) {
       <View style={styles.todayWorkoutsContainer}>
         <Text style={styles.sectionTitle}>Today's Workouts</Text>
         <View style={styles.divider} />
-
-        {loading ? (
-          <Text>Loading workouts...</Text>
-        ) : hasPersonalPlan && todayWorkouts.length > 0 ? (
-          todayWorkouts.map((session, index) => (
-            <TrainingSessionCard
-              key={index}
-              title={session.sessionName}
-              exercises={session.exerciseList.length}  // Count of exercises in the session
-              imageUri={session.downloadURL}  // Assuming each session has a thumbnail
-              days={session.days}  // Pass the days for the session
-              onPress={() => handlePress(session)}  // Handle navigation on press
-            />
-          ))
-        ) : hasPersonalPlan ? (
-          <Text>No workouts scheduled for today!</Text>
-        ) : (
-          <View style={styles.noPlanCard}>
-            <Text style={styles.noPlanText}>You don't have a personal plan yet!</Text>
-            <Button title="Purchase a Plan" onPress={() => {/* Handle purchasing plan */}} />
-          </View>
-        )}
       </View>
     </ScrollView>
   );

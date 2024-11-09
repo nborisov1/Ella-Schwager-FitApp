@@ -3,8 +3,6 @@ import { getFirestore, doc, getDoc } from "firebase/firestore";
 export const fetchExerciseVideos = async (trainingSessionId, exerciseId) => {
   const db = getFirestore();
   try {
-    console.log(trainingSessionId);
-    console.log(exerciseId);
     // Reference to the specific exercise document
     const exerciseDocRef = doc(db, `trainingSessions/${trainingSessionId}/exercises`, exerciseId);
     

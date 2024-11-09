@@ -6,16 +6,19 @@ import ExerciseCard from './cards/ExerciseCard';
 import styles from './styles';
 import { useNavigation } from '@react-navigation/native';
 import updateCommentForUsersPlanOnExerciseInSession from '../../backend/personalPlan/updateExerciseInSession';
+import { formatDuration } from '../../utils/utils';
 
 const ExerciseListScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { title, exercises, sessionId, userId, userComment, thumbnail, description } = route.params;
-  const [editableExercises, setEditableExercises] = useState(exercises.map(exercise => ({
+  const { title, exercises, sessionId, userId, userComment, thumbnail, description, totalDuration } = route.params;
+  const [editableExercises, setEditableExercises] = useState(exercises ? exercises.map(exercise => ({
     ...exercise,
     originalSets: exercise.sets || 0,  
     originalReps: exercise.reps || 0,  
-  })));
+  })) : []);
   const [loading, setLoading] = useState(true);  // Manage loading state for the header image
+
+  const exerciseCount = exercises ? exercises.length : 0;
   
   const handleSendComment = async (comment, name, exerciseId) => {
     if (comment) {
@@ -25,7 +28,6 @@ const ExerciseListScreen = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      {/* Header Section */}
       <View style={styles.headerContainer}>
         <ImageBackground
           source={{ uri: thumbnail }}
@@ -49,6 +51,30 @@ const ExerciseListScreen = ({ route }) => {
               {description && (
                 <Text style={styles.headerSubtitle}>{description}</Text>
               )}
+              
+              <View
+                style={[
+                  styles.infoContainer,
+                  !totalDuration && styles.infoContainerSingle  // Apply narrower width if only one element
+                ]}
+              >
+                <View style={styles.infoItem}>
+                  <FontAwesome name="list" size={16} color="black" />
+                  <Text style={styles.infoText}>
+                    {exerciseCount === 1 ? 'תרגיל בודד' : `${exerciseCount} תרגילים`}
+                  </Text>
+                </View>
+
+                {totalDuration ? (
+                  <>
+                    <View style={styles.divider} />
+                    <View style={styles.infoItem}>
+                      <FontAwesome name="clock-o" size={16} color="black" />
+                      <Text style={styles.infoText}>{formatDuration(totalDuration)}</Text>
+                    </View>
+                  </>
+                ) : null}
+              </View>
             </View>
           </LinearGradient>
         </ImageBackground>
@@ -66,6 +92,7 @@ const ExerciseListScreen = ({ route }) => {
                 thumbnail={exercise.thumbnail}
                 userComment={userComment}
                 sessionId={sessionId}
+                video={exercise.videoURL}
               />
           </View>
         ))}

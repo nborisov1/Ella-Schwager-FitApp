@@ -34,28 +34,50 @@ const styles = StyleSheet.create({
     right: 10,
     zIndex: 1,
   },
+  heartContainer: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    borderWidth: 1,               // Thin border for subtle effect
+    borderColor: 'rgba(255, 255, 255, 0.8)',  // Light border color with transparency
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Semi-transparent white background
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOpacity: 0.2,           // Light shadow for subtle elevation
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 2,
+    elevation: 3,                 // For Android shadow effect
+  },
   contentContainer: {
     flex: 1,
     padding: 10,
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'flex-end',      // Align content to the right for RTL
+    justifyContent: 'space-between', // Ensure stats are pushed to the bottom
   },
-  workoutTitle: {
-    fontSize: 16,
+    workoutTitle: {
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
     textAlign: 'right',
+    marginBottom: 0, // Ensure there's no bottom margin
+    paddingTop:0,
+    paddingBottom:0,
+    marginTop:0,
+    marginBottom:0,
   },
-  labelsRow: {
-    flexDirection: 'row-reverse', // Align labels from right to left
-    marginVertical: 5,
+  labelsContainer: {
+    position: 'absolute', // Position it on top of the thumbnail
+    top: 15,              // Spacing from the top of the card
+    zIndex: 2,            // Ensure it's above the image
+    alignItems: 'flex-start', // Align items to the left
   },
   labelPrimary: {
     backgroundColor: '#E7A977',
     borderRadius: 5,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    marginLeft: 5, // Space between the two labels
+    marginBottom: 5,       // Spacing between the labels
   },
   labelSecondary: {
     backgroundColor: '#C96F2C',
@@ -64,21 +86,20 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
   labelText: {
-    color: 'white',
+    color: 'black',
     fontSize: 10,
     fontWeight: 'bold',
   },
   workoutDescription: {
     fontSize: 12,
     color: '#666',
-    marginVertical: 4,
     textAlign: 'right',
+    marginTop: 0, // Ensure there's no top margin
   },
   workoutStats: {
     flexDirection: 'row-reverse',
     justifyContent: 'space-between',
     width: '100%',
-    marginTop: 8,
   },
   statsBlock: {
     flexDirection: 'row-reverse',
@@ -89,6 +110,109 @@ const styles = StyleSheet.create({
     color: '#333',
     marginRight: 5,
   },
+  daysContainerInline: {
+    flexDirection: 'row-reverse',  // Align text RTL for Hebrew
+    backgroundColor: 'rgba(255,255,255,1)',  // Semi-transparent background for day tags
+    paddingVertical: 4,
+    paddingHorizontal: 10,
+    borderRadius: 20,
+    marginTop: 8,  // Add spacing above to separate from workoutStats
+  },
+    dayText: {
+    color: 'black',  // White text for visibility on dark background
+    fontSize: 12,
+    fontWeight: 'bold',
+    textAlign: 'right',  // Right-align text for RTL languages
+    writingDirection: 'rtl',  // Ensure right-to-left text direction
+  },
+  mediumCardContainer: {
+    width: (width * 0.9) / 2,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    overflow: 'hidden',
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    elevation: 3,
+  },
+  mediumThumbnail: {
+    width: '100%',
+    height: 100,
+    justifyContent: 'space-between',
+  },
+  heartIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  mediumCardContent: {
+    flex: 1,
+    padding: 10,
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    flexDirection: 'column',
+  },
+  workoutTitle: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 4,
+    textAlign: 'right',
+  },
+  workoutDescription: {
+    fontSize: 12,
+    color: '#666',
+    marginBottom: 8,
+    flexDirection: 'row-reverse',
+    textAlign: 'right',
+  },
+  workoutStats: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    width: '100%',
+    },
+  statsBlock: {
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+  },
+  statsText: {
+    fontSize: 12,
+    color: '#333',
+    marginLeft: 5,
+  },
+  safeAreaContainer: {
+    flex: 1,
+    backgroundColor: '#F5F5F5',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+    paddingHorizontal: 15,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  searchContainer: {
+    paddingHorizontal: 15,
+    marginBottom: 10,
+    textAlign: 'right',
+  },
+  searchInput: {
+    backgroundColor: '#EFEFEF',
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    fontSize: 16,
+    color: '#333',
+    textAlign: 'right',
+  },
+
 });
 
 export default styles;

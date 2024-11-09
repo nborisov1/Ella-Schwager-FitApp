@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     width: '100%',
-    height: 300,  // Adjust the height for the header
+    height: 320,  // Adjust the height for the header
   },
   headerBackgroundImage: {
     flex: 1,
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
   headerContent: {
     paddingHorizontal: 20,
-    paddingBottom: 15,
+    paddingBottom: 20,
     alignItems: 'center',
   },
   headerTitle: {
@@ -65,6 +65,37 @@ const styles = StyleSheet.create({
     transform: [{ translateX: -12 }, { translateY: -12 }],
     zIndex: 1,  // Ensure the ActivityIndicator is on top of the image
   },  
+  infoContainer: {
+    flexDirection: 'row',
+    backgroundColor: 'white',
+    padding: 12,
+    borderRadius: 15,
+    marginTop: 20,  // Lower the position a bit
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: width * 0.5,  // Full width for two elements
+    alignSelf: 'center',
+  },
+  infoContainerSingle: {
+    width: width * 0.3,  // Smaller width for a single element
+  },
+  infoItem: {
+    flexDirection: 'row-reverse',  // Position icon to the right of the text
+    alignItems: 'center',
+    paddingHorizontal: 10,  // Add padding between the icon and text
+  },
+  infoText: {
+    fontSize: 14,
+    color: '#333',
+    marginRight: 5,  // Add spacing between the text and icon
+    textAlign: 'center',
+  },
+  divider: {
+    width: 1,
+    height: '80%',
+    backgroundColor: '#ccc',
+    marginHorizontal: 10,
+  },
 });
 
 export default styles;

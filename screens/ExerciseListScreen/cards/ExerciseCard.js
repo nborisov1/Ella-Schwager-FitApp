@@ -5,13 +5,12 @@ import { Video } from 'expo-av';
 import styles from './styles';
 import { fetchExerciseVideos } from '../../../backend/trainingSession/fetchExerciseVideos';
 
-const ExerciseCard = ({ name, customField, thumbnail, userComment, exerciseId, onCommentSend, sessionId }) => {
+const ExerciseCard = ({ name, subtitle, customField, thumbnail, userComment, exerciseId, onCommentSend, sessionId, video }) => {
   const [comment, setComment] = useState(userComment || '');
   const [loading, setLoading] = useState(true);
   const [videoUrl, setVideoUrl] = useState(null);
   const [isVideoModalVisible, setVideoModalVisible] = useState(false);
   const [videoLoading, setVideoLoading] = useState(false);
-
   const handleSendComment = () => {
     if (comment.trim()) {
       onCommentSend(comment, name, exerciseId);
@@ -21,12 +20,16 @@ const ExerciseCard = ({ name, customField, thumbnail, userComment, exerciseId, o
 
   const handlePlayPress = async () => {
     try {
-      const videos = await fetchExerciseVideos(sessionId, exerciseId);
-      if (videos.length > 0 && videos[0].videoURL) {
-        setVideoUrl(videos[0].videoURL);
-        setVideoModalVisible(true);
-        setVideoLoading(true); // Start loading indicator
+      let videoURL = video;
+      if (!videoURL) {
+        const videos = await fetchExerciseVideos(sessionId, exerciseId);
+        if (videos.length > 0 && videos[0].videoURL) {
+          videoURL = video[0].videoURL;
+        }
       }
+      setVideoUrl(video);
+      setVideoModalVisible(true);
+      setVideoLoading(true); // Start loading indicator      
     } catch (error) {
       console.error("Failed to load video:", error);
     }
@@ -34,7 +37,6 @@ const ExerciseCard = ({ name, customField, thumbnail, userComment, exerciseId, o
 
   return (
     <View style={styles.cardContainer}>
-      {/* Thumbnail on the left */}
       <View style={styles.imageContainer}>
         {loading && (
           <ActivityIndicator size="large" color="#0000ff" style={styles.activityIndicator} />
@@ -45,7 +47,6 @@ const ExerciseCard = ({ name, customField, thumbnail, userComment, exerciseId, o
           onLoadStart={() => setLoading(true)}
           onLoadEnd={() => setLoading(false)}
         />
-        {/* Play Button Overlay */}
         <TouchableOpacity style={styles.playButtonContainer} onPress={handlePlayPress}>
           <FontAwesome name="play" size={16} color="white" style={styles.playIcon} />
         </TouchableOpacity>
@@ -53,7 +54,6 @@ const ExerciseCard = ({ name, customField, thumbnail, userComment, exerciseId, o
 
       <View style={styles.detailsContainer}>
         <View style={styles.header}>
-          {/* Title at the top right and custom fields next to it */}
           <Text style={styles.title}>{name} -</Text>
           <Text style={styles.infoText}>
             {customField &&
@@ -62,8 +62,8 @@ const ExerciseCard = ({ name, customField, thumbnail, userComment, exerciseId, o
                 .join(' ')}
           </Text>
         </View>
+        { subtitle ? (<Text style={styles.subtitle}>{subtitle}</Text>) : null }
 
-        {/* Comment Section (Directly below the title and custom fields) */}
         <View style={styles.commentSection}>
           <TouchableOpacity style={styles.sendButton} onPress={handleSendComment}>
             <FontAwesome name="send" size={16} color="black" />
@@ -77,7 +77,6 @@ const ExerciseCard = ({ name, customField, thumbnail, userComment, exerciseId, o
         </View>
       </View>
 
-      {/* Video Modal */}
       <Modal visible={isVideoModalVisible} animationType="fade" transparent={true} onRequestClose={() => setVideoModalVisible(false)}>
         <View style={styles.modalOverlay}>
           <TouchableOpacity style={styles.closeButton} onPress={() => setVideoModalVisible(false)}>

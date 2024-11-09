@@ -6,10 +6,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import WorkoutsScreen from './WorkoutsScreen/workoutsScreen';
 import WorkoutDetailScreen from './WorkoutsScreen/WorkoutDetailScreen';
 import { createStackNavigator } from '@react-navigation/stack';
-import PaymentScreen from './PaymentScreen/PaymentScreen';
 import MyPlanStack from './PersonalCoachScreen/MyPlanStack';
 import ProfileScreenStack from './ProfileScreen/ProfileStack';
 import SettingsScreen from './SettingsScreen/SettingsScreen';
+import SubscriptionScreen from './PaymentScreen/SubscriptionScreen';
+import ExerciseListScreen from './ExerciseListScreen/ExerciseListScreen';
+import MediumWorkoutScreen from './WorkoutsScreen/MediumWorkoutScreen'
 
 const Stack = createStackNavigator();
 
@@ -38,15 +40,20 @@ const WorkoutStack = ({ user }) => {
         options={{ headerShown: false }}  // Customize header
       />
       <Stack.Screen
-        name="WorkoutDetail"
-        component={WorkoutDetailScreen}
+        name="ExerciseList"
+        component={ExerciseListScreen}
         options={{ headerShown: false }}  // Customize header
       />
       <Stack.Screen
         name="Payment"
-        component={PaymentScreen}
+        component={SubscriptionScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="AllWorkouts"
+        component={MediumWorkoutScreen}
+        options={{headerShown: false}}
+        />
     </Stack.Navigator>
   );
 };
@@ -83,7 +90,6 @@ const HomeScreen = ({ userData }) => {
 
             return (
               <View style={{ alignItems: 'center' }}>
-                {/* Move the icon up for the focused tab */}
                 <Icon name={iconName} size={iconSize} color={iconColor} style={{ marginTop: focused ? -6 : 0 }} />
               </View>
             );
@@ -110,7 +116,7 @@ const HomeScreen = ({ userData }) => {
             children={() => <MyPlanStack userData={userData} />}
             options={{ headerShown: false }}
           />
-                  <Tab.Screen name="הגדרות" component={SettingsScreen} />
+          <Tab.Screen name="הגדרות" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );

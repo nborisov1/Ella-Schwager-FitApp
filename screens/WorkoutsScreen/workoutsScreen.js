@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Text, ScrollView, View, FlatList, ActivityIndicator, RefreshControl, TextInput } from 'react-native';
+import { Text, ScrollView, View, FlatList, ActivityIndicator, RefreshControl, TextInput, TouchableOpacity } from 'react-native';
 import WorkoutPlanCard from './cards/WorkoutPlanCard';
 import styles from '../cards/styles';
 import { fetchGeneralWorkouts, fetchUserUnlockedWorkouts } from '../../backend/generalWorkouts/generalWorkoutController';
@@ -7,6 +7,8 @@ import { formatDuration } from '../../utils/utils';
 import { FontAwesome } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SmallWorkoutCard from './cards/SmallWorkoutCard';
+import { useNavigation } from '@react-navigation/native';
+
 const WorkoutsScreen = ({ user }) => {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,8 +16,12 @@ const WorkoutsScreen = ({ user }) => {
   const [unlockedWorkoutIds, setUnlockedWorkoutIds] = useState([]);
   const [unlockAll, setUnlockAll] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const navigation = useNavigation();
 
-  // Fetch user unlocked workouts from Firestore
+
+  const handleShowAllWorkouts = (allRelevantWorkouts, title) => {
+    navigation.navigate('AllWorkouts', { workouts: allRelevantWorkouts, title: title });
+  }
   const loadUserUnlockedWorkouts = async () => {
     if (user) {
       try {
@@ -28,12 +34,10 @@ const WorkoutsScreen = ({ user }) => {
     }
   };
 
-    // Filter workouts based on search query
-    const filteredWorkouts = workouts.filter(workout =>
-      workout.workoutName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-  
-  // Fetch general workouts from Firestore
+  const filteredWorkouts = workouts.filter(workout =>
+    workout.workoutName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const loadWorkouts = async () => {
     try {
       const fetchedWorkouts = await fetchGeneralWorkouts();
@@ -50,7 +54,6 @@ const WorkoutsScreen = ({ user }) => {
     loadWorkouts();
   }, []);
 
-  // Refresh Control Handler
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     loadUserUnlockedWorkouts();
@@ -61,7 +64,6 @@ const WorkoutsScreen = ({ user }) => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="#0000ff" />
-        <Text>Loading Workouts...</Text>
       </View>
     );
   }
@@ -70,7 +72,7 @@ const WorkoutsScreen = ({ user }) => {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>🔥 אימון כללי</Text>
+        <Text style={styles.headerTitle}>האימונים שלנו 🔥</Text>
       </View>
 
       {/* Search Bar */}
@@ -85,15 +87,18 @@ const WorkoutsScreen = ({ user }) => {
         />
         <FontAwesome name="search" size={18} color="#888" style={styles.searchIcon} />
       </View>
-
-      {/* Workouts List */}
-      {/* Popular Workouts Section */}
-      <Text style={styles.sectionTitle}>אימונים פופולריים</Text>
       <ScrollView
         style={styles.workoutList}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        contentContainerStyle={{ paddingBottom: 60 }} // Add padding to the bottom
       >
-        {filteredWorkouts.map((workout, index) => {
+      <View style={styles.sectionHeader}>
+        <Text style={styles.sectionTitle}>אימונים שאהבתי</Text>
+        <TouchableOpacity onPress={() => handleShowAllWorkouts(filteredWorkouts, 'אימונים שאהבתי')}>
+          <Text style={styles.viewAllButton}>להציג את הכל</Text>
+        </TouchableOpacity>
+      </View>
+        {filteredWorkouts.slice(0, 3).map((workout, index) => {
           const isUnlocked = unlockAll || unlockedWorkoutIds.includes(workout.id);
           return (
             <WorkoutPlanCard
@@ -101,8 +106,8 @@ const WorkoutsScreen = ({ user }) => {
               workout={{
                 title: workout.workoutName,
                 subtitle: workout.subtitle,
-                videos: workout.videos ? workout.videos.length : 0,
-                totalTime: formatDuration(workout.totalDuration || 0),
+                videos: workout.videos,
+                totalTime: workout.totalDuration || '',
                 isUnlocked: isUnlocked,
                 image: workout.thumbnailURL,
                 id: workout.id,
@@ -112,8 +117,14 @@ const WorkoutsScreen = ({ user }) => {
             />
           );
         })}
-        {/* Horizontal Workout List */}
-        <Text style={styles.sectionTitle}>כל האימונים הזמינים</Text>
+
+        {/* All Available Workouts Section */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>כל האימונים הזמינים</Text>
+          <TouchableOpacity onPress={() => handleShowAllWorkouts(filteredWorkouts)}>
+            <Text style={styles.viewAllButton}>להציג את הכל</Text>
+          </TouchableOpacity>
+        </View>
         <FlatList
           horizontal
           data={filteredWorkouts}
@@ -122,7 +133,7 @@ const WorkoutsScreen = ({ user }) => {
               workout={{
                 title: item.workoutShortName,
                 image: item.thumbnailURL,
-                label: item.label, // Assuming each workout has a label
+                label: item.label,
               }}
               onPress={() => console.log(`Navigate to ${item.title}`)}
             />
@@ -131,6 +142,31 @@ const WorkoutsScreen = ({ user }) => {
           showsHorizontalScrollIndicator={false}
           style={styles.horizontalList}
         />
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>אימונים פופולריים</Text>
+          <TouchableOpacity onPress={() => handleShowAllWorkouts(filteredWorkouts, 'אימונים פופולריים')}>
+            <Text style={styles.viewAllButton}>להציג את הכל</Text>
+          </TouchableOpacity>
+      </View>
+      {filteredWorkouts.slice(0, 3).map((workout, index) => {
+        const isUnlocked = unlockAll || unlockedWorkoutIds.includes(workout.id);
+        return (
+          <WorkoutPlanCard
+            key={index}
+            workout={{
+              title: workout.workoutName,
+              subtitle: workout.subtitle,
+              videos: workout.videos,
+              totalTime: workout.totalDuration || '',
+              isUnlocked: isUnlocked,
+              image: workout.thumbnailURL,
+              id: workout.id,
+              place: workout.place,
+              level: workout.level,
+            }}
+          />
+        );
+      })}
       </ScrollView>
     </SafeAreaView>
   );
