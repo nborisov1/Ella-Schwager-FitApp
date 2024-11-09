@@ -33,7 +33,6 @@ const WorkoutsScreen = ({ user }) => {
   };
 
   const handleExplorePress = () => {
-    console.log('user',user)
     navigation.navigate('AllWorkouts', { workouts: workouts, user: user });
   };
 
@@ -70,7 +69,6 @@ const WorkoutsScreen = ({ user }) => {
     loadUserLikedSessions();
   }, []);
 
-  // Update likedWorkouts whenever likedSessionIds or workouts change
   useEffect(() => {
     const filteredLikedWorkouts = workouts.filter(workout => likedSessionIds.includes(workout.id));
     setLikedWorkouts(filteredLikedWorkouts);
@@ -86,13 +84,12 @@ const WorkoutsScreen = ({ user }) => {
   const handleToggleLike = async (sessionId) => {
     try {
       const updatedLikedSessions = await toggleLikeSession(user.uid, sessionId, likedSessionIds);
-      setLikedSessionIds(updatedLikedSessions); // Update liked sessions, which triggers useEffect to refresh likedWorkouts
+      setLikedSessionIds(updatedLikedSessions);
     } catch (error) {
       console.error('Error toggling like:', error);
     }
   };
 
-  // Filter workouts based on search query
   const filteredWorkouts = workouts.filter(workout =>
     workout.workoutName.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -130,89 +127,116 @@ const WorkoutsScreen = ({ user }) => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         contentContainerStyle={{ paddingBottom: 60 }}
       >
-        {/* Liked Workouts Section */}
-        <View style={styles.sectionHeader}>
-          {likedWorkouts.length > 0 && (
-            <Text style={styles.sectionTitle}>אימונים שאהבתי</Text>
-          )}
-          {likedWorkouts.length > 0 && (
-            <TouchableOpacity onPress={() => handleShowAllWorkouts(likedWorkouts, 'אימונים שאהבתי')}>
-              <Text style={styles.viewAllButton}>להציג את הכל</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-        {likedWorkouts.length > 0 ? (
-          likedWorkouts.slice(0, 3).map((workout, index) => (
-            <WorkoutPlanCard
-              key={index}
-              workout={{
-                title: workout.workoutName,
-                subtitle: workout.subtitle,
-                videos: workout.videos,
-                totalTime: workout.totalDuration || '',
-                isUnlocked: unlockAll || unlockedWorkoutIds.includes(workout.id),
-                image: workout.thumbnailURL,
-                id: workout.id,
-                place: workout.place,
-                level: workout.level,
-                liked: true,
-              }}
-              onLike={() => handleToggleLike(workout.id)}
-            />
-          ))
+        {/* Render only search results when there is a search query */}
+        {searchQuery ? (
+          filteredWorkouts.length > 0 ? (
+            filteredWorkouts.map((workout, index) => (
+              <WorkoutPlanCard
+                key={index}
+                workout={{
+                  title: workout.workoutName,
+                  subtitle: workout.subtitle,
+                  videos: workout.videos,
+                  totalTime: workout.totalDuration || '',
+                  isUnlocked: unlockAll || unlockedWorkoutIds.includes(workout.id),
+                  image: workout.thumbnailURL,
+                  id: workout.id,
+                  place: workout.place,
+                  level: workout.level,
+                }}
+                onLike={() => handleToggleLike(workout.id)}
+              />
+            ))
+          ) : (
+            <Text style={{ textAlign: 'center', marginTop: 20 }}>לא נמצאו אימונים</Text>
+          )
         ) : (
-          <NoLikedWorkoutsCard onExplorePress={handleExplorePress} />
-        )}
+          <>
+            {/* Liked Workouts Section */}
+            <View style={styles.sectionHeader}>
+              {likedWorkouts.length > 0 && (
+                <Text style={styles.sectionTitle}>אימונים שאהבתי</Text>
+              )}
+              {likedWorkouts.length > 0 && (
+                <TouchableOpacity onPress={() => handleShowAllWorkouts(likedWorkouts, 'אימונים שאהבתי')}>
+                  <Text style={styles.viewAllButton}>להציג את הכל</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+            {likedWorkouts.length > 0 ? (
+              likedWorkouts.slice(0, 3).map((workout, index) => (
+                <WorkoutPlanCard
+                  key={index}
+                  workout={{
+                    title: workout.workoutName,
+                    subtitle: workout.subtitle,
+                    videos: workout.videos,
+                    totalTime: workout.totalDuration || '',
+                    isUnlocked: unlockAll || unlockedWorkoutIds.includes(workout.id),
+                    image: workout.thumbnailURL,
+                    id: workout.id,
+                    place: workout.place,
+                    level: workout.level,
+                    liked: true,
+                  }}
+                  onLike={() => handleToggleLike(workout.id)}
+                />
+              ))
+            ) : (
+              <NoLikedWorkoutsCard onExplorePress={handleExplorePress} />
+            )}
 
-        {/* Other Sections */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>כל האימונים הזמינים</Text>
-          <TouchableOpacity onPress={() => handleShowAllWorkouts(filteredWorkouts)}>
-            <Text style={styles.viewAllButton}>להציג את הכל</Text>
-          </TouchableOpacity>
-        </View>
+            {/* Other Sections */}
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>כל האימונים הזמינים</Text>
+              <TouchableOpacity onPress={() => handleShowAllWorkouts(filteredWorkouts)}>
+                <Text style={styles.viewAllButton}>להציג את הכל</Text>
+              </TouchableOpacity>
+            </View>
 
-        <FlatList
-          horizontal
-          data={filteredWorkouts}
-          renderItem={({ item }) => (
-            <SmallWorkoutCard
-              workout={{
-                title: item.workoutShortName,
-                image: item.thumbnailURL,
-                label: item.label,
-              }}
-              onPress={() => console.log(`Navigate to ${item.title}`)}
+            <FlatList
+              horizontal
+              data={filteredWorkouts}
+              renderItem={({ item }) => (
+                <SmallWorkoutCard
+                  workout={{
+                    title: item.workoutShortName,
+                    image: item.thumbnailURL,
+                    label: item.label,
+                  }}
+                  onPress={() => console.log(`Navigate to ${item.title}`)}
+                />
+              )}
+              keyExtractor={(item) => item.id.toString()}
+              showsHorizontalScrollIndicator={false}
+              style={styles.horizontalList}
             />
-          )}
-          keyExtractor={(item) => item.id.toString()}
-          showsHorizontalScrollIndicator={false}
-          style={styles.horizontalList}
-        />
 
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>אימונים פופולריים</Text>
-          <TouchableOpacity onPress={() => handleShowAllWorkouts(filteredWorkouts, 'אימונים פופולריים')}>
-            <Text style={styles.viewAllButton}>להציג את הכל</Text>
-          </TouchableOpacity>
-        </View>
-        {filteredWorkouts.slice(0, 3).map((workout, index) => (
-          <WorkoutPlanCard
-            key={index}
-            workout={{
-              title: workout.workoutName,
-              subtitle: workout.subtitle,
-              videos: workout.videos,
-              totalTime: workout.totalDuration || '',
-              isUnlocked: unlockAll || unlockedWorkoutIds.includes(workout.id),
-              image: workout.thumbnailURL,
-              id: workout.id,
-              place: workout.place,
-              level: workout.level,
-            }}
-            onLike={() => handleToggleLike(workout.id)}
-          />
-        ))}
+            <View style={styles.sectionHeader}>
+              <Text style={styles.sectionTitle}>אימונים פופולריים</Text>
+              <TouchableOpacity onPress={() => handleShowAllWorkouts(filteredWorkouts, 'אימונים פופולריים')}>
+                <Text style={styles.viewAllButton}>להציג את הכל</Text>
+              </TouchableOpacity>
+            </View>
+            {filteredWorkouts.slice(0, 3).map((workout, index) => (
+              <WorkoutPlanCard
+                key={index}
+                workout={{
+                  title: workout.workoutName,
+                  subtitle: workout.subtitle,
+                  videos: workout.videos,
+                  totalTime: workout.totalDuration || '',
+                  isUnlocked: unlockAll || unlockedWorkoutIds.includes(workout.id),
+                  image: workout.thumbnailURL,
+                  id: workout.id,
+                  place: workout.place,
+                  level: workout.level,
+                }}
+                onLike={() => handleToggleLike(workout.id)}
+              />
+            ))}
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
