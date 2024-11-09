@@ -1,16 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, FlatList, Text, SafeAreaView, TextInput } from 'react-native';
 import MediumWorkoutCard from './cards/MediumWorkoutCard';
 import styles from './cards/styles';
+import { useNavigation } from '@react-navigation/native';
+import { getUserLikedSessions, toggleLikeSession } from '../../backend/userController';
 
 const MediumWorkoutScreen = ({ route }) => {
-  const { workouts, title } = route.params; // Retrieve workouts passed from ParentComponent
+  const { workouts: initialWorkouts, title, user } = route.params; // Retrieve workouts passed from ParentComponent
+  const [workouts, setWorkouts] = useState(initialWorkouts); // Local copy of workouts to handle liked status
+  const [likedSessionIds, setLikedSessionIds] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const loadUserLikedSessions = async () => {
+      if (user) {
+        try {
+          const likedIds = await getUserLikedSessions(user.uid);
+          setLikedSessionIds(likedIds);
+        } catch (error) {
+          console.error('Error fetching liked sessions:', error);
+        }
+      }
+    };
+    loadUserLikedSessions();
+  }, [user]);
+
+  useEffect(() => {
+    // Update workouts with liked status based on likedSessionIds
+    const updatedWorkouts = initialWorkouts.map((workout) => ({
+      ...workout,
+      liked: likedSessionIds.includes(workout.id),
+    }));
+    setWorkouts(updatedWorkouts);
+  }, [likedSessionIds, initialWorkouts]);
+
+  const handleToggleLike = async (sessionId) => {
+    try {
+      console.log(sessionId);
+      console.log(user.uid);
+      const updatedLikedSessions = await toggleLikeSession(user.uid, sessionId, likedSessionIds);
+      setLikedSessionIds(updatedLikedSessions); // Update likedSessionIds to trigger re-render with new liked status
+    } catch (error) {
+      console.error('Error toggling like:', error);
+    }
+  };
 
   // Filter workouts based on the search query
   const filteredWorkouts = workouts.filter((workout) =>
     workout.workoutName.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handlePress = (workout) => {
+    navigation.navigate('ExerciseList', {
+      title: workout.title,
+      exercises: workout.videos,
+      sessionId: workout.id,
+      thumbnail: workout.thumbnailURL,
+      description: workout.subtitle,
+      totalDuration: workout.totalTime,
+    });
+  };
 
   if (!workouts || workouts.length === 0) {
     return (
@@ -53,8 +103,8 @@ const MediumWorkoutScreen = ({ route }) => {
               videos: item.videos ? item.videos.length : 0,
               liked: item.liked || false,
             }}
-            onPress={() => console.log(`Navigate to ${item.workoutName}`)}
-            onToggleLike={() => console.log(`Toggle like for ${item.workoutName}`)}
+            onPress={() => handlePress(item)}
+            onToggleLike={() => handleToggleLike(item.id)} // Pass toggle like function
           />
         )}
         keyExtractor={(item) => item.id.toString()}

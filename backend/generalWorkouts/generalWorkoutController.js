@@ -8,6 +8,7 @@ export const fetchGeneralWorkouts = async () => {
     const querySnapshot = await getDocs(collection(db, 'generalWorkouts'));
     const workouts = [];
     querySnapshot.forEach((doc) => {
+      console.log("NATAN id ", doc.id)
       workouts.push({ id: doc.id, ...doc.data() });
     });
     return workouts;

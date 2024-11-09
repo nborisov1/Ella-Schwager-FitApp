@@ -6,7 +6,7 @@ import styles from './styles';
 import { formatDuration, sortDays } from '../../../utils/utils';
 import { translateDayToHebrew } from '../../../utils/utils';
 
-const WorkoutPlanCard = ({ workout, onPress }) => {
+const WorkoutPlanCard = ({ workout, onPress, onLike }) => {
   const navigation = useNavigation();
   const [liked, setLiked] = useState(workout.liked || false);
   const exerciseCount = workout.videos ? workout.videos.length : 0
@@ -38,13 +38,16 @@ const WorkoutPlanCard = ({ workout, onPress }) => {
 
   const toggleLike = () => {
     setLiked(!liked);
+    if (onLike) {
+      onLike();
+    }
   };
 
   return (
     <TouchableOpacity style={styles.workoutPlanCard} onPress={onPress ? onPress : handlePress}>
       <View style={styles.thumbnailContainer}>
         <ImageBackground source={{ uri: workout.image }} style={styles.thumbnail} imageStyle={{ borderRadius: 10 }}>
-          <TouchableOpacity style={styles.heartIcon} onPress={toggleLike}>
+          {onLike ? (<TouchableOpacity style={styles.heartIcon} onPress={toggleLike}>
             <View style={styles.heartContainer}>
               <FontAwesome 
                 name={liked ? "heart" : "heart-o"} 
@@ -52,7 +55,7 @@ const WorkoutPlanCard = ({ workout, onPress }) => {
                 color={liked ? styles.workoutPlanCard.backgroundColor : "black"}
               />
             </View>
-          </TouchableOpacity>
+          </TouchableOpacity>) : null}
         </ImageBackground>
       </View>
   
@@ -83,12 +86,12 @@ const WorkoutPlanCard = ({ workout, onPress }) => {
           {workout.totalTime && (
             <View style={styles.statsBlock}>
               <FontAwesome name="clock-o" size={16} color="black" />
-              <Text style={styles.statsText}>{formatDuration(workout.totalTime)}</Text>
+              <Text style={styles.statsText}> {formatDuration(workout.totalTime)}</Text>
             </View>
           )}
           <View style={styles.statsBlock}>
             <FontAwesome name="fire" size={16} color="black" />
-            <Text style={styles.statsText}>{exerciseCount === 1 ? 'תרגיל בודד' : `${exerciseCount} תרגילים`}</Text>
+            <Text style={styles.statsText}>{exerciseCount === 1 ? 'תרגיל בודד' : ` ${exerciseCount} תרגילים`}</Text>
           </View>
         </View>
   

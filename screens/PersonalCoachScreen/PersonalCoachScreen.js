@@ -95,6 +95,7 @@ const PersonalCoachScreen = ({ userData }) => {
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           >
           {filteredSessions.map((session, index) => (
+            console.log("NATAN",session),
               <WorkoutPlanCard
                 key={index}
                 workout={{
@@ -104,7 +105,7 @@ const PersonalCoachScreen = ({ userData }) => {
                   image: session.downloadURL,
                   id: session.id,
                   isUnlocked: true,
-                  videos: session.exercises ? session.exercises : 0,
+                  videos: session.exerciseList,
                   days: session.days,
                 }}
                 onPress={() => handlePress(session)}
