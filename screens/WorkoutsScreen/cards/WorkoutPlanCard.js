@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ImageBackground, TouchableOpacity, Alert } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -7,8 +7,12 @@ import { formatDuration, sortDays } from '../../../utils/utils';
 import { translateDayToHebrew } from '../../../utils/utils';
 
 const WorkoutPlanCard = ({ workout, onPress, onLike }) => {
-  const [liked, setLiked] = useState(workout.liked || false);
+  const [liked, setLiked] = useState(workout.liked ? workout.liked : false);
   const exerciseCount = workout.videos ? workout.videos.length : 0
+
+  useEffect(() => {
+    setLiked(workout.liked);
+  }, [workout.liked]); // Update `liked` state whenever `workout.liked` changes
 
   const toggleLike = () => {
     setLiked(!liked);

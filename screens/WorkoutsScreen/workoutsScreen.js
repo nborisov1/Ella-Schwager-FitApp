@@ -67,7 +67,12 @@ const WorkoutsScreen = ({ user }) => {
 
   const loadWorkouts = async () => {
     try {
-      const fetchedWorkouts = await fetchGeneralWorkouts();
+      let fetchedWorkouts = await fetchGeneralWorkouts();
+      if (!user.unlockAll) {
+        fetchedWorkouts = fetchedWorkouts.sort((a,b) => {
+          return (b.isUnlocked ? 1 : 0) - (a.isUnlocked ? 1 : 0);
+        })
+      }
       setWorkouts(fetchedWorkouts);
     } catch (error) {
       console.error('Error fetching workouts:', error);
@@ -92,24 +97,43 @@ const WorkoutsScreen = ({ user }) => {
     loadUserLikedSessions().then(() => setRefreshing(false));
   }, []);
 
+
+  const _getFixupForLikedSessions = (workouts, likedSessionIds) => {
+    // Add the `liked` field to each workout based on `likedSessionIds`
+    let currentWorkouts = workouts.map(workout => ({
+      ...workout,
+      liked: likedSessionIds.includes(workout.id),
+    }));
+  
+    // Sort unlocked workouts to appear first if `user.unlockAll` is false
+    if (!user.unlockAll) {
+      currentWorkouts = currentWorkouts.sort((a, b) => {
+        return (b.isUnlocked ? 1 : 0) - (a.isUnlocked ? 1 : 0);
+      });
+    }
+  
+    // Log each workout's liked status to verify
+    currentWorkouts.forEach(workout => {
+      console.log(`Workout ID: ${workout.id}, Liked: ${workout.liked}`);
+    });
+  
+    return currentWorkouts;
+  };
   const handleToggleLike = async (sessionId) => {
     try {
+      // Toggle the like status and get updated liked sessions
       const updatedLikedSessions = await toggleLikeSession(user.uid, sessionId, likedSessionIds);
+  
+      // Update `likedSessionIds` state
       setLikedSessionIds(updatedLikedSessions);
   
-      setWorkouts(prevWorkouts =>
-        prevWorkouts.map(workout =>
-          workout.id === sessionId
-            ? { ...workout, liked: updatedLikedSessions.includes(sessionId) }
-            : workout
-        )
-      );
+      // Update `workouts` array to reflect the new liked status for all workouts
+      setWorkouts(_getFixupForLikedSessions(workouts, updatedLikedSessions));
     } catch (error) {
       console.error('Error toggling like:', error);
     }
   };
-  
-  const popularWorkouts = workouts.sort((a, b) => (b.score || 0) - (a.score || 0));
+    
 
   const filteredWorkouts = workouts.filter(workout =>
     workout.workoutName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -238,11 +262,12 @@ const WorkoutsScreen = ({ user }) => {
 
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>אימונים פופולריים</Text>
-              <TouchableOpacity onPress={() => handleShowAllWorkouts(popularWorkouts.slice(0,10), 'אימונים פופולריים')}>
+              <TouchableOpacity onPress={() => handleShowAllWorkouts(workouts.sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0,10), 'אימונים פופולריים')}>
                 <Text style={styles.viewAllButton}>להציג את הכל</Text>
               </TouchableOpacity>
             </View>
-            {popularWorkouts.slice(0, 2).map((workout, index) => (
+            {workouts.sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 2).map((workout, index) => (
+              console.log("NATAN workout like ",workout.liked),
               <WorkoutPlanCard
                 key={index}
                 workout={{
@@ -255,6 +280,7 @@ const WorkoutsScreen = ({ user }) => {
                   id: workout.id,
                   place: workout.place,
                   level: workout.level,
+                  liked: workout.liked ? true : false,
                 }}
                 onLike={() => handleToggleLike(workout.id)}
                 onPress={() => handlePress(workout)}
