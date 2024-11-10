@@ -13,12 +13,12 @@ const NoLikedWorkoutsCard = ({ onExplorePress }) => (
 
 const styles = StyleSheet.create({
   cardContainer: {
-    backgroundColor: '#E9F5E1', // Light green background color
+    backgroundColor: 'white', // Light green background color
     borderRadius: 10,
     padding: 20,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#D1E7CE', // Border color similar to background
+    borderColor: 'pink', // Border color similar to background
   },
   title: {
     fontSize: 18,

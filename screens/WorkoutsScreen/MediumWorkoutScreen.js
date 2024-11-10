@@ -11,7 +11,7 @@ const MediumWorkoutScreen = ({ route }) => {
   const [likedSessionIds, setLikedSessionIds] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const navigation = useNavigation();
-
+  console.log(workouts);
   useEffect(() => {
     const loadUserLikedSessions = async () => {
       if (user) {
@@ -92,6 +92,7 @@ const MediumWorkoutScreen = ({ route }) => {
       <FlatList
         data={filteredWorkouts}
         renderItem={({ item }) => (
+          console.log('item.liked', item.liked),
           <MediumWorkoutCard
             workout={{
               title: item.workoutMediumName,

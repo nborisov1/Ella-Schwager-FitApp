@@ -47,15 +47,6 @@ const WorkoutPlanCard = ({ workout, onPress, onLike }) => {
     <TouchableOpacity style={styles.workoutPlanCard} onPress={onPress ? onPress : handlePress}>
       <View style={styles.thumbnailContainer}>
         <ImageBackground source={{ uri: workout.image }} style={styles.thumbnail} imageStyle={{ borderRadius: 10 }}>
-          {onLike ? (<TouchableOpacity style={styles.heartIcon} onPress={toggleLike}>
-            <View style={styles.heartContainer}>
-              <FontAwesome 
-                name={liked ? "heart" : "heart-o"} 
-                size={18} 
-                color={liked ? styles.workoutPlanCard.backgroundColor : "black"}
-              />
-            </View>
-          </TouchableOpacity>) : null}
         </ImageBackground>
       </View>
   
@@ -77,7 +68,13 @@ const WorkoutPlanCard = ({ workout, onPress, onLike }) => {
       <View style={styles.contentContainer}>
         {/* Title and Description */}
         <View>
-          <Text style={styles.workoutTitle}>{workout.title}</Text>
+        
+        {onLike ? (<View style={styles.titleContainer}>
+            <TouchableOpacity style={styles.heartIcon} onPress={toggleLike}>
+              <FontAwesome name={liked ? 'heart' : 'heart-o'} size={20} color={liked ? 'white' : 'black'} />
+            </TouchableOpacity>
+            <Text style={styles.workoutTitle}>{workout.title}</Text>
+          </View>) : <Text style={styles.workoutTitle}>{workout.title}</Text>}
           {workout.subtitle && <Text style={styles.workoutDescription}>{workout.subtitle}</Text>}
         </View>
         

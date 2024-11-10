@@ -28,12 +28,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 10,
   },
-  heartIcon: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    zIndex: 1,
-  },
   heartContainer: {
     width: 26,
     height: 26,
@@ -141,11 +135,6 @@ const styles = StyleSheet.create({
     height: 100,
     justifyContent: 'space-between',
   },
-  heartIcon: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-  },
   mediumCardContent: {
     flex: 1,
     padding: 10,
@@ -212,7 +201,23 @@ const styles = StyleSheet.create({
     color: '#333',
     textAlign: 'right',
   },
+  titleContainer: {
+    flexDirection: 'row',  // Align items horizontally
+    alignItems: 'center',  // Center vertically
+    justifyContent: 'flex-end',  // Push title to the right
+    justifyContent: 'space-between',  // Align content at the top and bottom
+    width: '100%',
+  },
+  heartIcon: {
+    marginRight: 8, // Add space between the heart icon and the title
+  },
+  heartIconMediumCard: {
+    position: 'absolute',
+    top: 10,
+    right: 10, // Position the heart icon in the top-right of the thumbnail
+    zIndex: 1,
 
+  }
 });
 
 export default styles;

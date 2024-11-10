@@ -85,11 +85,19 @@ const WorkoutsScreen = ({ user }) => {
     try {
       const updatedLikedSessions = await toggleLikeSession(user.uid, sessionId, likedSessionIds);
       setLikedSessionIds(updatedLikedSessions);
+  
+      setWorkouts(prevWorkouts =>
+        prevWorkouts.map(workout =>
+          workout.id === sessionId
+            ? { ...workout, liked: updatedLikedSessions.includes(sessionId) }
+            : workout
+        )
+      );
     } catch (error) {
       console.error('Error toggling like:', error);
     }
   };
-
+  
   const filteredWorkouts = workouts.filter(workout =>
     workout.workoutName.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -164,7 +172,7 @@ const WorkoutsScreen = ({ user }) => {
               )}
             </View>
             {likedWorkouts.length > 0 ? (
-              likedWorkouts.slice(0, 3).map((workout, index) => (
+              likedWorkouts.slice(0, 2).map((workout, index) => (
                 <WorkoutPlanCard
                   key={index}
                   workout={{
@@ -189,7 +197,7 @@ const WorkoutsScreen = ({ user }) => {
             {/* Other Sections */}
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>כל האימונים הזמינים</Text>
-              <TouchableOpacity onPress={() => handleShowAllWorkouts(filteredWorkouts)}>
+              <TouchableOpacity onPress={() => handleShowAllWorkouts(workouts)}>
                 <Text style={styles.viewAllButton}>להציג את הכל</Text>
               </TouchableOpacity>
             </View>
@@ -218,7 +226,7 @@ const WorkoutsScreen = ({ user }) => {
                 <Text style={styles.viewAllButton}>להציג את הכל</Text>
               </TouchableOpacity>
             </View>
-            {filteredWorkouts.slice(0, 3).map((workout, index) => (
+            {filteredWorkouts.slice(0, 2).map((workout, index) => (
               <WorkoutPlanCard
                 key={index}
                 workout={{

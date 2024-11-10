@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, ImageBackground, TouchableOpacity } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import styles from './styles';
@@ -8,6 +8,9 @@ const MediumWorkoutCard = ({ workout, onPress, onToggleLike }) => {
   // Local state to manage liked status immediately on toggle
   const [liked, setLiked] = useState(workout.liked);
 
+  useEffect(() => {
+    setLiked(workout.liked);
+  }, [workout.liked]);
   const handleLikeToggle = () => {
     setLiked(!liked); // Toggle liked status locally
     onToggleLike(); // Call the parent function to handle backend update
@@ -30,7 +33,7 @@ const MediumWorkoutCard = ({ workout, onPress, onToggleLike }) => {
             )}
           </View>
         )}
-        <TouchableOpacity style={styles.heartIcon} onPress={handleLikeToggle}>
+        <TouchableOpacity style={styles.heartIconMediumCard} onPress={handleLikeToggle}>
           <FontAwesome name={liked ? "heart" : "heart-o"} size={20} color="white" />
         </TouchableOpacity>
       </ImageBackground>
@@ -41,7 +44,7 @@ const MediumWorkoutCard = ({ workout, onPress, onToggleLike }) => {
           {workout.totalTime ? (
             <View style={styles.statsBlock}>
               <FontAwesome name="clock-o" size={16} color="black" />
-              <Text style={styles.statsText}>{formatDuration(workout.totalTime)}</Text>
+              <Text style={styles.statsText}> {formatDuration(workout.totalTime)}</Text>
             </View>
           ) : null}
           {workout.videos ? (
