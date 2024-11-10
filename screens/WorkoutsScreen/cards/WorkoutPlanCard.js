@@ -7,34 +7,8 @@ import { formatDuration, sortDays } from '../../../utils/utils';
 import { translateDayToHebrew } from '../../../utils/utils';
 
 const WorkoutPlanCard = ({ workout, onPress, onLike }) => {
-  const navigation = useNavigation();
   const [liked, setLiked] = useState(workout.liked || false);
   const exerciseCount = workout.videos ? workout.videos.length : 0
-  const handlePress = () => {
-    if (workout.isUnlocked) {
-        navigation.navigate('ExerciseList', {
-          title: workout.title,
-          exercises: workout.videos,
-          sessionId: workout.id,
-          thumbnail: workout.image,
-          description: workout.subtitle,
-          totalDuration: workout.totalTime,
-        });
-    } else {
-      Alert.alert(
-        'Workout Locked',
-        'This workout plan is locked. Unlock to continue.',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { 
-            text: 'Pay for Workout', 
-            onPress: () => navigation.navigate('Payment', { workoutId: workout.id }) 
-          }
-        ],
-        { cancelable: true }
-      );
-    }
-  };
 
   const toggleLike = () => {
     setLiked(!liked);
@@ -46,7 +20,12 @@ const WorkoutPlanCard = ({ workout, onPress, onLike }) => {
   return (
     <TouchableOpacity style={styles.workoutPlanCard} onPress={onPress ? onPress : handlePress}>
       <View style={styles.thumbnailContainer}>
-        <ImageBackground source={{ uri: workout.image }} style={styles.thumbnail} imageStyle={{ borderRadius: 10 }}>
+        <ImageBackground source={{ uri: workout.image }} style={styles.thumbnail} blurRadius={workout.isUnlocked ? 0 :10} imageStyle={{ borderRadius: 10 } }>
+        {!workout.isUnlocked && (
+            <View style={styles.lockedOverlay}>
+              <FontAwesome name="lock" size={24} color="white" />
+            </View>
+          )}
         </ImageBackground>
       </View>
   

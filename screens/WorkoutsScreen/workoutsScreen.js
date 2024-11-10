@@ -9,6 +9,7 @@ import SmallWorkoutCard from './cards/SmallWorkoutCard';
 import { useNavigation } from '@react-navigation/native';
 import { getUserLikedSessions, toggleLikeSession } from '../../backend/userController';
 import NoLikedWorkoutsCard from './cards/NoLikeWorkoutsCard';
+import { Alert } from 'react-native';
 
 const WorkoutsScreen = ({ user }) => {
   const [workouts, setWorkouts] = useState([]);
@@ -16,10 +17,34 @@ const WorkoutsScreen = ({ user }) => {
   const [likedWorkouts, setLikedWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  const [unlockedWorkoutIds, setUnlockedWorkoutIds] = useState([]);
-  const [unlockAll, setUnlockAll] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const navigation = useNavigation();
+
+  const handlePress = (workout) => {
+    if (workout.isUnlocked || user.unlockAll) {
+        navigation.navigate('ExerciseList', {
+          title: workout.workoutName,
+          exercises: workout.videos,
+          sessionId: workout.id,
+          thumbnail: workout.thumbnailURL,
+          description: workout.subtitle,
+          totalDuration: workout.totalTime,
+        });
+    } else {
+      Alert.alert(
+        'Workout Locked',
+        'This workout plan is locked. Unlock to continue.',
+        [
+          { text: 'Cancel', style: 'cancel' },
+          { 
+            text: 'Pay for Workout', 
+            onPress: () => navigation.navigate('Payment', { workoutId: workout.id }) 
+          }
+        ],
+        { cancelable: true }
+      );
+    }
+  };
 
   const loadUserLikedSessions = async () => {
     if (user) {
@@ -40,18 +65,6 @@ const WorkoutsScreen = ({ user }) => {
     navigation.navigate('AllWorkouts', { workouts: allRelevantWorkouts, title: title, user: user });
   };
 
-  const loadUserUnlockedWorkouts = async () => {
-    if (user) {
-      try {
-        const { unlockedWorkoutIds, unlockAll } = await fetchUserUnlockedWorkouts(user.uid);
-        setUnlockedWorkoutIds(unlockedWorkoutIds);
-        setUnlockAll(unlockAll);
-      } catch (error) {
-        console.error('Error fetching user unlocked workouts:', error);
-      }
-    }
-  };
-
   const loadWorkouts = async () => {
     try {
       const fetchedWorkouts = await fetchGeneralWorkouts();
@@ -64,7 +77,6 @@ const WorkoutsScreen = ({ user }) => {
   };
 
   useEffect(() => {
-    loadUserUnlockedWorkouts();
     loadWorkouts();
     loadUserLikedSessions();
   }, []);
@@ -76,7 +88,6 @@ const WorkoutsScreen = ({ user }) => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    loadUserUnlockedWorkouts();
     loadWorkouts();
     loadUserLikedSessions().then(() => setRefreshing(false));
   }, []);
@@ -98,6 +109,8 @@ const WorkoutsScreen = ({ user }) => {
     }
   };
   
+  const popularWorkouts = workouts.sort((a, b) => (b.score || 0) - (a.score || 0));
+
   const filteredWorkouts = workouts.filter(workout =>
     workout.workoutName.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -146,13 +159,14 @@ const WorkoutsScreen = ({ user }) => {
                   subtitle: workout.subtitle,
                   videos: workout.videos,
                   totalTime: workout.totalDuration || '',
-                  isUnlocked: unlockAll || unlockedWorkoutIds.includes(workout.id),
+                  isUnlocked: user.unlockAll || workout.isUnlocked,
                   image: workout.thumbnailURL,
                   id: workout.id,
                   place: workout.place,
                   level: workout.level,
                 }}
                 onLike={() => handleToggleLike(workout.id)}
+                onPress={() => handlePress(workout)}
               />
             ))
           ) : (
@@ -180,7 +194,7 @@ const WorkoutsScreen = ({ user }) => {
                     subtitle: workout.subtitle,
                     videos: workout.videos,
                     totalTime: workout.totalDuration || '',
-                    isUnlocked: unlockAll || unlockedWorkoutIds.includes(workout.id),
+                    isUnlocked: user.unlockAll || workout.isUnlocked,
                     image: workout.thumbnailURL,
                     id: workout.id,
                     place: workout.place,
@@ -188,7 +202,8 @@ const WorkoutsScreen = ({ user }) => {
                     liked: true,
                   }}
                   onLike={() => handleToggleLike(workout.id)}
-                />
+                  onPress={() => handlePress(workout)}
+                  />
               ))
             ) : (
               <NoLikedWorkoutsCard onExplorePress={handleExplorePress} />
@@ -204,16 +219,17 @@ const WorkoutsScreen = ({ user }) => {
 
             <FlatList
               horizontal
-              data={filteredWorkouts}
+              data={workouts}
               renderItem={({ item }) => (
                 <SmallWorkoutCard
                   workout={{
                     title: item.workoutShortName,
                     image: item.thumbnailURL,
                     label: item.label,
+                    isUnlocked: user.unlockAll || item.isUnlocked,
                   }}
-                  onPress={() => console.log(`Navigate to ${item.title}`)}
-                />
+                  onPress={() => handlePress(item)}
+                  />
               )}
               keyExtractor={(item) => item.id.toString()}
               showsHorizontalScrollIndicator={false}
@@ -222,11 +238,11 @@ const WorkoutsScreen = ({ user }) => {
 
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>אימונים פופולריים</Text>
-              <TouchableOpacity onPress={() => handleShowAllWorkouts(filteredWorkouts, 'אימונים פופולריים')}>
+              <TouchableOpacity onPress={() => handleShowAllWorkouts(popularWorkouts.slice(0,10), 'אימונים פופולריים')}>
                 <Text style={styles.viewAllButton}>להציג את הכל</Text>
               </TouchableOpacity>
             </View>
-            {filteredWorkouts.slice(0, 2).map((workout, index) => (
+            {popularWorkouts.slice(0, 2).map((workout, index) => (
               <WorkoutPlanCard
                 key={index}
                 workout={{
@@ -234,13 +250,14 @@ const WorkoutsScreen = ({ user }) => {
                   subtitle: workout.subtitle,
                   videos: workout.videos,
                   totalTime: workout.totalDuration || '',
-                  isUnlocked: unlockAll || unlockedWorkoutIds.includes(workout.id),
+                  isUnlocked: user.unlockAll || workout.isUnlocked,
                   image: workout.thumbnailURL,
                   id: workout.id,
                   place: workout.place,
                   level: workout.level,
                 }}
                 onLike={() => handleToggleLike(workout.id)}
+                onPress={() => handlePress(workout)}
               />
             ))}
           </>

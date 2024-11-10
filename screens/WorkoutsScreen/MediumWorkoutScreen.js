@@ -92,7 +92,6 @@ const MediumWorkoutScreen = ({ route }) => {
       <FlatList
         data={filteredWorkouts}
         renderItem={({ item }) => (
-          console.log('item.liked', item.liked),
           <MediumWorkoutCard
             workout={{
               title: item.workoutMediumName,

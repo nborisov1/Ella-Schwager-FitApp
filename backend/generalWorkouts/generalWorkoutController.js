@@ -1,14 +1,13 @@
-import { collection, addDoc, doc, getDoc, updateDoc, arrayUnion, getDocs, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, getDoc, updateDoc, arrayUnion, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { ref, deleteObject } from 'firebase/storage';
 import { db, storage } from '../../config/firebase';
-
+import React from 'react';
 // 3. Fetch All General Workouts
 export const fetchGeneralWorkouts = async () => {
   try {
     const querySnapshot = await getDocs(collection(db, 'generalWorkouts'));
     const workouts = [];
     querySnapshot.forEach((doc) => {
-      console.log("NATAN id ", doc.id)
       workouts.push({ id: doc.id, ...doc.data() });
     });
     return workouts;
@@ -60,3 +59,24 @@ export const fetchUserUnlockedWorkouts = async (userId) => {
     return { unlockedWorkoutIds: [], unlockAll: false };
   }
 };
+
+export const fetchPopularWorkouts = async () => {
+  try {
+    // Query workouts that have a score, ordering by score in descending order
+    const generalWorkouts = await fetchGeneralWorkouts();
+    // Map through scored documents
+    const scoredWorkouts = generalWorkouts.map(workout => ({
+      ...doc.data(),
+      score: workout.score ?? 0,
+    }));
+    console.log("scoredWorkouts",scoredWorkouts);
+
+    // Combine and sort the lists, putting scored workouts first
+    const allWorkouts = [...scoredWorkouts, ...unscoredWorkouts].sort((a, b) => b.score - a.score);
+    console.log("allWorkouts",allWorkouts)
+    // Set only the top 10 if needed
+    return allWorkouts.slice(0,1);
+  } catch (error) {
+    console.error('Error fetching popular workouts:', error);
+  }
+}

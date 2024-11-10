@@ -216,8 +216,18 @@ const styles = StyleSheet.create({
     top: 10,
     right: 10, // Position the heart icon in the top-right of the thumbnail
     zIndex: 1,
-
-  }
+  },
+  lockedOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent overlay
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10, // Ensure border radius matches thumbnail
+  },  
 });
 
 export default styles;
