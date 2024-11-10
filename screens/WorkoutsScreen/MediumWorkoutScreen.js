@@ -59,6 +59,7 @@ const MediumWorkoutScreen = ({ route }) => {
       thumbnail: workout.thumbnailURL,
       description: workout.subtitle,
       totalDuration: workout.totalTime,
+      isGeneralWorkout: true,
     });
   };
 
@@ -102,6 +103,7 @@ const MediumWorkoutScreen = ({ route }) => {
               totalTime: item.totalDuration,
               videos: item.videos ? item.videos.length : 0,
               liked: item.liked || false,
+              isUnlocked: user.unlockAll ? user.unlockAll : item.isUnlocked,
             }}
             onPress={() => handlePress(item)}
             onToggleLike={() => handleToggleLike(item.id)} // Pass toggle like function

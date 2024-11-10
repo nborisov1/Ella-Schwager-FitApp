@@ -62,19 +62,28 @@ const ExerciseCard = ({ name, subtitle, customField, thumbnail, userComment, exe
                 .join(' ')}
           </Text>
         </View>
-        { subtitle ? (<Text style={styles.subtitle}>{subtitle}</Text>) : null }
-
-        <View style={styles.commentSection}>
-          <TouchableOpacity style={styles.sendButton} onPress={handleSendComment}>
-            <FontAwesome name="send" size={16} color="black" />
-          </TouchableOpacity>
-          <TextInput
-            style={styles.commentBox}
-            placeholder="קשה/קל מידי? כתבי לנו"
-            value={comment}
-            onChangeText={setComment}
-          />
-        </View>
+        {subtitle && (<Text
+          style={[
+            styles.subtitle,
+            !onCommentSend && { marginBottom: 25 } // Reduce margin if no comment section
+          ]}
+        >
+          {subtitle}
+        </Text>)}
+        {/* Conditional rendering for the comment section */}
+        {onCommentSend && (
+          <View style={styles.commentSection}>
+            <TouchableOpacity style={styles.sendButton} onPress={handleSendComment}>
+              <FontAwesome name="send" size={16} color="black" />
+            </TouchableOpacity>
+            <TextInput
+              style={styles.commentBox}
+              placeholder="קשה/קל מידי? כתבי לנו"
+              value={comment}
+              onChangeText={setComment}
+            />
+          </View>
+        )}
       </View>
 
       <Modal visible={isVideoModalVisible} animationType="fade" transparent={true} onRequestClose={() => setVideoModalVisible(false)}>

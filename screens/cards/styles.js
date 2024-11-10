@@ -8,15 +8,35 @@ const styles = StyleSheet.create({
   },
   header: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 20,
     marginBottom: 10,
+    paddingHorizontal: 15,
   },
   headerTitle: {
-    fontSize: 24,
+    fontSize: 23,
     fontWeight: 'bold',
     color: '#333',
+    textAlign: 'right',
+  },
+  premiumButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconCircle: {
+    backgroundColor: '#F4D03F', // Color of the circle
+    borderRadius: 16, // Ensures the circle shape
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  premiumButtonText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: '#333',
+    marginLeft: 5,
+    backgroundColor: 'transparent', // Transparent background for text
   },
   searchBar: {
     flexDirection: 'row',

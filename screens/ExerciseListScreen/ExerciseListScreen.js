@@ -10,7 +10,7 @@ import { formatDuration } from '../../utils/utils';
 
 const ExerciseListScreen = ({ route }) => {
   const navigation = useNavigation();
-  const { title, exercises, sessionId, userId, userComment, thumbnail, description, totalDuration } = route.params;
+  const { title, exercises, sessionId, userId, userComment, thumbnail, description, totalDuration, isGeneralWorkout } = route.params;
   const [editableExercises, setEditableExercises] = useState(exercises ? exercises.map(exercise => ({
     ...exercise,
     originalSets: exercise.sets || 0,  
@@ -88,7 +88,7 @@ const ExerciseListScreen = ({ route }) => {
                 subtitle={exercise.subtitle}
                 customField={exercise.customFields}
                 exerciseId={exercise.id}
-                onCommentSend={handleSendComment}
+                onCommentSend={isGeneralWorkout ? null : handleSendComment}
                 thumbnail={exercise.thumbnail}
                 userComment={userComment}
                 sessionId={sessionId}

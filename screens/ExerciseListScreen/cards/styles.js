@@ -19,14 +19,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   detailsContainer: {
-    flex: 1,  // Take up remaining space next to the thumbnail
-    alignItems: 'flex-end',  // Align all content to the right side
-    justifyContent: 'space-between',
+    flex:1,
   },
   header: {
-    flexDirection: 'row-reverse',  // Title and info aligned in row from the right
-    alignItems: 'center',
-    marginBottom: 10,  // Space between header and comment section
+    flex: 1,
+    justifyContent: 'flex-start',  // Align content to the top
+    flexDirection: 'row-reverse',
+    alignItems: 'top',
+    marginBottom: 3,
   },
   title: {
     fontSize: 16,
@@ -39,13 +39,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#333',
     textAlign: 'right',
-    marginBottom: 10,
-    marginTop: 0,
+    marginBottom: 10, // Default margin
   },
   infoText: {
     fontSize: 11,
     color: '#333',
     textAlign: 'right',
+    marginTop: 3,
   },
   commentSection: {
     flexDirection: 'row',

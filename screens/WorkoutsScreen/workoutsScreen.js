@@ -29,6 +29,7 @@ const WorkoutsScreen = ({ user }) => {
           thumbnail: workout.thumbnailURL,
           description: workout.subtitle,
           totalDuration: workout.totalTime,
+          isGeneralWorkout: true,
         });
     } else {
       Alert.alert(
@@ -134,6 +135,9 @@ const WorkoutsScreen = ({ user }) => {
     }
   };
     
+  const handlePaymentPress = () => {
+    navigation.navigate('Payment');
+  };
 
   const filteredWorkouts = workouts.filter(workout =>
     workout.workoutName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -151,6 +155,12 @@ const WorkoutsScreen = ({ user }) => {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
+        <TouchableOpacity style={styles.premiumButton} onPress={handlePaymentPress}>
+          <View style={styles.iconCircle}>
+            <FontAwesome name="star" size={16} color="#333" />
+          </View>
+          <Text style={styles.premiumButtonText}>הפוך לפרימיום</Text>
+        </TouchableOpacity>
         <Text style={styles.headerTitle}>האימונים שלנו 🔥</Text>
       </View>
 
