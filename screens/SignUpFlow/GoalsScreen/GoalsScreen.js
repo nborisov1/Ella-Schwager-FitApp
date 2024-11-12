@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Keyboard, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ProgressBar from '../ProgressBar';
 import OptionButton from '../OptionButton';
 import ContinueButton from '../ContinueButton';
 
-const GoalsScreen = ({ navigation }) => {
+const GoalsScreen = ({ navigation, route }) => {
+  const { signUpData } = route.params;
   const [selectedGoals, setSelectedGoals] = useState([]);
   const [isCustomGoalSelected, setIsCustomGoalSelected] = useState(false);
   const [customGoal, setCustomGoal] = useState('');
@@ -31,63 +32,62 @@ const GoalsScreen = ({ navigation }) => {
     const goalsToPass = isCustomGoalSelected && customGoal
       ? [...selectedGoals, customGoal]
       : selectedGoals;
-      
+    const updatedData = { ...signUpData, goals: goalsToPass }; // Add selected goals to sign-up data
+    console.log(updatedData);
     if (goalsToPass.length > 0) {
-      navigation.navigate('PhysicalActivity', { goals: goalsToPass });
+      navigation.navigate('PhysicalActivity', {signUpData: updatedData});
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ProgressBar currentStep={2} totalSteps={4} />
-      <Text style={styles.title}>מהי מטרת הכושר שלך?</Text>
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        <SafeAreaView style={styles.container}>
+          <ProgressBar currentStep={5} />
+          <Text style={styles.title}>מהי מטרת הכושר שלך?</Text>
 
-      <View style={styles.optionsContainer}>
-        <OptionButton
-          icon="weight"
-          label="לרדת במשקל"
-          isSelected={selectedGoals.includes('weight_loss')}
-          onPress={() => toggleGoalSelection('weight_loss')}
-        />
-        <OptionButton
-          icon="smile"
-          label="שמור על כושר"
-          isSelected={selectedGoals.includes('stay_fit')}
-          onPress={() => toggleGoalSelection('stay_fit')}
-        />
-        <OptionButton
-          icon="dumbbell"
-          label="להעלות מסת שריר"
-          isSelected={selectedGoals.includes('gain_muscle')}
-          onPress={() => toggleGoalSelection('gain_muscle')}
-        />
-        <OptionButton
-          icon="running"
-          label="להתחזק"
-          isSelected={selectedGoals.includes('get_strong')}
-          onPress={() => toggleGoalSelection('get_strong')}
-        />
+          <View style={styles.optionsContainer}>
+            <OptionButton
+              icon="weight"
+              label="לרדת במשקל"
+              isSelected={selectedGoals.includes('weight_loss')}
+              onPress={() => toggleGoalSelection('weight_loss')}
+            />
+            <OptionButton
+              icon="dumbbell"
+              label="להעלות מסת שריר"
+              isSelected={selectedGoals.includes('gain_muscle')}
+              onPress={() => toggleGoalSelection('gain_muscle')}
+            />
+            <OptionButton
+              icon="running"
+              label="להתחזק"
+              isSelected={selectedGoals.includes('get_strong')}
+              onPress={() => toggleGoalSelection('get_strong')}
+            />
 
-        {/* Custom Goal Option */}
-        <OptionButton
-          icon="pencil-alt"
-          label="מטרה אישית"
-          isSelected={isCustomGoalSelected}
-          onPress={handleCustomGoalToggle}
-        />
+            {/* Custom Goal Option */}
+            <OptionButton
+              icon="pencil-alt"
+              label="מטרה אישית"
+              isSelected={isCustomGoalSelected}
+              onPress={handleCustomGoalToggle}
+            />
 
-        {isCustomGoalSelected && (
-          <TextInput
-            style={styles.customGoalInput}
-            placeholder="הכנס מטרה אישית כאן..."
-            value={customGoal}
-            onChangeText={setCustomGoal}
-          />
-        )}
-      </View>
+            {isCustomGoalSelected && (
+              <TextInput
+                style={styles.customGoalInput}
+                placeholder="הכנס מטרה אישית כאן..."
+                value={customGoal}
+                onChangeText={setCustomGoal}
+              />
+            )}
+          </View>
 
-      <ContinueButton onPress={handleContinue} disabled={selectedGoals.length === 0 && !customGoal} />
-    </SafeAreaView>
+          <ContinueButton onPress={handleContinue} disabled={selectedGoals.length === 0 && !customGoal} />
+        </SafeAreaView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 

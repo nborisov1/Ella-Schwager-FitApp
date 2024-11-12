@@ -5,22 +5,25 @@ import ProgressBar from '../ProgressBar';
 import OptionButton from '../OptionButton';
 import ContinueButton from '../ContinueButton';
 
-const PhysicalActivityScreen = ({ navigation }) => {
+const PhysicalActivityScreen = ({ navigation, route }) => {
   const [selectedLevel, setSelectedLevel] = useState(null);
-
+  const { signUpData } = route.params;
   const handleLevelSelect = (level) => {
     setSelectedLevel(level);
   };
 
   const handleContinue = () => {
     if (selectedLevel) {
-      navigation.navigate('Account', { activityLevel: selectedLevel });
+      const updatedData = {...signUpData, activityLevel: selectedLevel}
+      console.log(updatedData);
+      console.log(signUpData);
+      navigation.navigate('Account', { signUpData: updatedData });
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ProgressBar currentStep={3} totalSteps={4} />
+      <ProgressBar currentStep={6}/>
       <Text style={styles.title}>מהי רמת הפעילות הגופנית שלך?</Text>
 
       <View style={styles.optionsContainer}>

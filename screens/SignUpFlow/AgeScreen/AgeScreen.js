@@ -1,51 +1,93 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import Picker from '@uynguyen505/react-native-wheel-picker'
-import styles from './styles';
-import CustomPicker from '../../../utils/CustomPicker';
-
-const PickerItem = Picker.Item;
+import { View, Text, StyleSheet, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import ProgressBar from '../ProgressBar';
+import ContinueButton from '../ContinueButton';
 
 const AgeScreen = ({ navigation, route }) => {
+  const [age, setAge] = useState(''); // Initialize height input as an empty string
   const { signUpData } = route.params;
-  const [selectedAgeIndex, setSelectedAgeIndex] = useState(14); // Default to age 32 (index 14)
-  
-  // Array of age values from 18 to 100
-  const ageList = Array.from({ length: 83 }, (_, i) => (i + 18).toString());
-
   const handleContinue = () => {
-    const selectedAge = ageList[selectedAgeIndex];
-    const updatedData = { ...signUpData, age: parseInt(selectedAge) }; // Add selected age to sign-up data
-    navigation.navigate('Weight', { signUpData: updatedData });
+    const updatedData = { ...signUpData, age: parseInt(age) }; // Add selected age to sign-up data
+    console.log(age);
+    navigation.navigate('Weight', { signUpData: updatedData });  
   };
 
   return (
-    <View style={styles.container}>
-      {/* Title and Subtitle */}
-      <Text style={styles.title}>How Old Are You?</Text>
-      <Text style={styles.subtitle}>Age in years. This will help us to personalize an exercise program plan that suits you.</Text>
-
-      {/* Age Picker */}
-      <CustomPicker
-        itemList={ageList}
-        selectedItemIndex={selectedAgeIndex}
-        setSelectedItemIndex={setSelectedAgeIndex}
-      />
-
-      {/* Back and Continue Buttons */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>Back</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.continueButton, { opacity: selectedAgeIndex ? 1 : 0.5 }]}
-          onPress={handleContinue}
-        >
-          <Text style={styles.continueButtonText}>Continue</Text>
-        </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <ProgressBar currentStep={2}/>
+      <Text style={styles.title}>מה הגיל שלך?</Text>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      {/* Input Field in the center */}
+      <View style={styles.centerContainer}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={age}
+            onChangeText={setAge}
+            placeholder="0"
+            keyboardType="numeric" // Shows the numeric keyboard on iOS
+            maxLength={2} // Limit the input length as necessary
+              />
+        </View>
       </View>
-    </View>
+      </TouchableWithoutFeedback>
+      <ContinueButton onPress={handleContinue} disabled={!age} />
+    </SafeAreaView>
   );
 };
 
 export default AgeScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#F5F5F5',
+  },
+  header: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'right',
+    marginBottom: 24,
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputContainer: {
+    alignItems: 'center',
+  },
+  input: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#DAA520',
+    width: '100%',
+  },
+  unitText: {
+    fontSize: 24,
+    color: '#333',
+    marginLeft: 8,
+  },
+  continueButton: {
+    backgroundColor: '#DAA520',
+    borderRadius: 30,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  continueButtonText: {
+    fontSize: 18,
+    color: '#FFF',
+    fontWeight: 'bold',
+  },
+});

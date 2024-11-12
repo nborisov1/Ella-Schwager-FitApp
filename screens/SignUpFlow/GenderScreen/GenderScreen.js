@@ -17,7 +17,7 @@ const GenderScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ProgressBar currentStep={1} totalSteps={4} />
+      <ProgressBar currentStep={1} />
       <Text style={styles.title}>לבחור המין שלך</Text>
 
       <View style={styles.optionsContainer}>

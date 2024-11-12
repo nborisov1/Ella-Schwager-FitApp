@@ -1,48 +1,93 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import CustomPicker from '../../utils/CustomPicker'; // Import the reusable picker component
-import styles from './AgeScreen/styles';
+import { View, Text, StyleSheet, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import ProgressBar from './ProgressBar';
+import ContinueButton from './ContinueButton';
 
 const WeightScreen = ({ navigation, route }) => {
+  const [weight, setweight] = useState(''); // Initialize weight input as an empty string
   const { signUpData } = route.params;
-  const [selectedWeightIndex, setSelectedWeightIndex] = useState(25); // Default index for Weight
-  
-  // Array of weight values from 30 to 150
-  const WeightList = Array.from({ length: 121 }, (_, i) => (30 + i).toString());
-
   const handleContinue = () => {
-    const selectedWeight = WeightList[selectedWeightIndex];
-    const updatedData = { ...signUpData, weight: parseInt(selectedWeight) }; // Add selected Weight to sign-up data
-    navigation.navigate('Height', { signUpData: updatedData });
+    const updatedData = { ...signUpData, weight: parseFloat(weight), unit: 'cm'  }; // Add selected age to sign-up data
+    navigation.navigate('Height', { signUpData: updatedData});
   };
 
   return (
-    <View style={styles.container}>
-      {/* Title and Subtitle */}
-      <Text style={styles.title}>Enter Your Weight</Text>
-      <Text style={styles.subtitle}>Weight in centimeters. This will help us to personalize an exercise program plan that suits you.</Text>
-
-      {/* Weight Picker */}
-      <CustomPicker
-        itemList={WeightList}
-        selectedItemIndex={selectedWeightIndex}
-        setSelectedItemIndex={setSelectedWeightIndex}
-      />
-
-      {/* Back and Continue Buttons */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>Back</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.continueButton, { opacity: selectedWeightIndex ? 1 : 0.5 }]}
-          onPress={handleContinue}
-        >
-          <Text style={styles.continueButtonText}>Continue</Text>
-        </TouchableOpacity>
+    <SafeAreaView style={styles.container}>
+      <ProgressBar currentStep={3}/>
+      <Text style={styles.title}>מה המשקל שלך?</Text>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      {/* Input Field in the center */}
+      <View style={styles.centerContainer}>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            value={weight}
+            onChangeText={setweight}
+            placeholder="0"
+            keyboardType="numeric" // Shows the numeric keyboard on iOS
+            maxLength={3} // Limit the input length as necessary
+          />
+        </View>
+        <Text style={styles.unitText}>ק״ג</Text>
       </View>
-    </View>
+      </TouchableWithoutFeedback>
+      <ContinueButton onPress={handleContinue} disabled={!weight} />
+    </SafeAreaView>
   );
 };
 
 export default WeightScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#F5F5F5',
+  },
+  header: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'right',
+    marginBottom: 24,
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputContainer: {
+    alignItems: 'center',
+  },
+  input: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#DAA520',
+    width: '100%',
+  },
+  unitText: {
+    fontSize: 24,
+    color: '#333',
+    marginLeft: 8,
+  },
+  continueButton: {
+    backgroundColor: '#DAA520',
+    borderRadius: 30,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  continueButtonText: {
+    fontSize: 18,
+    color: '#FFF',
+    fontWeight: 'bold',
+  },
+});

@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const ProgressBar = ({ currentStep, totalSteps }) => {
+const ProgressBar = ({ currentStep }) => {
   return (
     <View style={styles.progressBar}>
-      <Text style={styles.progressText}>שלב {currentStep} מתוך {totalSteps}</Text>
+      <Text style={styles.progressText}>שלב {currentStep} מתוך {7}</Text>
       <View style={styles.progressLine}>
-        <View style={[styles.progressIndicator, { width: `${(currentStep / totalSteps) * 100}%` }]} />
+        <View style={[styles.progressIndicator, { width: `${(currentStep / 7) * 100}%` }]} />
       </View>
     </View>
   );

@@ -1,48 +1,94 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import CustomPicker from '../../../utils/CustomPicker'; // Import the reusable picker component
-import styles from '../AgeScreen/styles';
+import { View, Text, StyleSheet, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import ProgressBar from '../ProgressBar';
+import ContinueButton from '../ContinueButton';
 
 const HeightScreen = ({ navigation, route }) => {
+  const [height, setHeight] = useState(''); // Initialize height input as an empty string
   const { signUpData } = route.params;
-  const [selectedHeightIndex, setSelectedHeightIndex] = useState(14); // Default index for height
-  
-  // Array of height values from 140cm to 220cm
-  const heightList = Array.from({ length: 81 }, (_, i) => (140 + i).toString());
-
   const handleContinue = () => {
-    const selectedHeight = heightList[selectedHeightIndex];
-    const updatedData = { ...signUpData, height: parseInt(selectedHeight) }; // Add selected height to sign-up data
-    navigation.navigate('Goals', { signUpData: updatedData });
+    const updatedData = { ...signUpData, height: parseFloat(height), unit: 'cm' }; // Add selected age to sign-up data
+    navigation.navigate('Goals', { signUpData: updatedData});
   };
 
   return (
-    <View style={styles.container}>
-      {/* Title and Subtitle */}
-      <Text style={styles.title}>How Tall Are You?</Text>
-      <Text style={styles.subtitle}>Height in centimeters. This will help us to personalize an exercise program plan that suits you.</Text>
-
-      {/* Height Picker */}
-      <CustomPicker
-        itemList={heightList}
-        selectedItemIndex={selectedHeightIndex}
-        setSelectedItemIndex={setSelectedHeightIndex}
-      />
-
-      {/* Back and Continue Buttons */}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>Back</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.continueButton, { opacity: selectedHeightIndex ? 1 : 0.5 }]}
-          onPress={handleContinue}
-        >
-          <Text style={styles.continueButtonText}>Continue</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <SafeAreaView style={styles.container}>
+      <ProgressBar currentStep={4} />
+      <Text style={styles.title}>מה הגובה שלך?</Text>
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+        {/* Input Field in the center */}
+        <View style={styles.centerContainer}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              value={height}
+              onChangeText={setHeight}
+              placeholder="0"
+              keyboardType="numeric" // Shows the numeric keyboard on iOS
+              maxLength={3} // Limit the input length as necessary
+              returnKeyType="done" // Add "Done" button
+            />
+          </View>
+          <Text style={styles.unitText}>ס"מ</Text>
+        </View>
+      </TouchableWithoutFeedback>
+      <ContinueButton onPress={handleContinue} disabled={!height} />
+    </SafeAreaView>
   );
 };
 
 export default HeightScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#F5F5F5',
+  },
+  header: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'right',
+    marginBottom: 24,
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  inputContainer: {
+    alignItems: 'center',
+  },
+  input: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#DAA520',
+    width: '100%',
+  },
+  unitText: {
+    fontSize: 24,
+    color: '#333',
+    marginLeft: 8,
+  },
+  continueButton: {
+    backgroundColor: '#DAA520',
+    borderRadius: 30,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  continueButtonText: {
+    fontSize: 18,
+    color: '#FFF',
+    fontWeight: 'bold',
+  },
+});
