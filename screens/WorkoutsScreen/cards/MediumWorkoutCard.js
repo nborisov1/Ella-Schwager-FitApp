@@ -4,11 +4,12 @@ import { FontAwesome } from '@expo/vector-icons';
 import styles from './styles';
 import { formatDuration } from '../../../utils/utils';
 import { Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const MediumWorkoutCard = ({ workout, onPress, onToggleLike }) => {
   // Local state to manage liked status immediately on toggle
   const [liked, setLiked] = useState(workout.liked);
-
+  const navigation = useNavigation();
   useEffect(() => {
     setLiked(workout.liked);
   }, [workout.liked]);
