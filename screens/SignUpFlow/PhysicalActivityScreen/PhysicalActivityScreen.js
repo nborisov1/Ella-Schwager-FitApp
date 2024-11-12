@@ -1,73 +1,70 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
-import styles from './styles';
+import { View, Text, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import ProgressBar from '../ProgressBar';
+import OptionButton from '../OptionButton';
+import ContinueButton from '../ContinueButton';
 
-const PhysicalActivityScreen = ({ navigation, route }) => {
-  const { signUpData } = route.params;
-  const [selectedLevel, setSelectedLevel] = useState(null);  // Track selected level
+const PhysicalActivityScreen = ({ navigation }) => {
+  const [selectedLevel, setSelectedLevel] = useState(null);
 
-  // Handle continue
+  const handleLevelSelect = (level) => {
+    setSelectedLevel(level);
+  };
+
   const handleContinue = () => {
-    const updatedData = { ...signUpData, activityLevel: selectedLevel };
-    navigation.navigate('Account', { signUpData: updatedData });
+    if (selectedLevel) {
+      navigation.navigate('Account', { activityLevel: selectedLevel });
+    }
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.centeredContent}>
-        {/* Title and Subtitle */}
-        <Text style={styles.title}>Physical Activity Level?</Text>
-        <Text style={styles.subtitle}>
-          Choose your regular activity level. This will help us to personalize plans for you.
-        </Text>
+    <SafeAreaView style={styles.container}>
+      <ProgressBar currentStep={3} totalSteps={4} />
+      <Text style={styles.title}>מהי רמת הפעילות הגופנית שלך?</Text>
 
-        {/* Activity Level Options */}
-        <TouchableOpacity
-          style={[
-            styles.levelButton,
-            selectedLevel === 'Beginner' && styles.levelButtonSelected,
-          ]}
-          onPress={() => setSelectedLevel('Beginner')}
-        >
-          <Text style={styles.levelText}>Beginner</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.levelButton,
-            selectedLevel === 'Intermediate' && styles.levelButtonSelected,
-          ]}
-          onPress={() => setSelectedLevel('Intermediate')}
-        >
-          <Text style={styles.levelText}>Intermediate</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.levelButton,
-            selectedLevel === 'Advanced' && styles.levelButtonSelected,
-          ]}
-          onPress={() => setSelectedLevel('Advanced')}
-        >
-          <Text style={styles.levelText}>Advanced</Text>
-        </TouchableOpacity>
-
-        {/* Back and Continue Buttons */}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-            <Text style={styles.backButtonText}>Back</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.continueButton, { opacity: selectedLevel ? 1 : 0.5 }]}
-            onPress={handleContinue}
-            disabled={!selectedLevel}  // Disable continue if no selection
-          >
-            <Text style={styles.continueButtonText}>Continue</Text>
-          </TouchableOpacity>
-        </View>
+      <View style={styles.optionsContainer}>
+        <OptionButton
+          icon="child"
+          label="מתחיל"
+          isSelected={selectedLevel === 'beginner'}
+          onPress={() => handleLevelSelect('beginner')}
+        />
+        <OptionButton
+          icon="user"
+          label="בינוני"
+          isSelected={selectedLevel === 'intermediate'}
+          onPress={() => handleLevelSelect('intermediate')}
+        />
+        <OptionButton
+          icon="running"
+          label="מתקדם"
+          isSelected={selectedLevel === 'advanced'}
+          onPress={() => handleLevelSelect('advanced')}
+        />
       </View>
+
+      <ContinueButton onPress={handleContinue} disabled={!selectedLevel} />
     </SafeAreaView>
   );
 };
 
 export default PhysicalActivityScreen;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#F5F5F5',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'right',
+    marginBottom: 24,
+  },
+  optionsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+});
