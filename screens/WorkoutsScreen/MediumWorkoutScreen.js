@@ -53,7 +53,7 @@ const MediumWorkoutScreen = ({ route }) => {
 
   const handlePress = (workout) => {
     navigation.navigate('ExerciseList', {
-      title: workout.title,
+      title: workout.workoutName,
       exercises: workout.videos,
       sessionId: workout.id,
       thumbnail: workout.thumbnailURL,
