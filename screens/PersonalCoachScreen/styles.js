@@ -95,7 +95,33 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'right',
   },
+  premiumText: {
+    fontSize: 16,             // A bit larger to draw attention
+    textAlign: 'right',      // Center-aligned for symmetry
+    marginBottom: 5,         // Adds space between the text and other elements below
+    fontWeight: 'bold',       // Makes the subheader stand out
+  },
+  subPremiumText: {
+    fontSize: 14,             // A bit larger to draw attention
+    textAlign: 'right',      // Center-aligned for symmetry
+    marginBottom: 16,         // Adds space between the text and other elements below
+    color: 'grey',
+  },
 
+  subheaderText: {
+    fontSize: 20,             // A bit smaller than the main header, but still noticeable
+    fontWeight: 'bold',       // Makes the subheader stand out
+    color: '#333',            // Dark gray for a neutral and easily readable color
+    textAlign: 'right',       // Right-aligned, consistent with the Hebrew text flow
+    marginTop: 8,
+  },
+  generalWorkoutsList: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    paddingBottom: 70, // Adds extra padding to prevent overlap with bottom buttons
+  },    
 });
 
 export default styles;

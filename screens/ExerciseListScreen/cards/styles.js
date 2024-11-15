@@ -53,10 +53,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     padding: 8,
-    width: '90%',
+    width: '95%',
     justifyContent: 'space-between',
+    marginLeft: 16, // Add space between the comment section and the thumbnail
   },
-  commentBox: {
+    commentBox: {
     flex: 1,
     borderRadius: 8,
     padding: 8,

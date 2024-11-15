@@ -4,7 +4,9 @@ import { View, Text, StyleSheet } from 'react-native';
 const PricingLabel = ({ price, duration }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.price}>{price} / {duration}</Text>
+      <Text style={styles.price}>
+        {price} ₪ / <Text style={styles.duration}>{duration}</Text>
+      </Text>
     </View>
   );
 };
@@ -23,6 +25,5 @@ const styles = StyleSheet.create({
   },
   duration: {
     fontSize: 16,
-    color: '#333',
   },
 });

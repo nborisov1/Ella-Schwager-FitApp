@@ -10,6 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getUserLikedSessions, toggleLikeSession } from '../../backend/userController';
 import NoLikedWorkoutsCard from './cards/NoLikeWorkoutsCard';
 import { Alert } from 'react-native';
+import { fetchPlans } from '../../backend/generalWorkouts/generalWorkoutController';
 
 const WorkoutsScreen = ({ user }) => {
   const [workouts, setWorkouts] = useState([]);
@@ -18,7 +19,17 @@ const WorkoutsScreen = ({ user }) => {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [plans, setPlans] = useState([]);
+  const [headerTitle, setHeaderTitle] = useState('');
+  const [headerDescription, setHeaderDescription] = useState('');
+  const [coupons, setCoupons] = useState({});
+
   const navigation = useNavigation();
+
+  const handlePaymentPress = () => {
+    navigation.navigate('Payment', { plans: plans, headerTitle: headerTitle, headerDescription: headerDescription, coupons: coupons })
+  };
+
 
   const handlePress = (workout) => {
     if (workout.isUnlocked || user.unlockAll) {
@@ -39,7 +50,7 @@ const WorkoutsScreen = ({ user }) => {
           { text: 'Cancel', style: 'cancel' },
           { 
             text: 'Pay for Workout', 
-            onPress: () => navigation.navigate('Payment', { workoutId: workout.id }) 
+            onPress: () => handlePaymentPress()
           }
         ],
         { cancelable: true }
@@ -59,11 +70,11 @@ const WorkoutsScreen = ({ user }) => {
   };
 
   const handleExplorePress = () => {
-    navigation.navigate('AllWorkouts', { workouts: workouts, user: user });
+    navigation.navigate('AllWorkouts', { workouts: workouts, user: user , onPaymentPress: handlePaymentPress});
   };
 
   const handleShowAllWorkouts = (allRelevantWorkouts, title) => {
-    navigation.navigate('AllWorkouts', { workouts: allRelevantWorkouts, title: title, user: user });
+    navigation.navigate('AllWorkouts', { workouts: allRelevantWorkouts, title: title, user: user, onPaymentPress: handlePaymentPress });
   };
 
   const loadWorkouts = async () => {
@@ -82,7 +93,17 @@ const WorkoutsScreen = ({ user }) => {
     }
   };
 
+  const loadPlans = async () => {
+    const { plans, headerTitle, headerDescription, coupons } = await fetchPlans();
+    const sortedPlans = plans.sort((a, b) => (b.isRecommended ? 1 : 0) - (a.isRecommended ? 1 : 0));
+    console.log(sortedPlans);
+    setPlans(sortedPlans);
+    setHeaderTitle(headerTitle);
+    setHeaderDescription(headerDescription);
+    setCoupons(coupons);
+  };
   useEffect(() => {
+    loadPlans();
     loadWorkouts();
     loadUserLikedSessions();
   }, []);
@@ -95,6 +116,7 @@ const WorkoutsScreen = ({ user }) => {
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     loadWorkouts();
+    loadPlans();
     loadUserLikedSessions().then(() => setRefreshing(false));
   }, []);
 
@@ -134,11 +156,6 @@ const WorkoutsScreen = ({ user }) => {
       console.error('Error toggling like:', error);
     }
   };
-    
-  const handlePaymentPress = () => {
-    navigation.navigate('Payment');
-  };
-
   const filteredWorkouts = workouts.filter(workout =>
     workout.workoutName.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -240,7 +257,7 @@ const WorkoutsScreen = ({ user }) => {
                   />
               ))
             ) : (
-              <NoLikedWorkoutsCard onExplorePress={handleExplorePress} />
+              <NoLikedWorkoutsCard title='עדיין לא שמרת שום אימון' subtitle='חקור את כלל האימונים שלנו וסמן את מה שאהבת!' onExplorePress={handleExplorePress} />
             )}
 
             {/* Other Sections */}

@@ -1,50 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import SubscriptionCard from './components/SubscriptionCard';
 import Footer from './components/Footer';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { fetchPlans } from '../../backend/generalWorkouts/generalWorkoutController';
 
-const SubscriptionScreen = () => {
-  const plans = [
-    {
-      title: 'תוכנית פרימיום',
-      price: '1499$',
-      duration: 'לשנה',
-      benefits: [
-        'גישה ללא מגבלות',
-        'אימונים מתקדמים',
-        'תמיכה מתקדמת',
-        'דוחות התקדמות',
-      ],
-      buttonLabel: 'למקצוענים',
-      isRecommended: true,
-    },
-    {
-      title: 'תוכנית בסיסית',
-      price: '199$',
-      duration: 'לחודש',
-      benefits: [
-        'אימונים לייב',
-        'ציוד תוכניות',
-        'לוח זמנים שבועי',
-        'בדיקת התקדמות',
-      ],
-      buttonLabel: 'למתחילים',
-    },
-    {
-      title: 'תוכנית סטנדרטית',
-      price: '699$',
-      duration: 'לחודש',
-      benefits: [
-        'ספריה מורחבת',
-        'הורד מדריכים',
-        'מעקב התקדמות',
-        'שאלות ותשובות',
-      ],
-      buttonLabel: 'לעליה ברמה',
-    },
-  ];
-
+const SubscriptionScreen = ({ route }) => {
+  const {plans, headerTitle, headerDescription, coupons} = route.params;
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -59,9 +21,9 @@ const SubscriptionScreen = () => {
               <Text style={styles.playButton}>▶</Text>
             </View>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>!הצטרפו למהפכת הכושר שלנו</Text>
+          <Text style={styles.headerTitle}>{headerTitle || '!הצטרפו למהפכת הכושר שלנו'}</Text>
           <Text style={styles.headerDescription}>
-            הרשמו לתוכנית שלנו ושפרו חווית כושר נוספת עם תוכניות מותאמות אישית ליכולות ולמוטיבציה האישית שלכם!
+            {headerDescription || 'הרשמו לתוכנית שלנו ושפרו חווית כושר נוספת עם תוכניות מותאמות אישית ליכולות ולמוטיבציה האישית שלכם!'}
           </Text>
         </View>
 
@@ -69,7 +31,9 @@ const SubscriptionScreen = () => {
         {plans.map((plan, index) => (
           <SubscriptionCard key={index} {...plan} />
         ))}
-        <Footer />
+
+        {/* Footer Section */}
+        <Footer coupons={coupons} />
       </ScrollView>
     </SafeAreaView>
   );

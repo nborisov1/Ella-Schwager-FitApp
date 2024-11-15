@@ -40,7 +40,7 @@ const AccountScreen = ({ navigation, route }) => {
 
       if (email && password){
           try{
-              const updatedData = { ...signUpData, name: fullName }; // Add selected age to sign-up data
+              const updatedData = { ...signUpData, name: fullName, state: 'beginner' }; // Add selected age to sign-up data
               await signUp(email, password, updatedData)
           }catch(err){
               setErrorMessage(err.message)

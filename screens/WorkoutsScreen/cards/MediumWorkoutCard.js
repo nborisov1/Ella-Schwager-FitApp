@@ -6,7 +6,7 @@ import { formatDuration } from '../../../utils/utils';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const MediumWorkoutCard = ({ workout, onPress, onToggleLike }) => {
+const MediumWorkoutCard = ({ workout, onPress, onToggleLike, onPaymentPress }) => {
   // Local state to manage liked status immediately on toggle
   const [liked, setLiked] = useState(workout.liked);
   const navigation = useNavigation();
@@ -29,7 +29,7 @@ const MediumWorkoutCard = ({ workout, onPress, onToggleLike }) => {
           { text: 'ביטול', style: 'cancel' },
           { 
             text: 'הפוך לחבר פרימיום', 
-            onPress: () => navigation.navigate('Payment', { workoutId: workout.id }) 
+            onPress: () => onPaymentPress
           }
         ],
         { cancelable: true }

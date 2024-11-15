@@ -3,6 +3,7 @@ import * as React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import PersonalCoachScreen from './PersonalCoachScreen';  // Your main screen
 import ExerciseListScreen from '../ExerciseListScreen/ExerciseListScreen';  // New screen for exercise list
+import SubscriptionScreen from '../PaymentScreen/SubscriptionScreen';
 
 const Stack = createStackNavigator();
 const MyPlanStack = ({userData}) => {

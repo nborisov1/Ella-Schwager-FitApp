@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const Footer = () => {
+const Footer = ({ coupons }) => {
   const [promoCode, setPromoCode] = useState('');
-
+  const [discount, setDiscount] = useState(0);
+  const [message, setMessage] = useState('');
   const handleRedeem = () => {
-    // Add logic for redeeming the promotion code
-    console.log('Promo code entered:', promoCode);
+    if (coupons && promoCode.toLocaleLowerCase() in coupons) {
+      const discountValue = coupons[promoCode.toLocaleLowerCase()];
+      setDiscount(discountValue);
+      setMessage(`ההנחה שלך: ${discountValue}%`);
+    } else {
+      setDiscount(0);
+      setMessage('קוד הקידום שהוזן אינו תקף');
+    }
   };
 
   return (
@@ -20,12 +27,18 @@ const Footer = () => {
           value={promoCode}
           onChangeText={setPromoCode}
         />
-        <TouchableOpacity style={styles.promoButton}>
+        <TouchableOpacity style={styles.promoButton} onPress={handleRedeem}>
           <Text style={styles.promoButtonText}>לפדות</Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity style={styles.redeemButton} onPress={handleRedeem}>
+      {message && (
+        <Text style={discount > 0 ? styles.discountText : styles.errorText}>
+          {message}
+        </Text>
+      )}
+
+      <TouchableOpacity style={styles.redeemButton}>
         <Text style={styles.redeemButtonText}>הוסף לתשלום</Text>
       </TouchableOpacity>
     </View>
@@ -41,7 +54,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: '#D3D3D3',
     marginTop: 20,
-    marginBottom: 30, // Additional margin to provide space at the bottom of the screen
+    marginBottom: 30,
   },
   footerTitle: {
     fontSize: 18,
@@ -63,7 +76,7 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: '#FFF',
     textAlign: 'right',
-    marginLeft: 12, // Increased margin between TextInput and promoButton
+    marginLeft: 12,
   },
   promoButton: {
     backgroundColor: '#F0C300',
@@ -76,13 +89,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
+  discountText: {
+    fontSize: 16,
+    color: '#00BFFF',
+    textAlign: 'center',
+    marginBottom: 16,
+    fontWeight: 'bold',
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#FF0000',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
   redeemButton: {
     backgroundColor: '#DAA520',
     paddingVertical: 16,
     borderRadius: 30,
     alignItems: 'center',
-    marginTop: 16, // Space between the promo section and redeem button
-    marginBottom: 20, // Additional space at the bottom of the button
+    marginTop: 16,
   },
   redeemButtonText: {
     fontSize: 16,

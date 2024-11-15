@@ -72,11 +72,58 @@ export const fetchPopularWorkouts = async () => {
     console.log("scoredWorkouts",scoredWorkouts);
 
     // Combine and sort the lists, putting scored workouts first
-    const allWorkouts = [...scoredWorkouts, ...unscoredWorkouts].sort((a, b) => b.score - a.score);
+    const allWorkouts = [...scoredWorkouts].sort((a, b) => b.score - a.score);
     console.log("allWorkouts",allWorkouts)
     // Set only the top 10 if needed
-    return allWorkouts.slice(0,1);
+    return allWorkouts.slice(0,10);
   } catch (error) {
     console.error('Error fetching popular workouts:', error);
   }
 }
+
+export const fetchPlans = async (planName = 'generalWorkouts') => {
+  try {
+    // Reference to the 'pricing' collection
+    const pricingCollectionRef = collection(db, 'pricing');
+    const querySnapshot = await getDocs(pricingCollectionRef);
+
+    let plansMap = {};
+    let headerTitle = '';
+    let headerDescription = '';
+    let coupons = {};
+
+    // Iterate over all documents in the pricing collection
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      console.log(data);
+      if (data[planName]) {
+        // If the document contains the plan map, set the plansMap
+        plansMap = data[planName];
+        
+        // Access headerTitle and headerDescription dynamically using planName as the prefix
+        headerTitle = data[`${planName}HeaderTitle`] || '';
+        headerDescription = data[`${planName}HeaderDescription`] || '';
+        coupons = data.coupons || {}; // Fetch the coupons map if it exists
+        console.log(coupons);
+      }
+    });
+
+    // Convert the plans map to an array of plan objects
+    const plans = Object.keys(plansMap).map((key) => plansMap[key]);
+
+    return {
+      plans,
+      headerTitle,
+      headerDescription,
+      coupons,
+    };
+  } catch (error) {
+    console.error('Error fetching plans:', error);
+    return {
+      plans: [],
+      headerTitle: '',
+      headerDescription: '',
+      coupons: {},
+    };
+  }
+};

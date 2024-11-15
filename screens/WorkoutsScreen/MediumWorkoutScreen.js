@@ -6,7 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { getUserLikedSessions, toggleLikeSession } from '../../backend/userController';
 
 const MediumWorkoutScreen = ({ route }) => {
-  const { workouts: initialWorkouts, title, user } = route.params; // Retrieve workouts passed from ParentComponent
+  const { workouts: initialWorkouts, title, user, onPaymentPress } = route.params; // Retrieve workouts passed from ParentComponent
   const [workouts, setWorkouts] = useState(initialWorkouts); // Local copy of workouts to handle liked status
   const [likedSessionIds, setLikedSessionIds] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -107,6 +107,7 @@ const MediumWorkoutScreen = ({ route }) => {
             }}
             onPress={() => handlePress(item)}
             onToggleLike={() => handleToggleLike(item.id)} // Pass toggle like function
+            onPaymentPress={() => onPaymentPress()}
           />
         )}
         keyExtractor={(item) => item.id.toString()}

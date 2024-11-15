@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const NoLikedWorkoutsCard = ({ onExplorePress }) => (
+const NoLikedWorkoutsCard = ({ title, subtitle, onExplorePress }) => (
   <View style={styles.cardContainer}>
-    <Text style={styles.title}>עדיין לא שמרת שום אימון</Text>
-    <Text style={styles.subtitle}>חקור את כלל האימונים שלנו וסמן את מה שאהבת!</Text>
+    <Text style={styles.title}>{title}</Text>
+    <Text style={styles.subtitle}>{subtitle}</Text>
     <TouchableOpacity style={styles.button} onPress={onExplorePress}>
       <Text style={styles.buttonText}>חקור עכשיו</Text>
     </TouchableOpacity>
