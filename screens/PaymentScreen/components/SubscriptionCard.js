@@ -1,12 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import PricingLabel from './PricingLabel';
 import BenefitsList from './BenefitsList';
-import SpecialLabel from './SpecialLabel';
 
-const SubscriptionCard = ({ title, price, duration, benefits, buttonLabel, isRecommended }) => {
+const SubscriptionCard = ({ title, price, duration, benefits, buttonLabel, isRecommended, isSelected, onSelect }) => {
   return (
-    <View style={styles.card}>
+    <TouchableOpacity
+      style={[styles.card, isSelected && styles.selectedCard]} // Change color if selected
+      onPress={onSelect}
+    >
       {/* Recommended Label */}
       {isRecommended && (
         <View style={styles.recommendedLabel}>
@@ -16,7 +18,6 @@ const SubscriptionCard = ({ title, price, duration, benefits, buttonLabel, isRec
 
       {/* Container for splitting left and right sections */}
       <View style={styles.contentContainer}>
-        
         {/* Left Side: Benefits List with Title */}
         <View style={styles.leftContainer}>
           <Text style={styles.benefitsTitle}>את תקבלי</Text>
@@ -30,7 +31,7 @@ const SubscriptionCard = ({ title, price, duration, benefits, buttonLabel, isRec
           <Text style={styles.decorativeLabel}>{buttonLabel}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -47,20 +48,24 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#F0C300',
   },
+  selectedCard: {
+    borderColor: '#FFA500', // Highlight color for selected card
+    backgroundColor: '#FFF9E5', // Optional light background
+  },
   contentContainer: {
-    flexDirection: 'row', // Keeps the Hebrew layout RTL (Title on the right)
+    flexDirection: 'row',
     justifyContent: 'space-between',
     paddingTop: 10,
     paddingRight: 10,
   },
   leftContainer: {
     flex: 1,
-    paddingRight: 8, // Spacing between left and right containers
+    paddingRight: 8,
   },
   rightContainer: {
     flex: 1,
     alignItems: 'flex-end',
-    paddingLeft: 8, // Spacing between left and right containers
+    paddingLeft: 8,
   },
   title: {
     fontSize: 16,
@@ -80,8 +85,8 @@ const styles = StyleSheet.create({
   },
   recommendedLabel: {
     position: 'absolute',
-    top: -15, // Moved higher for better prominence
-    right: 10, // Still providing some space from the right edge
+    top: -15,
+    right: 10,
     backgroundColor: '#FFA500',
     paddingVertical: 6,
     paddingHorizontal: 12,

@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
-const Footer = ({ coupons }) => {
+const Footer = ({ coupons, onRedeem, onPay }) => {
   const [promoCode, setPromoCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [message, setMessage] = useState('');
+
   const handleRedeem = () => {
-    if (coupons && promoCode.toLocaleLowerCase() in coupons) {
-      const discountValue = coupons[promoCode.toLocaleLowerCase()];
+    if (coupons && promoCode.toLowerCase() in coupons) {
+      const discountValue = coupons[promoCode.toLowerCase()];
       setDiscount(discountValue);
       setMessage(`ההנחה שלך: ${discountValue}%`);
+      onRedeem(discountValue); // Pass the discount to the parent
     } else {
       setDiscount(0);
       setMessage('קוד הקידום שהוזן אינו תקף');
@@ -38,7 +40,7 @@ const Footer = ({ coupons }) => {
         </Text>
       )}
 
-      <TouchableOpacity style={styles.redeemButton}>
+      <TouchableOpacity style={styles.redeemButton} onPress={onPay}>
         <Text style={styles.redeemButtonText}>הוסף לתשלום</Text>
       </TouchableOpacity>
     </View>

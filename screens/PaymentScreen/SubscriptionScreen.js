@@ -1,12 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Alert, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SubscriptionCard from './components/SubscriptionCard';
 import Footer from './components/Footer';
-import { fetchPlans } from '../../backend/generalWorkouts/generalWorkoutController';
 
 const SubscriptionScreen = ({ route }) => {
-  const {plans, headerTitle, headerDescription, coupons} = route.params;
+  const { plans, headerTitle, headerDescription, coupons } = route.params;
+  const [selectedPlan, setSelectedPlan] = useState(null); // Keep track of the selected plan
+  const [discount, setDiscount] = useState(0); // Track the discount from the coupon
+
+  const handleSelectPlan = (plan) => {
+    setSelectedPlan(plan);
+  };
+
+  const handleRedeemCoupon = (discountValue) => {
+    setDiscount(discountValue); // Update the discount from the Footer
+  };
+
+  const handlePayment = async () => {
+    const finalPrice = (selectedPlan.price * (1 - discount / 100)).toFixed(2);
+    console.log('finalPrice = ',finalPrice);
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
@@ -29,11 +44,20 @@ const SubscriptionScreen = ({ route }) => {
 
         {/* Subscription Cards */}
         {plans.map((plan, index) => (
-          <SubscriptionCard key={index} {...plan} />
+          <SubscriptionCard
+            key={index}
+            {...plan}
+            isSelected={selectedPlan?.title === plan.title} // Highlight selected plan
+            onSelect={() => handleSelectPlan(plan)} // Set selected plan
+          />
         ))}
 
         {/* Footer Section */}
-        <Footer coupons={coupons} />
+        <Footer
+        coupons={coupons}
+        onRedeem={handleRedeemCoupon} // Handle coupon redemption
+        onPay={handlePayment} // Trigger payment
+      />
       </ScrollView>
     </SafeAreaView>
   );
@@ -84,5 +108,21 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#666',
     marginBottom: 16,
+  },
+  payButton: {
+    backgroundColor: '#F0C300',
+    paddingVertical: 12,
+    borderRadius: 25,
+    alignItems: 'center',
+    marginTop: 20,
+    opacity: 0.5, // Disabled style
+  },
+  payButtonActive: {
+    opacity: 1, // Active button style
+  },
+  payButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
