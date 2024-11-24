@@ -10,6 +10,7 @@ import WorkoutPlanCard from '../WorkoutsScreen/cards/WorkoutPlanCard';
 import { fetchGeneralWorkouts } from '../../backend/generalWorkouts/generalWorkoutController';
 import { useNavigation } from '@react-navigation/native';
 import NoLikedWorkoutsCard from '../WorkoutsScreen/cards/NoLikeWorkoutsCard';
+import useRevenueCat from '../../hooks/useRevenueCat';
 
 const PersonalCoachScreen = ({ userData }) => {
   const { width, height } = Dimensions.get('window');
@@ -27,14 +28,15 @@ const PersonalCoachScreen = ({ userData }) => {
     loadPersonalPlan().then(() => setRefreshing(false));
   }, []);
 
+  const {currentOffering, customerInfo, isProMember, isPersonalMember} = useRevenueCat();
   const loadPersonalPlan = async () => {
     try {
-      if (userData.state === 'beginner' || !userData.state) {
+      if ((!isProMember && !isPersonalMember) || userData.state === 'beginner' || !userData.state) {
         const subscriptionResult = await fetchPlans('personalPlan');
         setSubscriptionData(subscriptionResult);
         setTrainingSessions(null);
         setFilteredSessions(null); // Initially set filtered sessions to all sessions
-      } else if (userData.state === 'personalCoach') {
+      } else if (isPersonalMember && userData.state === 'personalCoach') {
         const sessions = await fetchPersonalPlan(userData.uid);
         if (sessions && sessions.length > 0) {
           // Personal plan exists
@@ -47,7 +49,7 @@ const PersonalCoachScreen = ({ userData }) => {
           setGeneralWorkouts(generalWorkoutResults.slice(0, 7)); // Limit to 3 general workouts
           setSubscriptionData(null);
         }
-      } else if (userData.state === 'personalCoachBuilding') {
+      } else if (isPersonalMember && userData.state === 'personalCoachBuilding') {
         const generalWorkoutResults = await fetchGeneralWorkouts();
         setGeneralWorkouts(generalWorkoutResults.slice(0, 7)); // Limit to 3 general workouts
         setTrainingSessions(null);

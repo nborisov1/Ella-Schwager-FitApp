@@ -12,15 +12,24 @@ const APIKeys = {
 const typesOfMemberships = {
     monthly: "proMonthly",
     yearly: "proYearly",
+    personalMonthly: "personalMonthly",
+    personalYearly: "personalYearly",
 }
 export default function useRevenueCat() {
     const [currentOffering, setCurrentOffering] = useState(null);
     const [customerInfo, setCustomerInfo] = useState(null);
     let isProMember = false;
+    let isPersonalMember = false;
     if (customerInfo) {
         isProMember = 
             customerInfo.activeSubscriptions.includes(typesOfMemberships.monthly) || 
-            customerInfo.activeSubscriptions.includes(typesOfMemberships.yearly);
+            customerInfo.activeSubscriptions.includes(typesOfMemberships.yearly) || 
+            customerInfo.activeSubscriptions.includes(typesOfMemberships.personalMonthly) || 
+            customerInfo.activeSubscriptions.includes(typesOfMemberships.personalYearly);
+        isPersonalMember = 
+            customerInfo.activeSubscriptions.includes(typesOfMemberships.personalMonthly) || 
+            customerInfo.activeSubscriptions.includes(typesOfMemberships.personalYearly);
+
     }
 
     useEffect(() => {
@@ -39,7 +48,6 @@ export default function useRevenueCat() {
                 console.log("NATAN123 err", error.userInfo);
             }
         }
-
         fetchData().catch(console.error);
     }, []);
 
@@ -50,5 +58,5 @@ export default function useRevenueCat() {
         Purchases.addCustomerInfoUpdateListener(customerInfoUpdated)
     }, [])
 
-    return {currentOffering, customerInfo, isProMember};
+    return {currentOffering, customerInfo, isProMember, isPersonalMember};
 }

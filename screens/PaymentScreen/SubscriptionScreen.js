@@ -3,12 +3,14 @@ import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Alert, Pla
 import { SafeAreaView } from 'react-native-safe-area-context';
 import SubscriptionCard from './components/SubscriptionCard';
 import Footer from './components/Footer';
+import useRevenueCat from '../../hooks/useRevenueCat';
+import Purchases from 'react-native-purchases';
 
 const SubscriptionScreen = ({ route }) => {
   const { plans, headerTitle, headerDescription, coupons } = route.params;
   const [selectedPlan, setSelectedPlan] = useState(null); // Keep track of the selected plan
   const [discount, setDiscount] = useState(0); // Track the discount from the coupon
-
+  const {currentOffering, customerInfo, isProMember, isPersonalMember} = useRevenueCat();
   const handleSelectPlan = (plan) => {
     setSelectedPlan(plan);
   };
@@ -20,6 +22,9 @@ const SubscriptionScreen = ({ route }) => {
   const handlePayment = async () => {
     const finalPrice = (selectedPlan.price * (1 - discount / 100)).toFixed(2);
     console.log('finalPrice = ',finalPrice);
+    const purchaserInfo = await Purchases.purchasePackage(
+      currentOffering.monthly
+    );
   };
 
   return (
