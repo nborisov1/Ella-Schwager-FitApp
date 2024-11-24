@@ -69,11 +69,9 @@ export const fetchPopularWorkouts = async () => {
       ...doc.data(),
       score: workout.score ?? 0,
     }));
-    console.log("scoredWorkouts",scoredWorkouts);
 
     // Combine and sort the lists, putting scored workouts first
     const allWorkouts = [...scoredWorkouts].sort((a, b) => b.score - a.score);
-    console.log("allWorkouts",allWorkouts)
     // Set only the top 10 if needed
     return allWorkouts.slice(0,10);
   } catch (error) {
@@ -95,7 +93,6 @@ export const fetchPlans = async (planName = 'generalWorkouts') => {
     // Iterate over all documents in the pricing collection
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      console.log(data);
       if (data[planName]) {
         // If the document contains the plan map, set the plansMap
         plansMap = data[planName];
@@ -104,7 +101,6 @@ export const fetchPlans = async (planName = 'generalWorkouts') => {
         headerTitle = data[`${planName}HeaderTitle`] || '';
         headerDescription = data[`${planName}HeaderDescription`] || '';
         coupons = data.coupons || {}; // Fetch the coupons map if it exists
-        console.log(coupons);
       }
     });
 

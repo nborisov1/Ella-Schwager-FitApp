@@ -15,8 +15,6 @@ const PhysicalActivityScreen = ({ navigation, route }) => {
   const handleContinue = () => {
     if (selectedLevel) {
       const updatedData = {...signUpData, activityLevel: selectedLevel}
-      console.log(updatedData);
-      console.log(signUpData);
       navigation.navigate('Account', { signUpData: updatedData });
     }
   };

@@ -29,7 +29,6 @@ const PersonalCoachScreen = ({ userData }) => {
 
   const loadPersonalPlan = async () => {
     try {
-      console.log('state = ', userData.state);
       if (userData.state === 'beginner' || !userData.state) {
         const subscriptionResult = await fetchPlans('personalPlan');
         setSubscriptionData(subscriptionResult);

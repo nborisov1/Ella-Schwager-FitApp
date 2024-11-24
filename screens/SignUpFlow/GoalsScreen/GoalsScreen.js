@@ -33,7 +33,6 @@ const GoalsScreen = ({ navigation, route }) => {
       ? [...selectedGoals, customGoal]
       : selectedGoals;
     const updatedData = { ...signUpData, goals: goalsToPass }; // Add selected goals to sign-up data
-    console.log(updatedData);
     if (goalsToPass.length > 0) {
       navigation.navigate('PhysicalActivity', {signUpData: updatedData});
     }

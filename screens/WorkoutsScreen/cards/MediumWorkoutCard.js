@@ -18,7 +18,6 @@ const MediumWorkoutCard = ({ workout, onPress, onToggleLike, onPaymentPress }) =
     onToggleLike(); // Call the parent function to handle backend update
   };
   const handlePress = () => {
-    console.log(workout.isUnlocked);
     if (workout.isUnlocked) {
         onPress();
     } else {

@@ -294,7 +294,6 @@ const WorkoutsScreen = ({ user }) => {
               </TouchableOpacity>
             </View>
             {workouts.sort((a, b) => (b.score || 0) - (a.score || 0)).slice(0, 2).map((workout, index) => (
-              console.log("NATAN workout like ",workout.liked),
               <WorkoutPlanCard
                 key={index}
                 workout={{

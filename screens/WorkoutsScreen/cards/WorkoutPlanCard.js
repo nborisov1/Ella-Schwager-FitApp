@@ -9,8 +9,6 @@ import { translateDayToHebrew } from '../../../utils/utils';
 const WorkoutPlanCard = ({ workout, onPress, onLike }) => {
   const [liked, setLiked] = useState(workout.liked ? workout.liked : false);
   const exerciseCount = workout.videos ? workout.videos.length : 0
-  console.log(exerciseCount);
-  console.log(workout.videos);
   useEffect(() => {
     setLiked(workout.liked);
   }, [workout.liked]); // Update `liked` state whenever `workout.liked` changes

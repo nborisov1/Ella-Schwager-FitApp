@@ -4,7 +4,6 @@ import { db } from '../config/firebase';
 export const getUserLikedSessions = async (userId) => {
   const userDocRef = doc(db, 'users', userId);
   const userDoc = await getDoc(userDocRef);
-  console.log(userDoc);
   if (userDoc.exists()) {
     return userDoc.data().likedSessions || [];
   } else {

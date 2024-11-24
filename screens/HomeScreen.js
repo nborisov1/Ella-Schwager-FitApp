@@ -12,6 +12,7 @@ import SettingsScreen from './SettingsScreen/SettingsScreen';
 import SubscriptionScreen from './PaymentScreen/SubscriptionScreen';
 import ExerciseListScreen from './ExerciseListScreen/ExerciseListScreen';
 import MediumWorkoutScreen from './WorkoutsScreen/MediumWorkoutScreen'
+import useRevenueCat from '../hooks/useRevenueCat';
 
 const Stack = createStackNavigator();
 
@@ -60,6 +61,7 @@ const WorkoutStack = ({ user }) => {
 
 // Main Home Screen with bottom tabs
 const HomeScreen = ({ userData }) => {
+  const {currentOffering, customerInfo, isProMember} = useRevenueCat();
   return (
     <NavigationContainer>
       <Tab.Navigator

@@ -11,7 +11,6 @@ const MediumWorkoutScreen = ({ route }) => {
   const [likedSessionIds, setLikedSessionIds] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const navigation = useNavigation();
-  console.log(workouts);
   useEffect(() => {
     const loadUserLikedSessions = async () => {
       if (user) {
@@ -37,8 +36,6 @@ const MediumWorkoutScreen = ({ route }) => {
 
   const handleToggleLike = async (sessionId) => {
     try {
-      console.log(sessionId);
-      console.log(user.uid);
       const updatedLikedSessions = await toggleLikeSession(user.uid, sessionId, likedSessionIds);
       setLikedSessionIds(updatedLikedSessions); // Update likedSessionIds to trigger re-render with new liked status
     } catch (error) {
