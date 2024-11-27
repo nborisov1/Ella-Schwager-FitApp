@@ -54,7 +54,7 @@ export default function AuthForm({
         )}
 
         <TouchableOpacity
-          style={{ paddingVertical: 15, backgroundColor: '#E8C547', borderRadius: 25, marginTop: 10 }}
+          style={{ paddingVertical: 15, backgroundColor: '#e1b97b', borderRadius: 25, marginTop: 10 }}
           onPress={onButtonPress}
         >
           <Text style={{ textAlign: 'center', fontSize: 16, fontWeight: 'bold', color: 'white' }}>
@@ -85,7 +85,7 @@ export default function AuthForm({
 
       <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20 }}>
         <TouchableOpacity onPress={onToggleAuthMode}>
-          <Text style={{ color: '#1e90ff', fontWeight: 'bold' }}>{authModeText === 'כניסה למערכת' ? ' הירשם' : ' התחבר'}</Text>
+          <Text style={{ color: '#e1b97b', fontWeight: 'bold' }}>{authModeText === 'כניסה למערכת' ? ' הירשם' : ' התחבר'}</Text>
         </TouchableOpacity>
         <Text style={{ color: '#888888' }}>
           {authModeText === 'כניסה למערכת' ? 'אין לך חשבון?' : 'כבר יש לך חשבון?'}

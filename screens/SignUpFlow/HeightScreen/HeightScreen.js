@@ -30,7 +30,7 @@ const HeightScreen = ({ navigation, route }) => {
               returnKeyType="done" // Add "Done" button
             />
           </View>
-          <Text style={styles.unitText}>ס"מ</Text>
+          <Text style={styles.unitText}>cm</Text>
         </View>
       </TouchableWithoutFeedback>
       <ContinueButton onPress={handleContinue} disabled={!height} />
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#DAA520',
+    color: '#e1b97b',
     width: '100%',
   },
   unitText: {

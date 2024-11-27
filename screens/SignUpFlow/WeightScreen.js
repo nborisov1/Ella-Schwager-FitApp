@@ -29,7 +29,7 @@ const WeightScreen = ({ navigation, route }) => {
             maxLength={3} // Limit the input length as necessary
           />
         </View>
-        <Text style={styles.unitText}>ק״ג</Text>
+        <Text style={styles.unitText}>kg</Text>
       </View>
       </TouchableWithoutFeedback>
       <ContinueButton onPress={handleContinue} disabled={!weight} />
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#DAA520',
+    color: '#e1b97b',
     width: '100%',
   },
   unitText: {

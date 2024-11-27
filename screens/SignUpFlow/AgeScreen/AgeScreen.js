@@ -68,25 +68,12 @@ const styles = StyleSheet.create({
     fontSize: 48,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#DAA520',
+    color: '#e1b97b',
     width: '100%',
   },
   unitText: {
     fontSize: 24,
     color: '#333',
     marginLeft: 8,
-  },
-  continueButton: {
-    backgroundColor: '#DAA520',
-    borderRadius: 30,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  continueButtonText: {
-    fontSize: 18,
-    color: '#FFF',
-    fontWeight: 'bold',
   },
 });

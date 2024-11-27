@@ -18,7 +18,7 @@ const GenderScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ProgressBar currentStep={1} />
-      <Text style={styles.title}>לבחור המין שלך</Text>
+      <Text style={styles.title}>בחר את המין שלך</Text>
 
       <View style={styles.optionsContainer}>
         <OptionButton
@@ -33,9 +33,17 @@ const GenderScreen = ({ navigation }) => {
           isSelected={selectedGender === 'Male'}
           onPress={() => setSelectedGender('Male')}
         />
+        <OptionButton
+          icon="mars-stroke"
+          label="א-בינארי"
+          isSelected={selectedGender === 'Non-binary'}
+          onPress={() => setSelectedGender('Non-binary')}
+        />
       </View>
 
-      <ContinueButton onPress={handleContinue} disabled={!selectedGender} />
+      <View style={styles.continueButtonContainer}>
+        <ContinueButton onPress={handleContinue} disabled={!selectedGender} />
+      </View>
     </SafeAreaView>
   );
 };
@@ -46,7 +54,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: 'white',
   },
   title: {
     fontSize: 24,
@@ -55,7 +63,13 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   optionsContainer: {
-    flex: 1,
     justifyContent: 'center',
+  },
+  continueButtonContainer: {
+    position: 'absolute',
+    bottom: 20, // Position at the bottom with some spacing
+    left: 0,
+    right: 0,
+    paddingHorizontal: 16,
   },
 });

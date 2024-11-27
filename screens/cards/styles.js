@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   viewAllButton: {
     fontSize: 14,
-    color: '#CD7F32',  // Bronze color
+    color: '#e1b97b',  // Bronze color
     paddingHorizontal: 10,
     textDecorationLine: 'underline',  // Underline the button text
   },

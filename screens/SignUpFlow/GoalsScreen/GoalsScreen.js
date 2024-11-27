@@ -43,7 +43,8 @@ const GoalsScreen = ({ navigation, route }) => {
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <SafeAreaView style={styles.container}>
           <ProgressBar currentStep={5} />
-          <Text style={styles.title}>מהי מטרת הכושר שלך?</Text>
+          <Text style={styles.title}>הגדר/י את המטרה שלך</Text>
+          <Text style={styles.subtitle}>ניתן לבחור מספר אופציות</Text>
 
           <View style={styles.optionsContainer}>
             <OptionButton
@@ -102,8 +103,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     textAlign: 'right',
-    marginBottom: 24,
   },
+  subtitle: {
+    fontSize: 20,
+    textAlign: 'right',
+  },
+
   optionsContainer: {
     flex: 1,
     justifyContent: 'center',

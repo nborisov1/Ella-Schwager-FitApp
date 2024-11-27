@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: 'pink', // Border color similar to background
+    borderColor: '#e1b97b', // Border color similar to background
   },
   title: {
     fontSize: 18,

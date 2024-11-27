@@ -68,7 +68,7 @@ const HomeScreen = ({ userData }) => {
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused }) => {
             let iconName;
-            let iconColor = focused ? '#C73D8C' : '#000';  // Black for inactive, purple for active
+            let iconColor = focused ? '#e1b97b' : '#000';  // Black for inactive, purple for active
             let iconSize = focused ? 30 : 24;  // Make the active icon larger
 
             // Choose the outline icon based on the route name
@@ -82,12 +82,12 @@ const HomeScreen = ({ userData }) => {
               case 'הגדרות':
                 iconName = 'settings-outline';
                 break;
-              case 'חנות':
-                iconName = 'cart-outline';
-                break;
               case 'פרופיל':
                 iconName = 'people-outline';
                 break;
+                case 'מי אנחנו':
+                  iconName = 'call-outline';
+                  break;  
             }
 
             return (
@@ -101,24 +101,25 @@ const HomeScreen = ({ userData }) => {
           tabBarActiveTintColor: styles.tabBarActiveTintColor.color,  
           tabBarInactiveTintColor: styles.tabBarInactiveTintColor.color,  
         })}>
-          <Tab.Screen
+        <Tab.Screen name="מי אנחנו" component={SettingsScreen} />
+        <Tab.Screen
           name="פרופיל"
           children={() => <ProfileScreenStack user={userData} />}
           options={
             {headerShown: false}
-          }
+        }
         />
-        <Tab.Screen
-          name="אימונים"
-          children={() => <WorkoutStack user={userData}/>}
-          options={{ headerShown: false }}
-        />
-        <Tab.Screen
+      <Tab.Screen
             name="התוכנית שלי"
             children={() => <MyPlanStack userData={userData} />}
             options={{ headerShown: false }}
           />
-          <Tab.Screen name="הגדרות" component={SettingsScreen} />
+      <Tab.Screen
+          name="אימונים"
+          children={() => <WorkoutStack user={userData}/>}
+          options={{ headerShown: false }}
+        />
+      <Tab.Screen name="הגדרות" component={SettingsScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
@@ -131,8 +132,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   tabBarStyle: {
-    height: 85,  
-    paddingVertical: 5,  
+    height: 60,
+    paddingVertical: 5,
     borderTopLeftRadius: 20, 
     borderTopRightRadius: 20,  
     backgroundColor: '#FFFFFF',  
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',  
   },
   tabBarActiveTintColor: {
-    color: '#C73D8C',
+    color: '#e1b97b',
   },
   tabBarInactiveTintColor: {
     color: '#000',

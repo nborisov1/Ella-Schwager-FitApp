@@ -11,6 +11,10 @@ import { getUserLikedSessions, toggleLikeSession } from '../../backend/userContr
 import NoLikedWorkoutsCard from './cards/NoLikeWorkoutsCard';
 import { Alert } from 'react-native';
 import { fetchPlans } from '../../backend/generalWorkouts/generalWorkoutController';
+import Purchases from 'react-native-purchases';
+import { err } from 'react-native-svg';
+import useRevenueCat from '../../hooks/useRevenueCat';
+
 
 const WorkoutsScreen = ({ user }) => {
   const [workouts, setWorkouts] = useState([]);
@@ -96,16 +100,29 @@ const WorkoutsScreen = ({ user }) => {
   const loadPlans = async () => {
     const { plans, headerTitle, headerDescription, coupons } = await fetchPlans();
     const sortedPlans = plans.sort((a, b) => (b.isRecommended ? 1 : 0) - (a.isRecommended ? 1 : 0));
-    console.log(sortedPlans);
     setPlans(sortedPlans);
     setHeaderTitle(headerTitle);
     setHeaderDescription(headerDescription);
     setCoupons(coupons);
   };
+
+  const loadPurchases = async () => {
+    try {
+      Purchases.configure({apiKey: process.env.EXPO_PUBLIC_RC_ANDROID});
+      await Purchases.getOfferings().then(console.log);
+    } catch(error) {
+      console.log("NATAN123 err", error.userInfo);
+    }
+  }
   useEffect(() => {
-    loadPlans();
-    loadWorkouts();
-    loadUserLikedSessions();
+    try {
+      loadPlans();
+      loadWorkouts();
+      loadUserLikedSessions();
+      loadPurchases();
+    } catch (error) {
+      console.log("NATAN123443 underlying error", error.userInfo);
+    }
   }, []);
 
   useEffect(() => {
@@ -210,7 +227,7 @@ const WorkoutsScreen = ({ user }) => {
                   subtitle: workout.subtitle,
                   videos: workout.videos,
                   totalTime: workout.totalDuration || '',
-                  isUnlocked: user.unlockAll || workout.isUnlocked,
+                  isUnlocked: user.unlockAll || workout.isUnlocked || isPersonalMember || isProMember,
                   image: workout.thumbnailURL,
                   id: workout.id,
                   place: workout.place,

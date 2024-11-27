@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   progressIndicator: {
     height: 2,
-    backgroundColor: '#DAA520',
+    backgroundColor: '#e1b97b',
   },
 });
 
