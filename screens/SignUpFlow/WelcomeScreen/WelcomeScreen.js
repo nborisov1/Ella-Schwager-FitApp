@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, ImageBackground, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import logo from '../../../assets/images/logoimg.jpg'; // Adjust this import to match your structure
 
 const WelcomeScreen = ({ navigation }) => {
   return (
@@ -9,22 +10,29 @@ const WelcomeScreen = ({ navigation }) => {
         style={styles.backgroundImage}
       >
         <View style={styles.overlay}>
-          {/* Logo Container at the top 10% */}
+          {/* Logo Container */}
           <View style={styles.logoContainer}>
-            <Image source={{uri: 'https://www.shutterstock.com/shutterstock/photos/2440775703/display_1500/stock-vector-logo-design-gym-logo-fitness-logo-brand-identity-visual-identity-gym-branding-protein-shake-2440775703.jpg'}} style={styles.logo} />  
+            <Image
+              source={logo} // Using the imported image
+              style={styles.logo}
+            />
           </View>
 
-          {/* Main Content Container taking up the remaining space */}
+          {/* Content Container */}
           <View style={styles.contentContainer}>
             <Text style={styles.title}>
-              קחי שליטה על הגוף שלך 
+              <Text style={styles.highlight}>Your</Text>
+              {'\n'}happiness is in{'\n'}Your hands
             </Text>
+          </View>
 
+          {/* Sign-Up/In Container */}
+          <View style={styles.signUpOrInContainer}>
             <TouchableOpacity
               style={styles.button}
               onPress={() => navigation.navigate('Gender')}
             >
-              <Text style={styles.buttonText}>הירשמי כאן על מנת להתחיל </Text>
+              <Text style={styles.buttonText}>הירשמי כאן על מנת להתחיל</Text>
             </TouchableOpacity>
 
             <View style={styles.footerTextContainer}>
@@ -60,9 +68,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
     paddingHorizontal: 20,
     alignItems: 'center',
+    justifyContent: 'space-between', // Ensures spacing between top, middle, and bottom sections
   },
   logoContainer: {
-    height: '30%',  // Take up 10% of the screen height
+    height: '30%', // Take up 30% of the screen height
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -71,20 +80,27 @@ const styles = StyleSheet.create({
     height: 80,
   },
   contentContainer: {
-    flex: 1,  // Take up the remaining 90% of the screen height
+    marginBottom: 400,
+    flex:1,
+    justifyContent: 'center', // Center the content vertically
     alignItems: 'center',
-    justifyContent: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 40, // Bigger font size for the title
     fontWeight: 'bold',
     color: '#FFFFFF',
     textAlign: 'center',
-    marginBottom: 50,
-    lineHeight: 30,
+    lineHeight: 40, // Adjust line height for better readability
+    marginHorizontal: 20, // Add padding for better text placement
+  },
+  signUpOrInContainer: {
+    position: 'absolute',
+    bottom: 30, // Position it at the bottom of the screen with some spacing
+    alignItems: 'center',
+    width: '100%',
   },
   button: {
-    backgroundColor: '#E8C547',
+    backgroundColor: '#e5a987',
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 25,
@@ -104,7 +120,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   signUpText: {
-    color: '#E8C547',
+    color: '#e5a987',
     fontWeight: 'bold',
   },
 });
