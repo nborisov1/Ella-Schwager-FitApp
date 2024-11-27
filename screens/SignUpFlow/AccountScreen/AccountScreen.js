@@ -15,13 +15,6 @@ const AccountScreen = ({ navigation, route }) => {
   const [isConfirmedPasswordVisible, setIsConfirmedPasswordVisible] = useState(false);  // State to track password visibility
 
   const { signUpData } = route.params;
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible(!isPasswordVisible);  // Toggle password visibility state
-  };
-
-  const toggleConfirmedPasswordVisibility = () => {
-    setIsConfirmedPasswordVisible(!isConfirmedPasswordVisible);  // Toggle password visibility state
-  };
 
   const handleSignUp = async ()=>{
       setErrorMessage('');

@@ -4,7 +4,7 @@ import { View, Text, StyleSheet } from 'react-native';
 const ProgressBar = ({ currentStep }) => {
   return (
     <View style={styles.progressBar}>
-      <Text style={styles.progressText}>שלב {currentStep} מתוך {7}</Text>
+      <Text style={styles.progressText}>שלב {currentStep} מתוך {8}</Text>
       <View style={styles.progressLine}>
         <View style={[styles.progressIndicator, { width: `${(currentStep / 7) * 100}%` }]} />
       </View>

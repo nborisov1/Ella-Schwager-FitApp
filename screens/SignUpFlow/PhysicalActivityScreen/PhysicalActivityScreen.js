@@ -15,13 +15,13 @@ const PhysicalActivityScreen = ({ navigation, route }) => {
   const handleContinue = () => {
     if (selectedLevel) {
       const updatedData = {...signUpData, activityLevel: selectedLevel}
-      navigation.navigate('Account', { signUpData: updatedData });
+      navigation.navigate('WorkoutArea', { signUpData: updatedData });
     }
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ProgressBar currentStep={6}/>
+      <ProgressBar currentStep={7}/>
       <Text style={styles.title}>מהי רמת הפעילות הגופנית שלך?</Text>
 
       <View style={styles.optionsContainer}>

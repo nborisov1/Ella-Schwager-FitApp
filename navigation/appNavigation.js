@@ -13,6 +13,8 @@ import GoalsScreen from '../screens/SignUpFlow/GoalsScreen/GoalsScreen';
 import PhysicalActivityScreen from '../screens/SignUpFlow/PhysicalActivityScreen/PhysicalActivityScreen';
 import AccountScreen from '../screens/SignUpFlow/AccountScreen/AccountScreen';
 import AgeScreen from '../screens/SignUpFlow/AgeScreen/AgeScreen';
+import TargetZoneScreen from '../screens/SignUpFlow/TargetZone/TargetZoneScreen'
+import WorkoutAreaScreen from '../screens/SignUpFlow/WorkoutsArea/WorkoutsAreaScreen'
 
 const Stack = createNativeStackNavigator();
 
@@ -71,10 +73,20 @@ export default function AppNavigation() {
             options={{ headerShown: false, gestureEnabled: true }} 
           />
           <Stack.Screen 
+            name="TargetZone" 
+            component={TargetZoneScreen} 
+            options={{ headerShown: false, gestureEnabled: true }} 
+          />
+          <Stack.Screen 
             name="PhysicalActivity" 
             component={PhysicalActivityScreen} 
             options={{ headerShown: false, gestureEnabled: true }} 
           />
+          <Stack.Screen 
+            name="WorkoutArea" 
+            component={WorkoutAreaScreen} 
+            options={{ headerShown: false, gestureEnabled: true }} 
+          />          
           <Stack.Screen 
             name="Account" 
             component={AccountScreen} 

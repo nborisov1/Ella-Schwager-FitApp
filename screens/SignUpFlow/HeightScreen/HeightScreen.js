@@ -78,17 +78,4 @@ const styles = StyleSheet.create({
     color: '#333',
     marginLeft: 8,
   },
-  continueButton: {
-    backgroundColor: '#DAA520',
-    borderRadius: 30,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  continueButtonText: {
-    fontSize: 18,
-    color: '#FFF',
-    fontWeight: 'bold',
-  },
 });

@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 40, // Adjust line height for better readability
     marginHorizontal: 20, // Add padding for better text placement
+    lineHeight: 60,
   },
   signUpOrInContainer: {
     position: 'absolute',
