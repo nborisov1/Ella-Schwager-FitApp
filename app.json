@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Ella Schwager",
-    "slug": "Ella Schwager",
+    "slug": "Ella-Schwager",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -31,7 +31,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "ec1598a8-389b-4317-97a2-69b37c46d2b4"
+        "projectId": "e1818b11-0435-485e-a637-4ccaa483198c"
       }
     },
     "plugins": [
