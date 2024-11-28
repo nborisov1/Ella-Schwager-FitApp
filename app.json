@@ -15,14 +15,16 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "buildNumber": "1"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.apple.esfit"
+      "package": "com.apple.esfit",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
