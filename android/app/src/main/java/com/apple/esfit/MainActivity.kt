@@ -1,4 +1,4 @@
-package com.nborisov.appui
+package com.apple.esfit
 
 import android.os.Build
 import android.os.Bundle

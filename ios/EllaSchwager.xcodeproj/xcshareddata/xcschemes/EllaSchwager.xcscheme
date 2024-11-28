@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "appui.app"
-               BlueprintName = "appui"
-               ReferencedContainer = "container:appui.xcodeproj">
+               BuildableName = "EllaSchwager.app"
+               BlueprintName = "EllaSchwager"
+               ReferencedContainer = "container:EllaSchwager.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "appuiTests.xctest"
-               BlueprintName = "appuiTests"
-               ReferencedContainer = "container:appui.xcodeproj">
+               BuildableName = "EllaSchwagerTests.xctest"
+               BlueprintName = "EllaSchwagerTests"
+               ReferencedContainer = "container:EllaSchwager.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "appui.app"
-            BlueprintName = "appui"
-            ReferencedContainer = "container:appui.xcodeproj">
+            BuildableName = "EllaSchwager.app"
+            BlueprintName = "EllaSchwager"
+            ReferencedContainer = "container:EllaSchwager.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "appui.app"
-            BlueprintName = "appui"
-            ReferencedContainer = "container:appui.xcodeproj">
+            BuildableName = "EllaSchwager.app"
+            BlueprintName = "EllaSchwager"
+            ReferencedContainer = "container:EllaSchwager.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

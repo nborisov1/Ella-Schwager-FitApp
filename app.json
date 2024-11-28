@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "app-ui",
-    "slug": "app-ui",
+    "name": "Ella Schwager",
+    "slug": "Ella Schwager",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.nborisov.appui"
+      "package": "com.apple.esfit"
     },
     "web": {
       "favicon": "./assets/favicon.png"
